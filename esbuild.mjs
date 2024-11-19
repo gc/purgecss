@@ -4,11 +4,11 @@ await esbuild.build({
 	keepNames: true,
 	minify: true,
 	bundle: true,
-	sourcemap: false,
+	sourcemap: true,
 	platform: "node",
 	format: "esm",
 	target: "esnext",
 	metafile: true,
 	outdir: "dist",
-	entryPoints: ["src/index.ts"],
+	entryPoints: ["src/**/*.ts"],
 });
