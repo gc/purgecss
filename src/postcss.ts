@@ -7,14 +7,13 @@
  * @packageDocumentation
  */
 
-import * as path from "node:path";
 import type * as postcss from "postcss";
 import {
-    PurgeCSS,
-    defaultOptions,
-    mergeExtractorSelectors,
-    standardizeSafelist,
-    type RawContent,
+  PurgeCSS,
+  defaultOptions,
+  mergeExtractorSelectors,
+  standardizeSafelist,
+  type RawContent,
 } from "./index";
 import type { UserDefinedOptions } from "./types";
 
@@ -37,12 +36,6 @@ async function purgeCSS(
   const purgeCSS = new PurgeCSS();
 
   let configFileOptions: UserDefinedOptions | undefined;
-  try {
-    const t = path.resolve(process.cwd(), "purgecss.config.js");
-    configFileOptions = await import(t);
-  } catch {
-    // no config file present
-  }
 
   const options = {
     ...defaultOptions,
@@ -53,8 +46,11 @@ async function purgeCSS(
     ),
   };
 
+  // @ts-ignore
   if (opts && typeof opts.contentFunction === "function") {
+    // @ts-ignore
     options.content = opts.contentFunction(
+      // @ts-ignore
       (root.source && root.source.input.file) || "",
     );
   }
@@ -74,6 +70,7 @@ async function purgeCSS(
     (o) => typeof o === "object",
   ) as RawContent[];
 
+  // @ts-ignore
   const cssFileSelectors = await purgeCSS.extractSelectorsFromFiles(
     fileFormatContents,
     extractors,

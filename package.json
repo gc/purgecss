@@ -7,36 +7,19 @@
   "main": "lib/purgecss.js",
   "module": "./lib/purgecss.esm.js",
   "types": "./lib/purgecss.d.ts",
-  "bin": {
-    "purgecss": "bin/purgecss.js"
-  },
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "bin",
-    "lib"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FullHuman/purgecss.git"
+  "scripts": {
+    "build": "node esbuild.mjs && tsc -p src --declaration --emitDeclarationOnly"
   },
   "dependencies": {
     "glob": "^11.0.0",
     "postcss": "^8.4.47",
     "postcss-selector-parser": "^6.1.2"
   },
-  "bugs": {
-    "url": "https://github.com/FullHuman/purgecss/issues"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "devDependencies": {
+    "@types/node": "^22.9.0",
     "esbuild": "^0.24.0",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
   },
   "packageManager": "pnpm@8.15.6+sha512.77b89e9be77a2b06ad8f403a19cae5e22976f61023f98ad323d5c30194958ebc02ee0a6ae5d13ee454f6134e4e8caf29a05f0b1a0e1d2b17bca6b6a1f1159f86"
 }

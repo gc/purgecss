@@ -13,12 +13,10 @@
     "esModuleInterop": true,
     "removeComments": false,
     "lib": ["esnext", "dom"],
-    "types": ["jest"],
-    "rootDir": "."
+    "rootDir": ".",
+    "outDir": "../dist",
+    "types": ["@types/node"],
   },
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  }
+  "include": ["."],
+	"exclude": ["**/node_modules"],
 }

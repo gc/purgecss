@@ -583,6 +583,7 @@ class PurgeCSS {
             : null
           : option.raw;
       const isFromFile = typeof option === "string" && !this.options.stdin;
+          // @ts-ignore
       const root = postcss.parse(cssContent, {
         from: isFromFile ? option : undefined,
       });
@@ -718,6 +719,7 @@ class PurgeCSS {
   ): Promise<ResultPurge[]> {
     this.options =
       typeof userOptions !== "object"
+          // @ts-ignore
         ? await setOptions(userOptions)
         : {
             ...defaultOptions,
@@ -737,6 +739,7 @@ class PurgeCSS {
       (o) => typeof o === "object",
     ) as RawContent[];
 
+    // @ts-ignore
     const cssFileSelectors = await this.extractSelectorsFromFiles(
       fileFormatContents,
       extractors,
