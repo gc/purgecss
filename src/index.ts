@@ -7,7 +7,7 @@
  */
 
 import * as glob from "glob";
-import * as postcss from "postcss";
+import * as postcss from "./postcss/postcss";
 import selectorParser from "postcss-selector-parser";
 import {
   IGNORE_ANNOTATION_CURRENT,

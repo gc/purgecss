@@ -5,7 +5,7 @@
  *
  * @packageDocumentation
  */
-import * as postcss from "postcss";
+import * as postcss from "./postcss/postcss";
 import ExtractorResultSets from "./ExtractorResultSets";
 import { defaultOptions } from "./options";
 import type { ComplexSafelist, ExtractorResultDetailed, Extractors, Options, PostCSSRoot, RawContent, RawCSS, ResultPurge, UserDefinedOptions, UserDefinedSafelist } from "./types";

@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "glob": "^11.0.0",
-    "postcss": "^8.4.47",
-    "postcss-selector-parser": "^6.1.2"
+    "nanoid": "^5.0.8",
+    "picocolors": "^1.1.1",
+    "postcss-selector-parser": "^6.1.2",
+    "source-map-js": "^1.2.1"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",

@@ -6,7 +6,7 @@
  *
  * @packageDocumentation
  */
-import type * as postcss from "postcss";
+import type * as postcss from "./postcss/postcss";
 import type { UserDefinedOptions } from "./types";
 export * from "./types";
 /**
