@@ -732,18 +732,12 @@ class PurgeCSS {
       this.variablesStructure.safelist = safelist.variables || [];
     }
 
-    const fileFormatContents = content.filter(
-      (o) => typeof o === "string",
-    ) as string[];
+
     const rawFormatContents = content.filter(
       (o) => typeof o === "object",
     ) as RawContent[];
 
-    // @ts-ignore
-    const cssFileSelectors = await this.extractSelectorsFromFiles(
-      fileFormatContents,
-      extractors,
-    );
+
     const cssRawSelectors = await this.extractSelectorsFromString(
       rawFormatContents,
       extractors,
@@ -751,7 +745,7 @@ class PurgeCSS {
 
     return this.getPurgedCSS(
       css,
-      mergeExtractorSelectors(cssFileSelectors, cssRawSelectors),
+      mergeExtractorSelectors({} as any, cssRawSelectors),
     );
   }
 

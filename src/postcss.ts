@@ -63,24 +63,16 @@ async function purgeCSS(
 
   const { content, extractors } = options;
 
-  const fileFormatContents = content.filter(
-    (o) => typeof o === "string",
-  ) as string[];
   const rawFormatContents = content.filter(
     (o) => typeof o === "object",
   ) as RawContent[];
 
-  // @ts-ignore
-  const cssFileSelectors = await purgeCSS.extractSelectorsFromFiles(
-    fileFormatContents,
-    extractors,
-  );
   const cssRawSelectors = await purgeCSS.extractSelectorsFromString(
     rawFormatContents,
     extractors,
   );
 
-  const selectors = mergeExtractorSelectors(cssFileSelectors, cssRawSelectors);
+  const selectors = mergeExtractorSelectors({} as any, cssRawSelectors);
 
   //purge unused selectors
   purgeCSS.walkThroughCSS(root, selectors);
