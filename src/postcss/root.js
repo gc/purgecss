@@ -45,14 +45,14 @@ export class Root extends Container {
     const lazy = new LazyResult(new Processor(), this, opts)
     return lazy.stringify()
   }
-}
 
-Root.registerLazyResult = dependant => {
+  static registerLazyResult = dependant => {
   LazyResult = dependant
 }
 
-Root.registerProcessor = dependant => {
+static registerProcessor = dependant => {
   Processor = dependant
+}
 }
 
 Container.registerRoot(Root)

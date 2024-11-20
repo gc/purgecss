@@ -1215,42 +1215,8 @@ var init_container = __esm({
   }
 });
 
-// src/postcss/document.js
-var document_exports = {};
-__export(document_exports, {
-  Document: () => Document
-});
-var LazyResult, Processor, Document;
-var init_document = __esm({
-  "src/postcss/document.js"() {
-    "use strict";
-    init_container();
-    Document = class extends Container {
-      static {
-        __name(this, "Document");
-      }
-      constructor(defaults) {
-        super({ type: "document", ...defaults });
-        if (!this.nodes) {
-          this.nodes = [];
-        }
-      }
-      toResult(opts = {}) {
-        const lazy = new LazyResult(new Processor(), this, opts);
-        return lazy.stringify();
-      }
-    };
-    Document.registerLazyResult = (dependant) => {
-      LazyResult = dependant;
-    };
-    Document.registerProcessor = (dependant) => {
-      Processor = dependant;
-    };
-  }
-});
-
 // src/postcss/root.js
-var LazyResult2, Processor2, Root2;
+var LazyResult, Processor, Root2;
 var init_root = __esm({
   "src/postcss/root.js"() {
     "use strict";
@@ -1289,17 +1255,51 @@ var init_root = __esm({
         return super.removeChild(child);
       }
       toResult(opts = {}) {
-        const lazy = new LazyResult2(new Processor2(), this, opts);
+        const lazy = new LazyResult(new Processor(), this, opts);
         return lazy.stringify();
       }
       static registerLazyResult = /* @__PURE__ */ __name((dependant) => {
-        LazyResult2 = dependant;
+        LazyResult = dependant;
       }, "registerLazyResult");
       static registerProcessor = /* @__PURE__ */ __name((dependant) => {
-        Processor2 = dependant;
+        Processor = dependant;
       }, "registerProcessor");
     };
     Container.registerRoot(Root2);
+  }
+});
+
+// src/postcss/document.js
+var document_exports = {};
+__export(document_exports, {
+  Document: () => Document
+});
+var LazyResult2, Processor2, Document;
+var init_document = __esm({
+  "src/postcss/document.js"() {
+    "use strict";
+    init_container();
+    Document = class extends Container {
+      static {
+        __name(this, "Document");
+      }
+      constructor(defaults) {
+        super({ type: "document", ...defaults });
+        if (!this.nodes) {
+          this.nodes = [];
+        }
+      }
+      toResult(opts = {}) {
+        const lazy = new LazyResult2(new Processor2(), this, opts);
+        return lazy.stringify();
+      }
+    };
+    Document.registerLazyResult = (dependant) => {
+      LazyResult2 = dependant;
+    };
+    Document.registerProcessor = (dependant) => {
+      Processor2 = dependant;
+    };
   }
 });
 
@@ -1835,27 +1835,6 @@ var init_map_generator = __esm({
         return url;
       }
     };
-  }
-});
-
-// src/postcss/warn-once.js
-var warn_once_exports = {};
-__export(warn_once_exports, {
-  warnOnce: () => warnOnce
-});
-function warnOnce(message) {
-  if (printed[message]) return;
-  printed[message] = true;
-  if (typeof console !== "undefined" && console.warn) {
-    console.warn(message);
-  }
-}
-var printed;
-var init_warn_once = __esm({
-  "src/postcss/warn-once.js"() {
-    "use strict";
-    printed = {};
-    __name(warnOnce, "warnOnce");
   }
 });
 
@@ -2848,121 +2827,26 @@ var init_result = __esm({
   }
 });
 
-// src/postcss/processor.js
-init_document();
-init_root();
-
-// src/postcss/no-work-result.js
-init_map_generator();
-init_warn_once();
-init_parse();
-init_result();
-init_stringify();
-var NoWorkResult = class {
-  static {
-    __name(this, "NoWorkResult");
+// src/postcss/warn-once.js
+var warn_once_exports = {};
+__export(warn_once_exports, {
+  warnOnce: () => warnOnce
+});
+function warnOnce(message) {
+  if (printed[message]) return;
+  printed[message] = true;
+  if (typeof console !== "undefined" && console.warn) {
+    console.warn(message);
   }
-  constructor(processor, css, opts) {
-    css = css.toString();
-    this.stringified = false;
-    this._processor = processor;
-    this._css = css;
-    this._opts = opts;
-    this._map = void 0;
-    let root;
-    const str = stringify;
-    this.result = new Result(this._processor, root, this._opts);
-    this.result.css = css;
-    const self = this;
-    Object.defineProperty(this.result, "root", {
-      get() {
-        return self.root;
-      }
-    });
-    const map = new MapGenerator(str, root, this._opts, css);
-    if (map.isMap()) {
-      const [generatedCSS, generatedMap] = map.generate();
-      if (generatedCSS) {
-        this.result.css = generatedCSS;
-      }
-      if (generatedMap) {
-        this.result.map = generatedMap;
-      }
-    } else {
-      map.clearAnnotation();
-      this.result.css = map.css;
-    }
+}
+var printed;
+var init_warn_once = __esm({
+  "src/postcss/warn-once.js"() {
+    "use strict";
+    printed = {};
+    __name(warnOnce, "warnOnce");
   }
-  async() {
-    if (this.error) return Promise.reject(this.error);
-    return Promise.resolve(this.result);
-  }
-  catch(onRejected) {
-    return this.async().catch(onRejected);
-  }
-  finally(onFinally) {
-    return this.async().then(onFinally, onFinally);
-  }
-  sync() {
-    if (this.error) throw this.error;
-    return this.result;
-  }
-  then(onFulfilled, onRejected) {
-    if (process.env.NODE_ENV !== "production") {
-      if (!("from" in this._opts)) {
-        warnOnce(
-          "Without `from` option PostCSS could generate wrong source map and will not find Browserslist config. Set it to CSS file path or to `undefined` to prevent this warning."
-        );
-      }
-    }
-    return this.async().then(onFulfilled, onRejected);
-  }
-  toString() {
-    return this._css;
-  }
-  warnings() {
-    return [];
-  }
-  get content() {
-    return this.result.css;
-  }
-  get css() {
-    return this.result.css;
-  }
-  get map() {
-    return this.result.map;
-  }
-  get messages() {
-    return [];
-  }
-  get opts() {
-    return this.result.opts;
-  }
-  get processor() {
-    return this.result.processor;
-  }
-  get root() {
-    if (this._root) {
-      return this._root;
-    }
-    let root;
-    const parser = parse2;
-    try {
-      root = parser(this._css, this._opts);
-    } catch (error) {
-      this.error = error;
-    }
-    if (this.error) {
-      throw this.error;
-    } else {
-      this._root = root;
-      return root;
-    }
-  }
-  get [Symbol.toStringTag]() {
-    return "NoWorkResult";
-  }
-};
+});
 
 // src/postcss/lazy-result.js
 init_root();
@@ -3437,57 +3321,7 @@ LazyResult3.registerPostcss = (dependant) => {
 };
 Root2.registerLazyResult(LazyResult3);
 Document2.registerLazyResult(LazyResult3);
-
-// src/postcss/processor.js
-var Processor3 = class {
-  static {
-    __name(this, "Processor");
-  }
-  constructor(plugins = []) {
-    this.version = "8.4.49";
-    this.plugins = this.normalize(plugins);
-  }
-  normalize(plugins) {
-    let normalized = [];
-    for (let i of plugins) {
-      if (i.postcss === true) {
-        i = i();
-      } else if (i.postcss) {
-        i = i.postcss;
-      }
-      if (typeof i === "object" && Array.isArray(i.plugins)) {
-        normalized = normalized.concat(i.plugins);
-      } else if (typeof i === "object" && i.postcssPlugin) {
-        normalized.push(i);
-      } else if (typeof i === "function") {
-        normalized.push(i);
-      } else if (typeof i === "object" && (i.parse || i.stringify)) {
-        if (process.env.NODE_ENV !== "production") {
-          throw new Error(
-            "PostCSS syntaxes cannot be used as plugins. Instead, please use one of the syntax/parser/stringifier options as outlined in your PostCSS runner documentation."
-          );
-        }
-      } else {
-        throw new Error(i + " is not a PostCSS plugin");
-      }
-    }
-    return normalized;
-  }
-  process(css, opts = {}) {
-    if (!this.plugins.length && !opts.parser && !opts.stringifier && !opts.syntax) {
-      return new NoWorkResult(this, css, opts);
-    } else {
-      return new LazyResult3(this, css, opts);
-    }
-  }
-  use(plugin) {
-    this.plugins = this.plugins.concat(this.normalize([plugin]));
-    return this;
-  }
-};
-Root2.registerProcessor(Processor3);
-Document.registerProcessor(Processor3);
 export {
-  Processor3 as Processor
+  LazyResult3 as LazyResult
 };
-//# sourceMappingURL=processor.mjs.map
+//# sourceMappingURL=lazy-result.mjs.map

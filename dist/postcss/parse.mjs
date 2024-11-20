@@ -1388,12 +1388,12 @@ var Root2 = class extends Container {
     const lazy = new LazyResult(new Processor(), this, opts);
     return lazy.stringify();
   }
-};
-Root2.registerLazyResult = (dependant) => {
-  LazyResult = dependant;
-};
-Root2.registerProcessor = (dependant) => {
-  Processor = dependant;
+  static registerLazyResult = /* @__PURE__ */ __name((dependant) => {
+    LazyResult = dependant;
+  }, "registerLazyResult");
+  static registerProcessor = /* @__PURE__ */ __name((dependant) => {
+    Processor = dependant;
+  }, "registerProcessor");
 };
 Container.registerRoot(Root2);
 

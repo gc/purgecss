@@ -1,6 +1,7 @@
 import { Document } from "./document";
 import { Root } from './root';
 import { NoWorkResult } from './no-work-result';
+import { LazyResult } from './lazy-result';
 
 export class Processor {
   constructor(plugins = []) {
@@ -47,7 +48,7 @@ export class Processor {
     ) {
       return new NoWorkResult(this, css, opts)
     } else {
-       return Promise.resolve({css});
+       return new LazyResult(this, css, opts)
     }
   }
 

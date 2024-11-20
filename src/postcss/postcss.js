@@ -15,6 +15,9 @@ import { fromJSON } from "./fromJSON";
 import { Processor } from "./processor";
 import { Warning } from "./warning";
 import { Result } from "./result";
+import { LazyResult } from "./lazy-result";
+
+LazyResult.registerPostcss(postcss)
 
 function postcss(...plugins) {
   if (plugins.length === 1 && Array.isArray(plugins[0])) {
