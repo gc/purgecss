@@ -1,5 +1,3 @@
-import { dirname, join } from 'path';
-
 function fromBase64(str) {
   if (Buffer) {
     return Buffer.from(str, 'base64').toString()
@@ -20,7 +18,6 @@ export class PreviousMap {
     if (!this.mapFile && opts.from) {
       this.mapFile = opts.from
     }
-    if (this.mapFile) this.root = dirname(this.mapFile)
     if (text) this.text = text
   }
 
@@ -79,11 +76,6 @@ export class PreviousMap {
   }
 
   loadFile(path) {
-    // this.root = dirname(path)
-    // if (existsSync(path)) {
-    //   this.mapFile = path
-    //   return readFileSync(path, 'utf-8').toString().trim()
-    // }
     throw new Error("Shouldnt be used");
   }
 
@@ -114,8 +106,7 @@ export class PreviousMap {
     } else if (this.inline) {
       return this.decodeInline(this.annotation)
     } else if (this.annotation) {
-      let map = this.annotation
-      if (file) map = join(dirname(file), map)
+      const map = this.annotation
       return this.loadFile(map)
     }
   }

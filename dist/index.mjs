@@ -1372,8 +1372,8 @@ var init_rule = __esm({
       }
       set selectors(values) {
         const match = this.selector ? this.selector.match(/,\s*/) : null;
-        const sep2 = match ? match[0] : "," + this.raw("between", "beforeOpen");
-        this.selector = values.join(sep2);
+        const sep = match ? match[0] : "," + this.raw("between", "beforeOpen");
+        this.selector = values.join(sep);
       }
     };
     Container.registerRule(Rule2);
@@ -1397,17 +1397,13 @@ var init_non_secure = __esm({
 });
 
 // src/postcss/input.js
-import { isAbsolute, resolve } from "path";
-import { fileURLToPath, pathToFileURL } from "url";
-var fromOffsetCache, sourceMapAvailable, pathAvailable, Input;
+var fromOffsetCache, Input;
 var init_input = __esm({
   "src/postcss/input.js"() {
     "use strict";
     init_non_secure();
     init_css_syntax_error();
     fromOffsetCache = Symbol("fromOffsetCache");
-    sourceMapAvailable = Boolean(false);
-    pathAvailable = Boolean(resolve && isAbsolute);
     Input = class {
       static {
         __name(this, "Input");
@@ -1422,13 +1418,6 @@ var init_input = __esm({
           this.css = this.css.slice(1);
         } else {
           this.hasBOM = false;
-        }
-        if (opts.from) {
-          if (!pathAvailable || /^\w+:\/\//.test(opts.from) || isAbsolute(opts.from)) {
-            this.file = opts.from;
-          } else {
-            this.file = resolve(opts.from);
-          }
         }
         if (!this.file) {
           this.id = "<input css " + nanoid(6) + ">";
@@ -1483,9 +1472,6 @@ var init_input = __esm({
         }
         result.input = { column, endColumn, endLine, line, source: this.css };
         if (this.file) {
-          if (pathToFileURL) {
-            result.input.url = pathToFileURL(this.file).toString();
-          }
           result.input.file = this.file;
         }
         return result;
@@ -1528,12 +1514,6 @@ var init_input = __esm({
           line: min + 1
         };
       }
-      mapResolve(file) {
-        if (/^\w+:\/\//.test(file)) {
-          return file;
-        }
-        return resolve(this.map.consumer().sourceRoot || this.map.root || ".", file);
-      }
       origin(line, column, endLine, endColumn) {
         if (!this.map) return false;
         const consumer = this.map.consumer();
@@ -1544,14 +1524,10 @@ var init_input = __esm({
           to = consumer.originalPositionFor({ column: endColumn, line: endLine });
         }
         let fromUrl;
-        if (isAbsolute(from.source)) {
-          fromUrl = pathToFileURL(from.source);
-        } else {
-          fromUrl = new URL(
-            from.source,
-            this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile)
-          );
-        }
+        fromUrl = new URL(
+          from.source,
+          this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile)
+        );
         const result = {
           column: from.column,
           endColumn: to && to.column,
@@ -1559,13 +1535,6 @@ var init_input = __esm({
           line: from.line,
           url: fromUrl.toString()
         };
-        if (fromUrl.protocol === "file:") {
-          if (fileURLToPath) {
-            result.file = fileURLToPath(fromUrl);
-          } else {
-            throw new Error(`file: protocol is not available in this PostCSS build`);
-          }
-        }
         const source = consumer.sourceContentFor(from.source);
         if (source) result.source = source;
         return result;
@@ -2426,15 +2395,11 @@ var map_generator_exports = {};
 __export(map_generator_exports, {
   MapGenerator: () => MapGenerator
 });
-import { dirname, relative, resolve as resolve2, sep } from "path";
-import { pathToFileURL as pathToFileURL2 } from "url";
-var sourceMapAvailable2, pathAvailable2, MapGenerator;
+var MapGenerator;
 var init_map_generator = __esm({
   "src/postcss/map-generator.js"() {
     "use strict";
     init_input();
-    sourceMapAvailable2 = Boolean(false);
-    pathAvailable2 = Boolean(dirname && resolve2 && relative && sep);
     MapGenerator = class {
       static {
         __name(this, "MapGenerator");
@@ -2467,20 +2432,6 @@ var init_map_generator = __esm({
         this.css += eol + "/*# sourceMappingURL=" + content + " */";
       }
       applyPrevMaps() {
-        for (const prev of this.previous()) {
-          const from = this.toUrl(this.path(prev.file));
-          const root = prev.root || dirname(prev.file);
-          let map;
-          if (this.mapOpts.sourcesContent === false) {
-            map = new SourceMapConsumer(prev.text);
-            if (map.sourcesContent) {
-              map.sourcesContent = null;
-            }
-          } else {
-            map = prev.consumer();
-          }
-          this.map.applySourceMap(map, from, this.toUrl(this.path(root)));
-        }
       }
       clearAnnotation() {
         if (this.mapOpts.annotation === false) return;
@@ -2499,15 +2450,11 @@ var init_map_generator = __esm({
       }
       generate() {
         this.clearAnnotation();
-        if (pathAvailable2 && sourceMapAvailable2 && this.isMap()) {
-          return this.generateMap();
-        } else {
-          let result = "";
-          this.stringify(this.root, (i) => {
-            result += i;
-          });
-          return [result];
-        }
+        let result = "";
+        this.stringify(this.root, (i) => {
+          result += i;
+        });
+        return [result];
       }
       generateMap() {
         if (this.root) {
@@ -2651,18 +2598,7 @@ var init_map_generator = __esm({
         }
       }
       path(file) {
-        if (this.mapOpts.absolute) return file;
-        if (file.charCodeAt(0) === 60) return file;
-        if (/^\w+:\/\//.test(file)) return file;
-        const cached = this.memoizedPaths.get(file);
-        if (cached) return cached;
-        let from = this.opts.to ? dirname(this.opts.to) : ".";
-        if (typeof this.mapOpts.annotation === "string") {
-          from = dirname(resolve2(from, this.mapOpts.annotation));
-        }
-        const path = relative(from, file);
-        this.memoizedPaths.set(file, path);
-        return path;
+        return file;
       }
       previous() {
         if (!this.previousMaps) {
@@ -2684,22 +2620,7 @@ var init_map_generator = __esm({
         return this.previousMaps;
       }
       setSourcesContent() {
-        const already = {};
-        if (this.root) {
-          this.root.walk((node) => {
-            if (node.source) {
-              const from = node.source.input.from;
-              if (from && !already[from]) {
-                already[from] = true;
-                const fromUrl = this.usesFileUrls ? this.toFileUrl(from) : this.toUrl(this.path(from));
-                this.map.setSourceContent(fromUrl, node.source.input.css);
-              }
-            }
-          });
-        } else if (this.css) {
-          const from = this.opts.from ? this.toUrl(this.path(this.opts.from)) : "<no source>";
-          this.map.setSourceContent(from, this.css);
-        }
+        throw new Error(`setSourcesContent isnt implemented`);
       }
       sourcePath(node) {
         if (this.mapOpts.from) {
@@ -2720,22 +2641,14 @@ var init_map_generator = __esm({
       toFileUrl(path) {
         const cached = this.memoizedFileURLs.get(path);
         if (cached) return cached;
-        if (pathToFileURL2) {
-          const fileURL = pathToFileURL2(path).toString();
-          this.memoizedFileURLs.set(path, fileURL);
-          return fileURL;
-        } else {
-          throw new Error(
-            "`map.absolute` option is not available in this PostCSS build"
-          );
-        }
+        throw new Error(
+          "`map.absolute` option is not available in this PostCSS build"
+        );
       }
       toUrl(path) {
         const cached = this.memoizedURLs.get(path);
         if (cached) return cached;
-        if (sep === "\\") {
-          path = path.replace(/\\/g, "/");
-        }
+        path = path.replace(/\\/g, "/");
         const url = encodeURI(path).replace(/[#?]/g, encodeURIComponent);
         this.memoizedURLs.set(path, url);
         return url;

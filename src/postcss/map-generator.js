@@ -1,10 +1,4 @@
-import { dirname, relative, resolve, sep } from 'path';
-import { pathToFileURL } from 'url';
-
 import { Input } from './input';
-
-const sourceMapAvailable = Boolean(false);
-const pathAvailable = Boolean(dirname && resolve && relative && sep)
 
 export class MapGenerator {
   constructor(stringify, root, opts, cssString) {
@@ -41,22 +35,7 @@ export class MapGenerator {
   }
 
   applyPrevMaps() {
-    for (const prev of this.previous()) {
-      const from = this.toUrl(this.path(prev.file))
-      const root = prev.root || dirname(prev.file)
-      let map
-
-      if (this.mapOpts.sourcesContent === false) {
-        map = new SourceMapConsumer(prev.text)
-        if (map.sourcesContent) {
-          map.sourcesContent = null
-        }
-      } else {
-        map = prev.consumer()
-      }
-
-      this.map.applySourceMap(map, from, this.toUrl(this.path(root)))
-    }
+   
   }
 
   clearAnnotation() {
@@ -78,15 +57,11 @@ export class MapGenerator {
 
   generate() {
     this.clearAnnotation()
-    if (pathAvailable && sourceMapAvailable && this.isMap()) {
-      return this.generateMap()
-    } else {
       let result = ''
       this.stringify(this.root, i => {
         result += i
       })
       return [result]
-    }
   }
 
   generateMap() {
@@ -251,22 +226,7 @@ export class MapGenerator {
   }
 
   path(file) {
-    if (this.mapOpts.absolute) return file
-    if (file.charCodeAt(0) === 60 /* `<` */) return file
-    if (/^\w+:\/\//.test(file)) return file
-    const cached = this.memoizedPaths.get(file)
-    if (cached) return cached
-
-    let from = this.opts.to ? dirname(this.opts.to) : '.'
-
-    if (typeof this.mapOpts.annotation === 'string') {
-      from = dirname(resolve(from, this.mapOpts.annotation))
-    }
-
-    const path = relative(from, file)
-    this.memoizedPaths.set(file, path)
-
-    return path
+   return file;
   }
 
   previous() {
@@ -291,26 +251,7 @@ export class MapGenerator {
   }
 
   setSourcesContent() {
-    const already = {}
-    if (this.root) {
-      this.root.walk(node => {
-        if (node.source) {
-          const from = node.source.input.from
-          if (from && !already[from]) {
-            already[from] = true
-            const fromUrl = this.usesFileUrls
-              ? this.toFileUrl(from)
-              : this.toUrl(this.path(from))
-            this.map.setSourceContent(fromUrl, node.source.input.css)
-          }
-        }
-      })
-    } else if (this.css) {
-      const from = this.opts.from
-        ? this.toUrl(this.path(this.opts.from))
-        : '<no source>'
-      this.map.setSourceContent(from, this.css)
-    }
+    throw new Error(`setSourcesContent isnt implemented`);
   }
 
   sourcePath(node) {
@@ -335,25 +276,16 @@ export class MapGenerator {
     const cached = this.memoizedFileURLs.get(path)
     if (cached) return cached
 
-    if (pathToFileURL) {
-      const fileURL = pathToFileURL(path).toString()
-      this.memoizedFileURLs.set(path, fileURL)
-
-      return fileURL
-    } else {
       throw new Error(
         '`map.absolute` option is not available in this PostCSS build'
       )
-    }
   }
 
   toUrl(path) {
     const cached = this.memoizedURLs.get(path)
     if (cached) return cached
 
-    if (sep === '\\') {
-      path = path.replace(/\\/g, '/')
-    }
+    path = path.replace(/\\/g, '/')
 
     const url = encodeURI(path).replace(/[#?]/g, encodeURIComponent)
     this.memoizedURLs.set(path, url)

@@ -2,7 +2,6 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
 // src/postcss/previous-map.js
-import { dirname, join } from "path";
 function fromBase64(str) {
   if (Buffer) {
     return Buffer.from(str, "base64").toString();
@@ -24,7 +23,6 @@ var PreviousMap = class {
     if (!this.mapFile && opts.from) {
       this.mapFile = opts.from;
     }
-    if (this.mapFile) this.root = dirname(this.mapFile);
     if (text) this.text = text;
   }
   consumer() {
@@ -94,8 +92,7 @@ var PreviousMap = class {
     } else if (this.inline) {
       return this.decodeInline(this.annotation);
     } else if (this.annotation) {
-      let map = this.annotation;
-      if (file) map = join(dirname(file), map);
+      const map = this.annotation;
       return this.loadFile(map);
     }
   }

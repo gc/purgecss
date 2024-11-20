@@ -1141,11 +1141,7 @@ var nanoid = /* @__PURE__ */ __name((size = 21) => {
 }, "nanoid");
 
 // src/postcss/input.js
-import { isAbsolute, resolve } from "path";
-import { fileURLToPath, pathToFileURL } from "url";
 var fromOffsetCache = Symbol("fromOffsetCache");
-var sourceMapAvailable = Boolean(false);
-var pathAvailable = Boolean(resolve && isAbsolute);
 var Input = class {
   static {
     __name(this, "Input");
@@ -1160,13 +1156,6 @@ var Input = class {
       this.css = this.css.slice(1);
     } else {
       this.hasBOM = false;
-    }
-    if (opts.from) {
-      if (!pathAvailable || /^\w+:\/\//.test(opts.from) || isAbsolute(opts.from)) {
-        this.file = opts.from;
-      } else {
-        this.file = resolve(opts.from);
-      }
     }
     if (!this.file) {
       this.id = "<input css " + nanoid(6) + ">";
@@ -1221,9 +1210,6 @@ var Input = class {
     }
     result.input = { column, endColumn, endLine, line, source: this.css };
     if (this.file) {
-      if (pathToFileURL) {
-        result.input.url = pathToFileURL(this.file).toString();
-      }
       result.input.file = this.file;
     }
     return result;
@@ -1266,12 +1252,6 @@ var Input = class {
       line: min + 1
     };
   }
-  mapResolve(file) {
-    if (/^\w+:\/\//.test(file)) {
-      return file;
-    }
-    return resolve(this.map.consumer().sourceRoot || this.map.root || ".", file);
-  }
   origin(line, column, endLine, endColumn) {
     if (!this.map) return false;
     const consumer = this.map.consumer();
@@ -1282,14 +1262,10 @@ var Input = class {
       to = consumer.originalPositionFor({ column: endColumn, line: endLine });
     }
     let fromUrl;
-    if (isAbsolute(from.source)) {
-      fromUrl = pathToFileURL(from.source);
-    } else {
-      fromUrl = new URL(
-        from.source,
-        this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile)
-      );
-    }
+    fromUrl = new URL(
+      from.source,
+      this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile)
+    );
     const result = {
       column: from.column,
       endColumn: to && to.column,
@@ -1297,13 +1273,6 @@ var Input = class {
       line: from.line,
       url: fromUrl.toString()
     };
-    if (fromUrl.protocol === "file:") {
-      if (fileURLToPath) {
-        result.file = fileURLToPath(fromUrl);
-      } else {
-        throw new Error(`file: protocol is not available in this PostCSS build`);
-      }
-    }
     const source = consumer.sourceContentFor(from.source);
     if (source) result.source = source;
     return result;

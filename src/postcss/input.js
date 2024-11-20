@@ -1,14 +1,9 @@
 
 
 import { nanoid } from 'nanoid/non-secure';
-import { isAbsolute, resolve } from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
 import { CssSyntaxError } from "./css-syntax-error";
 
 const fromOffsetCache = Symbol('fromOffsetCache')
-
-const sourceMapAvailable = Boolean(false);
-const pathAvailable = Boolean(resolve && isAbsolute)
 
 export class Input {
   constructor(css, opts = {}) {
@@ -28,27 +23,6 @@ export class Input {
     } else {
       this.hasBOM = false
     }
-
-    if (opts.from) {
-      if (
-        !pathAvailable ||
-        /^\w+:\/\//.test(opts.from) ||
-        isAbsolute(opts.from)
-      ) {
-        this.file = opts.from
-      } else {
-        this.file = resolve(opts.from)
-      }
-    }
-
-    // if (pathAvailable && sourceMapAvailable) {
-    //   const map = new PreviousMap(this.css, opts)
-    //   if (map.text) {
-    //     this.map = map
-    //     const file = map.consumer().file
-    //     if (!this.file && file) this.file = this.mapResolve(file)
-    //   }
-    // }
 
     if (!this.file) {
       this.id = '<input css ' + nanoid(6) + '>'
@@ -111,9 +85,6 @@ export class Input {
 
     result.input = { column, endColumn, endLine, line, source: this.css }
     if (this.file) {
-      if (pathToFileURL) {
-        result.input.url = pathToFileURL(this.file).toString()
-      }
       result.input.file = this.file
     }
 
@@ -162,13 +133,6 @@ export class Input {
     }
   }
 
-  mapResolve(file) {
-    if (/^\w+:\/\//.test(file)) {
-      return file
-    }
-    return resolve(this.map.consumer().sourceRoot || this.map.root || '.', file)
-  }
-
   origin(line, column, endLine, endColumn) {
     if (!this.map) return false
     const consumer = this.map.consumer()
@@ -183,14 +147,11 @@ export class Input {
 
     let fromUrl
 
-    if (isAbsolute(from.source)) {
-      fromUrl = pathToFileURL(from.source)
-    } else {
+
       fromUrl = new URL(
         from.source,
         this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile)
       )
-    }
 
     const result = {
       column: from.column,
@@ -198,15 +159,6 @@ export class Input {
       endLine: to && to.line,
       line: from.line,
       url: fromUrl.toString()
-    }
-
-    if (fromUrl.protocol === 'file:') {
-      if (fileURLToPath) {
-        result.file = fileURLToPath(fromUrl)
-      } else {
-        /* c8 ignore next 2 */
-        throw new Error(`file: protocol is not available in this PostCSS build`)
-      }
     }
 
     const source = consumer.sourceContentFor(from.source)
