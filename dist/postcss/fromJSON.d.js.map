@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../../src/postcss/fromJSON.d.ts"],
   "sourcesContent": ["import { JSONHydrator } from './postcss.js'\n\ninterface FromJSON extends JSONHydrator {\n  default: FromJSON\n}\n\ndeclare const fromJSON: FromJSON\n\nexport = fromJSON\n"],
-  "mappings": "8DAAA,IAAAA,EAAAC,EAAA,CAAAC,EAAAC,IAAA,CAQAA,EAAA,QAAS",
-  "names": ["require_fromJSON_d", "__commonJSMin", "exports", "module"]
+  "mappings": ";;;;;;AAAA;AAAA;AAQA,qBAAS;AAAA;AAAA;",
+  "names": []
 }

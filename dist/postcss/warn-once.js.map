@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../../src/postcss/warn-once.js"],
   "sourcesContent": ["/* eslint-disable no-console */\n'use strict'\n\nlet printed = {}\n\nmodule.exports = function warnOnce(message) {\n  if (printed[message]) return\n  printed[message] = true\n\n  if (typeof console !== 'undefined' && console.warn) {\n    console.warn(message)\n  }\n}\n"],
-  "mappings": "6IAAA,IAAAA,EAAAC,EAAA,CAAAC,EAAAC,IAAA,CAGA,IAAIC,EAAU,CAAC,EAEfD,EAAO,QAAUE,EAAA,SAAkBC,EAAS,CACtCF,EAAQE,CAAO,IACnBF,EAAQE,CAAO,EAAI,GAEf,OAAO,QAAY,KAAe,QAAQ,MAC5C,QAAQ,KAAKA,CAAO,EAExB,EAPiB",
-  "names": ["require_warn_once", "__commonJSMin", "exports", "module", "printed", "__name", "message"]
+  "mappings": ";;;;;;;;AAAA;AAAA;AAGA,QAAI,UAAU,CAAC;AAEf,WAAO,UAAU,gCAAS,SAAS,SAAS;AAC1C,UAAI,QAAQ,OAAO,EAAG;AACtB,cAAQ,OAAO,IAAI;AAEnB,UAAI,OAAO,YAAY,eAAe,QAAQ,MAAM;AAClD,gBAAQ,KAAK,OAAO;AAAA,MACtB;AAAA,IACF,GAPiB;AAAA;AAAA;",
+  "names": []
 }

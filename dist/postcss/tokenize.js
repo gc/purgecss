@@ -1,2 +1,227 @@
-var H=Object.defineProperty;var a=(l,r)=>H(l,"name",{value:r,configurable:!0});var p=(l,r)=>()=>(r||l((r={exports:{}}).exports,r),r.exports);var D=p((K,P)=>{var S=/[\t\n\f\r "#'()/;[\\\]{}]/g,h=/[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g,w=/.[\r\n"'(/\\]/,I=/[\da-f]/i;P.exports=a(function(r,g={}){let c=r.css.valueOf(),f=g.ignoreErrors,s,O,d,e,R,o,n,A,E,T,u=c.length,t=0,L=[],i=[];function k(){return t}a(k,"position");function N(C){throw r.error("Unclosed "+C,t)}a(N,"unclosed");function B(){return i.length===0&&t>=u}a(B,"endOfFile");function b(C){if(i.length)return i.pop();if(t>=u)return;let _=C?C.ignoreUnclosed:!1;switch(s=c.charCodeAt(t),s){case 10:case 32:case 9:case 13:case 12:{e=t;do e+=1,s=c.charCodeAt(e);while(s===32||s===10||s===9||s===13||s===12);o=["space",c.slice(t,e)],t=e-1;break}case 91:case 93:case 123:case 125:case 58:case 59:case 41:{let U=String.fromCharCode(s);o=[U,U,t];break}case 40:{if(T=L.length?L.pop()[1]:"",E=c.charCodeAt(t+1),T==="url"&&E!==39&&E!==34&&E!==32&&E!==10&&E!==9&&E!==12&&E!==13){e=t;do{if(n=!1,e=c.indexOf(")",e+1),e===-1)if(f||_){e=t;break}else N("bracket");for(A=e;c.charCodeAt(A-1)===92;)A-=1,n=!n}while(n);o=["brackets",c.slice(t,e+1),t,e],t=e}else e=c.indexOf(")",t+1),O=c.slice(t,e+1),e===-1||w.test(O)?o=["(","(",t]:(o=["brackets",O,t,e],t=e);break}case 39:case 34:{R=s===39?"'":'"',e=t;do{if(n=!1,e=c.indexOf(R,e+1),e===-1)if(f||_){e=t+1;break}else N("string");for(A=e;c.charCodeAt(A-1)===92;)A-=1,n=!n}while(n);o=["string",c.slice(t,e+1),t,e],t=e;break}case 64:{S.lastIndex=t+1,S.test(c),S.lastIndex===0?e=c.length-1:e=S.lastIndex-2,o=["at-word",c.slice(t,e+1),t,e],t=e;break}case 92:{for(e=t,d=!0;c.charCodeAt(e+1)===92;)e+=1,d=!d;if(s=c.charCodeAt(e+1),d&&s!==47&&s!==32&&s!==10&&s!==9&&s!==13&&s!==12&&(e+=1,I.test(c.charAt(e)))){for(;I.test(c.charAt(e+1));)e+=1;c.charCodeAt(e+1)===32&&(e+=1)}o=["word",c.slice(t,e+1),t,e],t=e;break}default:{s===47&&c.charCodeAt(t+1)===42?(e=c.indexOf("*/",t+2)+1,e===0&&(f||_?e=c.length:N("comment")),o=["comment",c.slice(t,e+1),t,e],t=e):(h.lastIndex=t+1,h.test(c),h.lastIndex===0?e=c.length-1:e=h.lastIndex-2,o=["word",c.slice(t,e+1),t,e],L.push(o),t=e);break}}return t++,o}a(b,"nextToken");function x(C){i.push(C)}return a(x,"back"),{back:x,endOfFile:B,nextToken:b,position:k}},"tokenizer")});export default D();
+var __defProp = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
+
+// src/postcss/tokenize.js
+var require_tokenize = __commonJS({
+  "src/postcss/tokenize.js"(exports, module) {
+    var SINGLE_QUOTE = "'".charCodeAt(0);
+    var DOUBLE_QUOTE = '"'.charCodeAt(0);
+    var BACKSLASH = "\\".charCodeAt(0);
+    var SLASH = "/".charCodeAt(0);
+    var NEWLINE = "\n".charCodeAt(0);
+    var SPACE = " ".charCodeAt(0);
+    var FEED = "\f".charCodeAt(0);
+    var TAB = "	".charCodeAt(0);
+    var CR = "\r".charCodeAt(0);
+    var OPEN_SQUARE = "[".charCodeAt(0);
+    var CLOSE_SQUARE = "]".charCodeAt(0);
+    var OPEN_PARENTHESES = "(".charCodeAt(0);
+    var CLOSE_PARENTHESES = ")".charCodeAt(0);
+    var OPEN_CURLY = "{".charCodeAt(0);
+    var CLOSE_CURLY = "}".charCodeAt(0);
+    var SEMICOLON = ";".charCodeAt(0);
+    var ASTERISK = "*".charCodeAt(0);
+    var COLON = ":".charCodeAt(0);
+    var AT = "@".charCodeAt(0);
+    var RE_AT_END = /[\t\n\f\r "#'()/;[\\\]{}]/g;
+    var RE_WORD_END = /[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g;
+    var RE_BAD_BRACKET = /.[\r\n"'(/\\]/;
+    var RE_HEX_ESCAPE = /[\da-f]/i;
+    module.exports = /* @__PURE__ */ __name(function tokenizer(input, options = {}) {
+      let css = input.css.valueOf();
+      let ignore = options.ignoreErrors;
+      let code, content, escape, next, quote;
+      let currentToken, escaped, escapePos, n, prev;
+      let length = css.length;
+      let pos = 0;
+      let buffer = [];
+      let returned = [];
+      function position() {
+        return pos;
+      }
+      __name(position, "position");
+      function unclosed(what) {
+        throw input.error("Unclosed " + what, pos);
+      }
+      __name(unclosed, "unclosed");
+      function endOfFile() {
+        return returned.length === 0 && pos >= length;
+      }
+      __name(endOfFile, "endOfFile");
+      function nextToken(opts) {
+        if (returned.length) return returned.pop();
+        if (pos >= length) return;
+        let ignoreUnclosed = opts ? opts.ignoreUnclosed : false;
+        code = css.charCodeAt(pos);
+        switch (code) {
+          case NEWLINE:
+          case SPACE:
+          case TAB:
+          case CR:
+          case FEED: {
+            next = pos;
+            do {
+              next += 1;
+              code = css.charCodeAt(next);
+            } while (code === SPACE || code === NEWLINE || code === TAB || code === CR || code === FEED);
+            currentToken = ["space", css.slice(pos, next)];
+            pos = next - 1;
+            break;
+          }
+          case OPEN_SQUARE:
+          case CLOSE_SQUARE:
+          case OPEN_CURLY:
+          case CLOSE_CURLY:
+          case COLON:
+          case SEMICOLON:
+          case CLOSE_PARENTHESES: {
+            let controlChar = String.fromCharCode(code);
+            currentToken = [controlChar, controlChar, pos];
+            break;
+          }
+          case OPEN_PARENTHESES: {
+            prev = buffer.length ? buffer.pop()[1] : "";
+            n = css.charCodeAt(pos + 1);
+            if (prev === "url" && n !== SINGLE_QUOTE && n !== DOUBLE_QUOTE && n !== SPACE && n !== NEWLINE && n !== TAB && n !== FEED && n !== CR) {
+              next = pos;
+              do {
+                escaped = false;
+                next = css.indexOf(")", next + 1);
+                if (next === -1) {
+                  if (ignore || ignoreUnclosed) {
+                    next = pos;
+                    break;
+                  } else {
+                    unclosed("bracket");
+                  }
+                }
+                escapePos = next;
+                while (css.charCodeAt(escapePos - 1) === BACKSLASH) {
+                  escapePos -= 1;
+                  escaped = !escaped;
+                }
+              } while (escaped);
+              currentToken = ["brackets", css.slice(pos, next + 1), pos, next];
+              pos = next;
+            } else {
+              next = css.indexOf(")", pos + 1);
+              content = css.slice(pos, next + 1);
+              if (next === -1 || RE_BAD_BRACKET.test(content)) {
+                currentToken = ["(", "(", pos];
+              } else {
+                currentToken = ["brackets", content, pos, next];
+                pos = next;
+              }
+            }
+            break;
+          }
+          case SINGLE_QUOTE:
+          case DOUBLE_QUOTE: {
+            quote = code === SINGLE_QUOTE ? "'" : '"';
+            next = pos;
+            do {
+              escaped = false;
+              next = css.indexOf(quote, next + 1);
+              if (next === -1) {
+                if (ignore || ignoreUnclosed) {
+                  next = pos + 1;
+                  break;
+                } else {
+                  unclosed("string");
+                }
+              }
+              escapePos = next;
+              while (css.charCodeAt(escapePos - 1) === BACKSLASH) {
+                escapePos -= 1;
+                escaped = !escaped;
+              }
+            } while (escaped);
+            currentToken = ["string", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          case AT: {
+            RE_AT_END.lastIndex = pos + 1;
+            RE_AT_END.test(css);
+            if (RE_AT_END.lastIndex === 0) {
+              next = css.length - 1;
+            } else {
+              next = RE_AT_END.lastIndex - 2;
+            }
+            currentToken = ["at-word", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          case BACKSLASH: {
+            next = pos;
+            escape = true;
+            while (css.charCodeAt(next + 1) === BACKSLASH) {
+              next += 1;
+              escape = !escape;
+            }
+            code = css.charCodeAt(next + 1);
+            if (escape && code !== SLASH && code !== SPACE && code !== NEWLINE && code !== TAB && code !== CR && code !== FEED) {
+              next += 1;
+              if (RE_HEX_ESCAPE.test(css.charAt(next))) {
+                while (RE_HEX_ESCAPE.test(css.charAt(next + 1))) {
+                  next += 1;
+                }
+                if (css.charCodeAt(next + 1) === SPACE) {
+                  next += 1;
+                }
+              }
+            }
+            currentToken = ["word", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          default: {
+            if (code === SLASH && css.charCodeAt(pos + 1) === ASTERISK) {
+              next = css.indexOf("*/", pos + 2) + 1;
+              if (next === 0) {
+                if (ignore || ignoreUnclosed) {
+                  next = css.length;
+                } else {
+                  unclosed("comment");
+                }
+              }
+              currentToken = ["comment", css.slice(pos, next + 1), pos, next];
+              pos = next;
+            } else {
+              RE_WORD_END.lastIndex = pos + 1;
+              RE_WORD_END.test(css);
+              if (RE_WORD_END.lastIndex === 0) {
+                next = css.length - 1;
+              } else {
+                next = RE_WORD_END.lastIndex - 2;
+              }
+              currentToken = ["word", css.slice(pos, next + 1), pos, next];
+              buffer.push(currentToken);
+              pos = next;
+            }
+            break;
+          }
+        }
+        pos++;
+        return currentToken;
+      }
+      __name(nextToken, "nextToken");
+      function back(token) {
+        returned.push(token);
+      }
+      __name(back, "back");
+      return {
+        back,
+        endOfFile,
+        nextToken,
+        position
+      };
+    }, "tokenizer");
+  }
+});
+export default require_tokenize();
 //# sourceMappingURL=tokenize.js.map

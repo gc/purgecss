@@ -1,23 +1,1682 @@
-var _e=Object.defineProperty;var f=(n,e)=>_e(n,"name",{value:e,configurable:!0});var p=(n,e)=>()=>(e||n((e={exports:{}}).exports,e),e.exports);var W=p((st,Q)=>{var T=process||{},V=T.argv||[],P=T.env||{},Ue=!(P.NO_COLOR||V.includes("--no-color"))&&(!!P.FORCE_COLOR||V.includes("--color")||T.platform==="win32"||(T.stdout||{}).isTTY&&P.TERM!=="dumb"||!!P.CI),He=f((n,e,r=n)=>t=>{let s=""+t,i=s.indexOf(e,n.length);return~i?n+qe(s,e,r,i)+e:n+s+e},"formatter"),qe=f((n,e,r,t)=>{let s="",i=0;do s+=n.substring(i,t)+r,i=t+e.length,t=n.indexOf(e,i);while(~t);return s+n.substring(i)},"replaceClose"),X=f((n=Ue)=>{let e=n?He:()=>String;return{isColorSupported:n,reset:e("\x1B[0m","\x1B[0m"),bold:e("\x1B[1m","\x1B[22m","\x1B[22m\x1B[1m"),dim:e("\x1B[2m","\x1B[22m","\x1B[22m\x1B[2m"),italic:e("\x1B[3m","\x1B[23m"),underline:e("\x1B[4m","\x1B[24m"),inverse:e("\x1B[7m","\x1B[27m"),hidden:e("\x1B[8m","\x1B[28m"),strikethrough:e("\x1B[9m","\x1B[29m"),black:e("\x1B[30m","\x1B[39m"),red:e("\x1B[31m","\x1B[39m"),green:e("\x1B[32m","\x1B[39m"),yellow:e("\x1B[33m","\x1B[39m"),blue:e("\x1B[34m","\x1B[39m"),magenta:e("\x1B[35m","\x1B[39m"),cyan:e("\x1B[36m","\x1B[39m"),white:e("\x1B[37m","\x1B[39m"),gray:e("\x1B[90m","\x1B[39m"),bgBlack:e("\x1B[40m","\x1B[49m"),bgRed:e("\x1B[41m","\x1B[49m"),bgGreen:e("\x1B[42m","\x1B[49m"),bgYellow:e("\x1B[43m","\x1B[49m"),bgBlue:e("\x1B[44m","\x1B[49m"),bgMagenta:e("\x1B[45m","\x1B[49m"),bgCyan:e("\x1B[46m","\x1B[49m"),bgWhite:e("\x1B[47m","\x1B[49m"),blackBright:e("\x1B[90m","\x1B[39m"),redBright:e("\x1B[91m","\x1B[39m"),greenBright:e("\x1B[92m","\x1B[39m"),yellowBright:e("\x1B[93m","\x1B[39m"),blueBright:e("\x1B[94m","\x1B[39m"),magentaBright:e("\x1B[95m","\x1B[39m"),cyanBright:e("\x1B[96m","\x1B[39m"),whiteBright:e("\x1B[97m","\x1B[39m"),bgBlackBright:e("\x1B[100m","\x1B[49m"),bgRedBright:e("\x1B[101m","\x1B[49m"),bgGreenBright:e("\x1B[102m","\x1B[49m"),bgYellowBright:e("\x1B[103m","\x1B[49m"),bgBlueBright:e("\x1B[104m","\x1B[49m"),bgMagentaBright:e("\x1B[105m","\x1B[49m"),bgCyanBright:e("\x1B[106m","\x1B[49m"),bgWhiteBright:e("\x1B[107m","\x1B[49m")}},"createColors");Q.exports=X();Q.exports.createColors=X});var te=p((nt,ee)=>{"use strict";var D=/[\t\n\f\r "#'()/;[\\\]{}]/g,_=/[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g,Me=/.[\r\n"'(/\\]/,Z=/[\da-f]/i;ee.exports=f(function(e,r={}){let t=e.css.valueOf(),s=r.ignoreErrors,i,o,h,l,b,u,d,x,c,I,w=t.length,a=0,O=[],g=[];function H(){return a}f(H,"position");function q(C){throw e.error("Unclosed "+C,a)}f(q,"unclosed");function Pe(){return g.length===0&&a>=w}f(Pe,"endOfFile");function Te(C){if(g.length)return g.pop();if(a>=w)return;let M=C?C.ignoreUnclosed:!1;switch(i=t.charCodeAt(a),i){case 10:case 32:case 9:case 13:case 12:{l=a;do l+=1,i=t.charCodeAt(l);while(i===32||i===10||i===9||i===13||i===12);u=["space",t.slice(a,l)],a=l-1;break}case 91:case 93:case 123:case 125:case 58:case 59:case 41:{let J=String.fromCharCode(i);u=[J,J,a];break}case 40:{if(I=O.length?O.pop()[1]:"",c=t.charCodeAt(a+1),I==="url"&&c!==39&&c!==34&&c!==32&&c!==10&&c!==9&&c!==12&&c!==13){l=a;do{if(d=!1,l=t.indexOf(")",l+1),l===-1)if(s||M){l=a;break}else q("bracket");for(x=l;t.charCodeAt(x-1)===92;)x-=1,d=!d}while(d);u=["brackets",t.slice(a,l+1),a,l],a=l}else l=t.indexOf(")",a+1),o=t.slice(a,l+1),l===-1||Me.test(o)?u=["(","(",a]:(u=["brackets",o,a,l],a=l);break}case 39:case 34:{b=i===39?"'":'"',l=a;do{if(d=!1,l=t.indexOf(b,l+1),l===-1)if(s||M){l=a+1;break}else q("string");for(x=l;t.charCodeAt(x-1)===92;)x-=1,d=!d}while(d);u=["string",t.slice(a,l+1),a,l],a=l;break}case 64:{D.lastIndex=a+1,D.test(t),D.lastIndex===0?l=t.length-1:l=D.lastIndex-2,u=["at-word",t.slice(a,l+1),a,l],a=l;break}case 92:{for(l=a,h=!0;t.charCodeAt(l+1)===92;)l+=1,h=!h;if(i=t.charCodeAt(l+1),h&&i!==47&&i!==32&&i!==10&&i!==9&&i!==13&&i!==12&&(l+=1,Z.test(t.charAt(l)))){for(;Z.test(t.charAt(l+1));)l+=1;t.charCodeAt(l+1)===32&&(l+=1)}u=["word",t.slice(a,l+1),a,l],a=l;break}default:{i===47&&t.charCodeAt(a+1)===42?(l=t.indexOf("*/",a+2)+1,l===0&&(s||M?l=t.length:q("comment")),u=["comment",t.slice(a,l+1),a,l],a=l):(_.lastIndex=a+1,_.test(t),_.lastIndex===0?l=t.length-1:l=_.lastIndex-2,u=["word",t.slice(a,l+1),a,l],O.push(u),a=l);break}}return a++,u}f(Te,"nextToken");function De(C){g.push(C)}return f(De,"back"),{back:De,endOfFile:Pe,nextToken:Te,position:H}},"tokenizer")});var ne=p((ot,ie)=>{"use strict";var m=W(),Qe=te(),re;function We(n){re=n}f(We,"registerInput");var je={";":m.yellow,":":m.yellow,"(":m.cyan,")":m.cyan,"[":m.yellow,"]":m.yellow,"{":m.yellow,"}":m.yellow,"at-word":m.cyan,brackets:m.cyan,call:m.cyan,class:m.yellow,comment:m.gray,hash:m.magenta,string:m.green};function Fe([n,e],r){if(n==="word"){if(e[0]===".")return"class";if(e[0]==="#")return"hash"}if(!r.endOfFile()){let t=r.nextToken();if(r.back(t),t[0]==="brackets"||t[0]==="(")return"call"}return n}f(Fe,"getTokenType");function se(n){let e=Qe(new re(n),{ignoreErrors:!0}),r="";for(;!e.endOfFile();){let t=e.nextToken(),s=je[Fe(t,e)];s?r+=t[1].split(/\r?\n/).map(i=>s(i)).join(`
-`):r+=t[1]}return r}f(se,"terminalHighlight");se.registerInput=We;ie.exports=se});var fe=p((ft,ae)=>{"use strict";var le=W(),oe=ne(),A=class n extends Error{static{f(this,"CssSyntaxError")}constructor(e,r,t,s,i,o){super(e),this.name="CssSyntaxError",this.reason=e,i&&(this.file=i),s&&(this.source=s),o&&(this.plugin=o),typeof r<"u"&&typeof t<"u"&&(typeof r=="number"?(this.line=r,this.column=t):(this.line=r.line,this.column=r.column,this.endLine=t.line,this.endColumn=t.column)),this.setMessage(),Error.captureStackTrace&&Error.captureStackTrace(this,n)}setMessage(){this.message=this.plugin?this.plugin+": ":"",this.message+=this.file?this.file:"<css input>",typeof this.line<"u"&&(this.message+=":"+this.line+":"+this.column),this.message+=": "+this.reason}showSourceCode(e){if(!this.source)return"";let r=this.source;e==null&&(e=le.isColorSupported);let t=f(u=>u,"aside"),s=f(u=>u,"mark"),i=f(u=>u,"highlight");if(e){let{bold:u,gray:d,red:x}=le.createColors(!0);s=f(c=>u(x(c)),"mark"),t=f(c=>d(c),"aside"),oe&&(i=f(c=>oe(c),"highlight"))}let o=r.split(/\r?\n/),h=Math.max(this.line-3,0),l=Math.min(this.line+2,o.length),b=String(l).length;return o.slice(h,l).map((u,d)=>{let x=h+1+d,c=" "+(" "+x).slice(-b)+" | ";if(x===this.line){if(u.length>160){let w=20,a=Math.max(0,this.column-w),O=Math.max(this.column+w,this.endColumn+w),g=u.slice(a,O),H=t(c.replace(/\d/g," "))+u.slice(0,Math.min(this.column-1,w-1)).replace(/[^\t]/g," ");return s(">")+t(c)+i(g)+`
- `+H+s("^")}let I=t(c.replace(/\d/g," "))+u.slice(0,this.column-1).replace(/[^\t]/g," ");return s(">")+t(c)+i(u)+`
- `+I+s("^")}return" "+t(c)+i(u)}).join(`
-`)}toString(){let e=this.showSourceCode();return e&&(e=`
+var __defProp = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
 
-`+e+`
-`),this.name+": "+this.message+e}};ae.exports=A;A.default=A});var j=p((ht,he)=>{"use strict";var ue={after:`
-`,beforeClose:`
-`,beforeComment:`
-`,beforeDecl:`
-`,beforeOpen:" ",beforeRule:`
-`,colon:": ",commentLeft:" ",commentRight:" ",emptyBody:"",indent:"    ",semicolon:!1};function $e(n){return n[0].toUpperCase()+n.slice(1)}f($e,"capitalize");var S=class{static{f(this,"Stringifier")}constructor(e){this.builder=e}atrule(e,r){let t="@"+e.name,s=e.params?this.rawValue(e,"params"):"";if(typeof e.raws.afterName<"u"?t+=e.raws.afterName:s&&(t+=" "),e.nodes)this.block(e,t+s);else{let i=(e.raws.between||"")+(r?";":"");this.builder(t+s+i,e)}}beforeAfter(e,r){let t;e.type==="decl"?t=this.raw(e,null,"beforeDecl"):e.type==="comment"?t=this.raw(e,null,"beforeComment"):r==="before"?t=this.raw(e,null,"beforeRule"):t=this.raw(e,null,"beforeClose");let s=e.parent,i=0;for(;s&&s.type!=="root";)i+=1,s=s.parent;if(t.includes(`
-`)){let o=this.raw(e,null,"indent");if(o.length)for(let h=0;h<i;h++)t+=o}return t}block(e,r){let t=this.raw(e,"between","beforeOpen");this.builder(r+t+"{",e,"start");let s;e.nodes&&e.nodes.length?(this.body(e),s=this.raw(e,"after")):s=this.raw(e,"after","emptyBody"),s&&this.builder(s),this.builder("}",e,"end")}body(e){let r=e.nodes.length-1;for(;r>0&&e.nodes[r].type==="comment";)r-=1;let t=this.raw(e,"semicolon");for(let s=0;s<e.nodes.length;s++){let i=e.nodes[s],o=this.raw(i,"before");o&&this.builder(o),this.stringify(i,r!==s||t)}}comment(e){let r=this.raw(e,"left","commentLeft"),t=this.raw(e,"right","commentRight");this.builder("/*"+r+e.text+t+"*/",e)}decl(e,r){let t=this.raw(e,"between","colon"),s=e.prop+t+this.rawValue(e,"value");e.important&&(s+=e.raws.important||" !important"),r&&(s+=";"),this.builder(s,e)}document(e){this.body(e)}raw(e,r,t){let s;if(t||(t=r),r&&(s=e.raws[r],typeof s<"u"))return s;let i=e.parent;if(t==="before"&&(!i||i.type==="root"&&i.first===e||i&&i.type==="document"))return"";if(!i)return ue[t];let o=e.root();if(o.rawCache||(o.rawCache={}),typeof o.rawCache[t]<"u")return o.rawCache[t];if(t==="before"||t==="after")return this.beforeAfter(e,t);{let h="raw"+$e(t);this[h]?s=this[h](o,e):o.walk(l=>{if(s=l.raws[r],typeof s<"u")return!1})}return typeof s>"u"&&(s=ue[t]),o.rawCache[t]=s,s}rawBeforeClose(e){let r;return e.walk(t=>{if(t.nodes&&t.nodes.length>0&&typeof t.raws.after<"u")return r=t.raws.after,r.includes(`
-`)&&(r=r.replace(/[^\n]+$/,"")),!1}),r&&(r=r.replace(/\S/g,"")),r}rawBeforeComment(e,r){let t;return e.walkComments(s=>{if(typeof s.raws.before<"u")return t=s.raws.before,t.includes(`
-`)&&(t=t.replace(/[^\n]+$/,"")),!1}),typeof t>"u"?t=this.raw(r,null,"beforeDecl"):t&&(t=t.replace(/\S/g,"")),t}rawBeforeDecl(e,r){let t;return e.walkDecls(s=>{if(typeof s.raws.before<"u")return t=s.raws.before,t.includes(`
-`)&&(t=t.replace(/[^\n]+$/,"")),!1}),typeof t>"u"?t=this.raw(r,null,"beforeRule"):t&&(t=t.replace(/\S/g,"")),t}rawBeforeOpen(e){let r;return e.walk(t=>{if(t.type!=="decl"&&(r=t.raws.between,typeof r<"u"))return!1}),r}rawBeforeRule(e){let r;return e.walk(t=>{if(t.nodes&&(t.parent!==e||e.first!==t)&&typeof t.raws.before<"u")return r=t.raws.before,r.includes(`
-`)&&(r=r.replace(/[^\n]+$/,"")),!1}),r&&(r=r.replace(/\S/g,"")),r}rawColon(e){let r;return e.walkDecls(t=>{if(typeof t.raws.between<"u")return r=t.raws.between.replace(/[^\s:]/g,""),!1}),r}rawEmptyBody(e){let r;return e.walk(t=>{if(t.nodes&&t.nodes.length===0&&(r=t.raws.after,typeof r<"u"))return!1}),r}rawIndent(e){if(e.raws.indent)return e.raws.indent;let r;return e.walk(t=>{let s=t.parent;if(s&&s!==e&&s.parent&&s.parent===e&&typeof t.raws.before<"u"){let i=t.raws.before.split(`
-`);return r=i[i.length-1],r=r.replace(/\S/g,""),!1}}),r}rawSemicolon(e){let r;return e.walk(t=>{if(t.nodes&&t.nodes.length&&t.last.type==="decl"&&(r=t.raws.semicolon,typeof r<"u"))return!1}),r}rawValue(e,r){let t=e[r],s=e.raws[r];return s&&s.value===t?s.raw:t}root(e){this.body(e),e.raws.after&&this.builder(e.raws.after)}rule(e){this.block(e,this.rawValue(e,"selector")),e.raws.ownSemicolon&&this.builder(e.raws.ownSemicolon,e,"end")}stringify(e,r){if(!this[e.type])throw new Error("Unknown AST node type "+e.type+". Maybe you need to change PostCSS stringifier.");this[e.type](e,r)}};he.exports=S;S.default=S});var me=p((mt,ce)=>{"use strict";var ze=j();function F(n,e){new ze(e).stringify(n)}f(F,"stringify");ce.exports=F;F.default=F});var z=p((dt,$)=>{"use strict";$.exports.isClean=Symbol("isClean");$.exports.my=Symbol("my")});var U=p((xt,pe)=>{"use strict";var Ge=fe(),Ke=j(),Ye=me(),{isClean:k,my:Je}=z();function G(n,e){let r=new n.constructor;for(let t in n){if(!Object.prototype.hasOwnProperty.call(n,t)||t==="proxyCache")continue;let s=n[t],i=typeof s;t==="parent"&&i==="object"?e&&(r[t]=e):t==="source"?r[t]=s:Array.isArray(s)?r[t]=s.map(o=>G(o,r)):(i==="object"&&s!==null&&(s=G(s)),r[t]=s)}return r}f(G,"cloneNode");function R(n,e){if(e&&typeof e.offset<"u")return e.offset;let r=1,t=1,s=0;for(let i=0;i<n.length;i++){if(t===e.line&&r===e.column){s=i;break}n[i]===`
-`?(r=1,t+=1):r+=1}return s}f(R,"sourceOffset");var B=class{static{f(this,"Node")}constructor(e={}){this.raws={},this[k]=!1,this[Je]=!0;for(let r in e)if(r==="nodes"){this.nodes=[];for(let t of e[r])typeof t.clone=="function"?this.append(t.clone()):this.append(t)}else this[r]=e[r]}addToError(e){if(e.postcssNode=this,e.stack&&this.source&&/\n\s{4}at /.test(e.stack)){let r=this.source;e.stack=e.stack.replace(/\n\s{4}at /,`$&${r.input.from}:${r.start.line}:${r.start.column}$&`)}return e}after(e){return this.parent.insertAfter(this,e),this}assign(e={}){for(let r in e)this[r]=e[r];return this}before(e){return this.parent.insertBefore(this,e),this}cleanRaws(e){delete this.raws.before,delete this.raws.after,e||delete this.raws.between}clone(e={}){let r=G(this);for(let t in e)r[t]=e[t];return r}cloneAfter(e={}){let r=this.clone(e);return this.parent.insertAfter(this,r),r}cloneBefore(e={}){let r=this.clone(e);return this.parent.insertBefore(this,r),r}error(e,r={}){if(this.source){let{end:t,start:s}=this.rangeBy(r);return this.source.input.error(e,{column:s.column,line:s.line},{column:t.column,line:t.line},r)}return new Ge(e)}getProxyProcessor(){return{get(e,r){return r==="proxyOf"?e:r==="root"?()=>e.root().toProxy():e[r]},set(e,r,t){return e[r]===t||(e[r]=t,(r==="prop"||r==="value"||r==="name"||r==="params"||r==="important"||r==="text")&&e.markDirty()),!0}}}markClean(){this[k]=!0}markDirty(){if(this[k]){this[k]=!1;let e=this;for(;e=e.parent;)e[k]=!1}}next(){if(!this.parent)return;let e=this.parent.index(this);return this.parent.nodes[e+1]}positionBy(e){let r=this.source.start;if(e.index)r=this.positionInside(e.index);else if(e.word){let s=this.source.input.css.slice(R(this.source.input.css,this.source.start),R(this.source.input.css,this.source.end)).indexOf(e.word);s!==-1&&(r=this.positionInside(s))}return r}positionInside(e){let r=this.source.start.column,t=this.source.start.line,s=R(this.source.input.css,this.source.start),i=s+e;for(let o=s;o<i;o++)this.source.input.css[o]===`
-`?(r=1,t+=1):r+=1;return{column:r,line:t}}prev(){if(!this.parent)return;let e=this.parent.index(this);return this.parent.nodes[e-1]}rangeBy(e){let r={column:this.source.start.column,line:this.source.start.line},t=this.source.end?{column:this.source.end.column+1,line:this.source.end.line}:{column:r.column+1,line:r.line};if(e.word){let i=this.source.input.css.slice(R(this.source.input.css,this.source.start),R(this.source.input.css,this.source.end)).indexOf(e.word);i!==-1&&(r=this.positionInside(i),t=this.positionInside(i+e.word.length))}else e.start?r={column:e.start.column,line:e.start.line}:e.index&&(r=this.positionInside(e.index)),e.end?t={column:e.end.column,line:e.end.line}:typeof e.endIndex=="number"?t=this.positionInside(e.endIndex):e.index&&(t=this.positionInside(e.index+1));return(t.line<r.line||t.line===r.line&&t.column<=r.column)&&(t={column:r.column+1,line:r.line}),{end:t,start:r}}raw(e,r){return new Ke().raw(this,e,r)}remove(){return this.parent&&this.parent.removeChild(this),this.parent=void 0,this}replaceWith(...e){if(this.parent){let r=this,t=!1;for(let s of e)s===this?t=!0:t?(this.parent.insertAfter(r,s),r=s):this.parent.insertBefore(r,s);t||this.remove()}return this}root(){let e=this;for(;e.parent&&e.parent.type!=="document";)e=e.parent;return e}toJSON(e,r){let t={},s=r==null;r=r||new Map;let i=0;for(let o in this){if(!Object.prototype.hasOwnProperty.call(this,o)||o==="parent"||o==="proxyCache")continue;let h=this[o];if(Array.isArray(h))t[o]=h.map(l=>typeof l=="object"&&l.toJSON?l.toJSON(null,r):l);else if(typeof h=="object"&&h.toJSON)t[o]=h.toJSON(null,r);else if(o==="source"){let l=r.get(h.input);l==null&&(l=i,r.set(h.input,i),i++),t[o]={end:h.end,inputId:l,start:h.start}}else t[o]=h}return s&&(t.inputs=[...r.keys()].map(o=>o.toJSON())),t}toProxy(){return this.proxyCache||(this.proxyCache=new Proxy(this,this.getProxyProcessor())),this.proxyCache}toString(e=Ye){e.stringify&&(e=e.stringify);let r="";return e(this,t=>{r+=t}),r}warn(e,r,t){let s={node:this};for(let i in t)s[i]=t[i];return e.warn(r,s)}get proxyOf(){return this}};pe.exports=B;B.default=B});var xe=p((bt,de)=>{"use strict";var Ve=U(),v=class extends Ve{static{f(this,"Comment")}constructor(e){super(e),this.type="comment"}};de.exports=v;v.default=v});var be=p((gt,ye)=>{"use strict";var Xe=U(),L=class extends Xe{static{f(this,"Declaration")}constructor(e){e&&typeof e.value<"u"&&typeof e.value!="string"&&(e={...e,value:String(e.value)}),super(e),this.type="decl"}get variable(){return this.prop.startsWith("--")||this.prop[0]==="$"}};ye.exports=L;L.default=L});var Be=p((Et,Re)=>{"use strict";var we=xe(),ge=be(),Ze=U(),{isClean:Ce,my:Ee}=z(),K,Oe,Ae,Y;function Se(n){return n.map(e=>(e.nodes&&(e.nodes=Se(e.nodes)),delete e.source,e))}f(Se,"cleanSource");function ke(n){if(n[Ce]=!1,n.proxyOf.nodes)for(let e of n.proxyOf.nodes)ke(e)}f(ke,"markTreeDirty");var y=class n extends Ze{static{f(this,"Container")}append(...e){for(let r of e){let t=this.normalize(r,this.last);for(let s of t)this.proxyOf.nodes.push(s)}return this.markDirty(),this}cleanRaws(e){if(super.cleanRaws(e),this.nodes)for(let r of this.nodes)r.cleanRaws(e)}each(e){if(!this.proxyOf.nodes)return;let r=this.getIterator(),t,s;for(;this.indexes[r]<this.proxyOf.nodes.length&&(t=this.indexes[r],s=e(this.proxyOf.nodes[t],t),s!==!1);)this.indexes[r]+=1;return delete this.indexes[r],s}every(e){return this.nodes.every(e)}getIterator(){this.lastEach||(this.lastEach=0),this.indexes||(this.indexes={}),this.lastEach+=1;let e=this.lastEach;return this.indexes[e]=0,e}getProxyProcessor(){return{get(e,r){return r==="proxyOf"?e:e[r]?r==="each"||typeof r=="string"&&r.startsWith("walk")?(...t)=>e[r](...t.map(s=>typeof s=="function"?(i,o)=>s(i.toProxy(),o):s)):r==="every"||r==="some"?t=>e[r]((s,...i)=>t(s.toProxy(),...i)):r==="root"?()=>e.root().toProxy():r==="nodes"?e.nodes.map(t=>t.toProxy()):r==="first"||r==="last"?e[r].toProxy():e[r]:e[r]},set(e,r,t){return e[r]===t||(e[r]=t,(r==="name"||r==="params"||r==="selector")&&e.markDirty()),!0}}}index(e){return typeof e=="number"?e:(e.proxyOf&&(e=e.proxyOf),this.proxyOf.nodes.indexOf(e))}insertAfter(e,r){let t=this.index(e),s=this.normalize(r,this.proxyOf.nodes[t]).reverse();t=this.index(e);for(let o of s)this.proxyOf.nodes.splice(t+1,0,o);let i;for(let o in this.indexes)i=this.indexes[o],t<i&&(this.indexes[o]=i+s.length);return this.markDirty(),this}insertBefore(e,r){let t=this.index(e),s=t===0?"prepend":!1,i=this.normalize(r,this.proxyOf.nodes[t],s).reverse();t=this.index(e);for(let h of i)this.proxyOf.nodes.splice(t,0,h);let o;for(let h in this.indexes)o=this.indexes[h],t<=o&&(this.indexes[h]=o+i.length);return this.markDirty(),this}normalize(e,r){if(typeof e=="string")e=Se(Oe(e).nodes);else if(typeof e>"u")e=[];else if(Array.isArray(e)){e=e.slice(0);for(let s of e)s.parent&&s.parent.removeChild(s,"ignore")}else if(e.type==="root"&&this.type!=="document"){e=e.nodes.slice(0);for(let s of e)s.parent&&s.parent.removeChild(s,"ignore")}else if(e.type)e=[e];else if(e.prop){if(typeof e.value>"u")throw new Error("Value field is missed in node creation");typeof e.value!="string"&&(e.value=String(e.value)),e=[new ge(e)]}else if(e.selector||e.selectors)e=[new Y(e)];else if(e.name)e=[new K(e)];else if(e.text)e=[new we(e)];else throw new Error("Unknown node type in node creation");return e.map(s=>(s[Ee]||n.rebuild(s),s=s.proxyOf,s.parent&&s.parent.removeChild(s),s[Ce]&&ke(s),s.raws||(s.raws={}),typeof s.raws.before>"u"&&r&&typeof r.raws.before<"u"&&(s.raws.before=r.raws.before.replace(/\S/g,"")),s.parent=this.proxyOf,s))}prepend(...e){e=e.reverse();for(let r of e){let t=this.normalize(r,this.first,"prepend").reverse();for(let s of t)this.proxyOf.nodes.unshift(s);for(let s in this.indexes)this.indexes[s]=this.indexes[s]+t.length}return this.markDirty(),this}push(e){return e.parent=this,this.proxyOf.nodes.push(e),this}removeAll(){for(let e of this.proxyOf.nodes)e.parent=void 0;return this.proxyOf.nodes=[],this.markDirty(),this}removeChild(e){e=this.index(e),this.proxyOf.nodes[e].parent=void 0,this.proxyOf.nodes.splice(e,1);let r;for(let t in this.indexes)r=this.indexes[t],r>=e&&(this.indexes[t]=r-1);return this.markDirty(),this}replaceValues(e,r,t){return t||(t=r,r={}),this.walkDecls(s=>{r.props&&!r.props.includes(s.prop)||r.fast&&!s.value.includes(r.fast)||(s.value=s.value.replace(e,t))}),this.markDirty(),this}some(e){return this.nodes.some(e)}walk(e){return this.each((r,t)=>{let s;try{s=e(r,t)}catch(i){throw r.addToError(i)}return s!==!1&&r.walk&&(s=r.walk(e)),s})}walkAtRules(e,r){return r?e instanceof RegExp?this.walk((t,s)=>{if(t.type==="atrule"&&e.test(t.name))return r(t,s)}):this.walk((t,s)=>{if(t.type==="atrule"&&t.name===e)return r(t,s)}):(r=e,this.walk((t,s)=>{if(t.type==="atrule")return r(t,s)}))}walkComments(e){return this.walk((r,t)=>{if(r.type==="comment")return e(r,t)})}walkDecls(e,r){return r?e instanceof RegExp?this.walk((t,s)=>{if(t.type==="decl"&&e.test(t.prop))return r(t,s)}):this.walk((t,s)=>{if(t.type==="decl"&&t.prop===e)return r(t,s)}):(r=e,this.walk((t,s)=>{if(t.type==="decl")return r(t,s)}))}walkRules(e,r){return r?e instanceof RegExp?this.walk((t,s)=>{if(t.type==="rule"&&e.test(t.selector))return r(t,s)}):this.walk((t,s)=>{if(t.type==="rule"&&t.selector===e)return r(t,s)}):(r=e,this.walk((t,s)=>{if(t.type==="rule")return r(t,s)}))}get first(){if(this.proxyOf.nodes)return this.proxyOf.nodes[0]}get last(){if(this.proxyOf.nodes)return this.proxyOf.nodes[this.proxyOf.nodes.length-1]}};y.registerParse=n=>{Oe=n};y.registerRule=n=>{Y=n};y.registerAtRule=n=>{K=n};y.registerRoot=n=>{Ae=n};Re.exports=y;y.default=y;y.rebuild=n=>{n.type==="atrule"?Object.setPrototypeOf(n,K.prototype):n.type==="rule"?Object.setPrototypeOf(n,Y.prototype):n.type==="decl"?Object.setPrototypeOf(n,ge.prototype):n.type==="comment"?Object.setPrototypeOf(n,we.prototype):n.type==="root"&&Object.setPrototypeOf(n,Ae.prototype),n[Ee]=!0,n.nodes&&n.nodes.forEach(e=>{y.rebuild(e)})}});var Le=p((At,ve)=>{"use strict";var N={comma(n){return N.split(n,[","],!0)},space(n){let e=[" ",`
-`,"	"];return N.split(n,e)},split(n,e,r){let t=[],s="",i=!1,o=0,h=!1,l="",b=!1;for(let u of n)b?b=!1:u==="\\"?b=!0:h?u===l&&(h=!1):u==='"'||u==="'"?(h=!0,l=u):u==="("?o+=1:u===")"?o>0&&(o-=1):o===0&&e.includes(u)&&(i=!0),i?(s!==""&&t.push(s.trim()),s="",i=!1):s+=u;return(r||s!=="")&&t.push(s.trim()),t}};ve.exports=N;N.default=N});var tt=p((St,Ie)=>{var Ne=Be(),et=Le(),E=class extends Ne{static{f(this,"Rule")}constructor(e){super(e),this.type="rule",this.nodes||(this.nodes=[])}get selectors(){return et.comma(this.selector)}set selectors(e){let r=this.selector?this.selector.match(/,\s*/):null,t=r?r[0]:","+this.raw("between","beforeOpen");this.selector=e.join(t)}};Ie.exports=E;E.default=E;Ne.registerRule(E)});export default tt();
+// node_modules/.pnpm/picocolors@1.1.1/node_modules/picocolors/picocolors.js
+var require_picocolors = __commonJS({
+  "node_modules/.pnpm/picocolors@1.1.1/node_modules/picocolors/picocolors.js"(exports, module) {
+    var p = process || {};
+    var argv = p.argv || [];
+    var env = p.env || {};
+    var isColorSupported = !(!!env.NO_COLOR || argv.includes("--no-color")) && (!!env.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env.TERM !== "dumb" || !!env.CI);
+    var formatter = /* @__PURE__ */ __name((open, close, replace = open) => (input) => {
+      let string = "" + input, index = string.indexOf(close, open.length);
+      return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
+    }, "formatter");
+    var replaceClose = /* @__PURE__ */ __name((string, close, replace, index) => {
+      let result = "", cursor = 0;
+      do {
+        result += string.substring(cursor, index) + replace;
+        cursor = index + close.length;
+        index = string.indexOf(close, cursor);
+      } while (~index);
+      return result + string.substring(cursor);
+    }, "replaceClose");
+    var createColors = /* @__PURE__ */ __name((enabled = isColorSupported) => {
+      let f = enabled ? formatter : () => String;
+      return {
+        isColorSupported: enabled,
+        reset: f("\x1B[0m", "\x1B[0m"),
+        bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
+        dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
+        italic: f("\x1B[3m", "\x1B[23m"),
+        underline: f("\x1B[4m", "\x1B[24m"),
+        inverse: f("\x1B[7m", "\x1B[27m"),
+        hidden: f("\x1B[8m", "\x1B[28m"),
+        strikethrough: f("\x1B[9m", "\x1B[29m"),
+        black: f("\x1B[30m", "\x1B[39m"),
+        red: f("\x1B[31m", "\x1B[39m"),
+        green: f("\x1B[32m", "\x1B[39m"),
+        yellow: f("\x1B[33m", "\x1B[39m"),
+        blue: f("\x1B[34m", "\x1B[39m"),
+        magenta: f("\x1B[35m", "\x1B[39m"),
+        cyan: f("\x1B[36m", "\x1B[39m"),
+        white: f("\x1B[37m", "\x1B[39m"),
+        gray: f("\x1B[90m", "\x1B[39m"),
+        bgBlack: f("\x1B[40m", "\x1B[49m"),
+        bgRed: f("\x1B[41m", "\x1B[49m"),
+        bgGreen: f("\x1B[42m", "\x1B[49m"),
+        bgYellow: f("\x1B[43m", "\x1B[49m"),
+        bgBlue: f("\x1B[44m", "\x1B[49m"),
+        bgMagenta: f("\x1B[45m", "\x1B[49m"),
+        bgCyan: f("\x1B[46m", "\x1B[49m"),
+        bgWhite: f("\x1B[47m", "\x1B[49m"),
+        blackBright: f("\x1B[90m", "\x1B[39m"),
+        redBright: f("\x1B[91m", "\x1B[39m"),
+        greenBright: f("\x1B[92m", "\x1B[39m"),
+        yellowBright: f("\x1B[93m", "\x1B[39m"),
+        blueBright: f("\x1B[94m", "\x1B[39m"),
+        magentaBright: f("\x1B[95m", "\x1B[39m"),
+        cyanBright: f("\x1B[96m", "\x1B[39m"),
+        whiteBright: f("\x1B[97m", "\x1B[39m"),
+        bgBlackBright: f("\x1B[100m", "\x1B[49m"),
+        bgRedBright: f("\x1B[101m", "\x1B[49m"),
+        bgGreenBright: f("\x1B[102m", "\x1B[49m"),
+        bgYellowBright: f("\x1B[103m", "\x1B[49m"),
+        bgBlueBright: f("\x1B[104m", "\x1B[49m"),
+        bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
+        bgCyanBright: f("\x1B[106m", "\x1B[49m"),
+        bgWhiteBright: f("\x1B[107m", "\x1B[49m")
+      };
+    }, "createColors");
+    module.exports = createColors();
+    module.exports.createColors = createColors;
+  }
+});
+
+// src/postcss/tokenize.js
+var require_tokenize = __commonJS({
+  "src/postcss/tokenize.js"(exports, module) {
+    "use strict";
+    var SINGLE_QUOTE = "'".charCodeAt(0);
+    var DOUBLE_QUOTE = '"'.charCodeAt(0);
+    var BACKSLASH = "\\".charCodeAt(0);
+    var SLASH = "/".charCodeAt(0);
+    var NEWLINE = "\n".charCodeAt(0);
+    var SPACE = " ".charCodeAt(0);
+    var FEED = "\f".charCodeAt(0);
+    var TAB = "	".charCodeAt(0);
+    var CR = "\r".charCodeAt(0);
+    var OPEN_SQUARE = "[".charCodeAt(0);
+    var CLOSE_SQUARE = "]".charCodeAt(0);
+    var OPEN_PARENTHESES = "(".charCodeAt(0);
+    var CLOSE_PARENTHESES = ")".charCodeAt(0);
+    var OPEN_CURLY = "{".charCodeAt(0);
+    var CLOSE_CURLY = "}".charCodeAt(0);
+    var SEMICOLON = ";".charCodeAt(0);
+    var ASTERISK = "*".charCodeAt(0);
+    var COLON = ":".charCodeAt(0);
+    var AT = "@".charCodeAt(0);
+    var RE_AT_END = /[\t\n\f\r "#'()/;[\\\]{}]/g;
+    var RE_WORD_END = /[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g;
+    var RE_BAD_BRACKET = /.[\r\n"'(/\\]/;
+    var RE_HEX_ESCAPE = /[\da-f]/i;
+    module.exports = /* @__PURE__ */ __name(function tokenizer(input, options = {}) {
+      let css = input.css.valueOf();
+      let ignore = options.ignoreErrors;
+      let code, content, escape, next, quote;
+      let currentToken, escaped, escapePos, n, prev;
+      let length = css.length;
+      let pos = 0;
+      let buffer = [];
+      let returned = [];
+      function position() {
+        return pos;
+      }
+      __name(position, "position");
+      function unclosed(what) {
+        throw input.error("Unclosed " + what, pos);
+      }
+      __name(unclosed, "unclosed");
+      function endOfFile() {
+        return returned.length === 0 && pos >= length;
+      }
+      __name(endOfFile, "endOfFile");
+      function nextToken(opts) {
+        if (returned.length) return returned.pop();
+        if (pos >= length) return;
+        let ignoreUnclosed = opts ? opts.ignoreUnclosed : false;
+        code = css.charCodeAt(pos);
+        switch (code) {
+          case NEWLINE:
+          case SPACE:
+          case TAB:
+          case CR:
+          case FEED: {
+            next = pos;
+            do {
+              next += 1;
+              code = css.charCodeAt(next);
+            } while (code === SPACE || code === NEWLINE || code === TAB || code === CR || code === FEED);
+            currentToken = ["space", css.slice(pos, next)];
+            pos = next - 1;
+            break;
+          }
+          case OPEN_SQUARE:
+          case CLOSE_SQUARE:
+          case OPEN_CURLY:
+          case CLOSE_CURLY:
+          case COLON:
+          case SEMICOLON:
+          case CLOSE_PARENTHESES: {
+            let controlChar = String.fromCharCode(code);
+            currentToken = [controlChar, controlChar, pos];
+            break;
+          }
+          case OPEN_PARENTHESES: {
+            prev = buffer.length ? buffer.pop()[1] : "";
+            n = css.charCodeAt(pos + 1);
+            if (prev === "url" && n !== SINGLE_QUOTE && n !== DOUBLE_QUOTE && n !== SPACE && n !== NEWLINE && n !== TAB && n !== FEED && n !== CR) {
+              next = pos;
+              do {
+                escaped = false;
+                next = css.indexOf(")", next + 1);
+                if (next === -1) {
+                  if (ignore || ignoreUnclosed) {
+                    next = pos;
+                    break;
+                  } else {
+                    unclosed("bracket");
+                  }
+                }
+                escapePos = next;
+                while (css.charCodeAt(escapePos - 1) === BACKSLASH) {
+                  escapePos -= 1;
+                  escaped = !escaped;
+                }
+              } while (escaped);
+              currentToken = ["brackets", css.slice(pos, next + 1), pos, next];
+              pos = next;
+            } else {
+              next = css.indexOf(")", pos + 1);
+              content = css.slice(pos, next + 1);
+              if (next === -1 || RE_BAD_BRACKET.test(content)) {
+                currentToken = ["(", "(", pos];
+              } else {
+                currentToken = ["brackets", content, pos, next];
+                pos = next;
+              }
+            }
+            break;
+          }
+          case SINGLE_QUOTE:
+          case DOUBLE_QUOTE: {
+            quote = code === SINGLE_QUOTE ? "'" : '"';
+            next = pos;
+            do {
+              escaped = false;
+              next = css.indexOf(quote, next + 1);
+              if (next === -1) {
+                if (ignore || ignoreUnclosed) {
+                  next = pos + 1;
+                  break;
+                } else {
+                  unclosed("string");
+                }
+              }
+              escapePos = next;
+              while (css.charCodeAt(escapePos - 1) === BACKSLASH) {
+                escapePos -= 1;
+                escaped = !escaped;
+              }
+            } while (escaped);
+            currentToken = ["string", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          case AT: {
+            RE_AT_END.lastIndex = pos + 1;
+            RE_AT_END.test(css);
+            if (RE_AT_END.lastIndex === 0) {
+              next = css.length - 1;
+            } else {
+              next = RE_AT_END.lastIndex - 2;
+            }
+            currentToken = ["at-word", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          case BACKSLASH: {
+            next = pos;
+            escape = true;
+            while (css.charCodeAt(next + 1) === BACKSLASH) {
+              next += 1;
+              escape = !escape;
+            }
+            code = css.charCodeAt(next + 1);
+            if (escape && code !== SLASH && code !== SPACE && code !== NEWLINE && code !== TAB && code !== CR && code !== FEED) {
+              next += 1;
+              if (RE_HEX_ESCAPE.test(css.charAt(next))) {
+                while (RE_HEX_ESCAPE.test(css.charAt(next + 1))) {
+                  next += 1;
+                }
+                if (css.charCodeAt(next + 1) === SPACE) {
+                  next += 1;
+                }
+              }
+            }
+            currentToken = ["word", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          default: {
+            if (code === SLASH && css.charCodeAt(pos + 1) === ASTERISK) {
+              next = css.indexOf("*/", pos + 2) + 1;
+              if (next === 0) {
+                if (ignore || ignoreUnclosed) {
+                  next = css.length;
+                } else {
+                  unclosed("comment");
+                }
+              }
+              currentToken = ["comment", css.slice(pos, next + 1), pos, next];
+              pos = next;
+            } else {
+              RE_WORD_END.lastIndex = pos + 1;
+              RE_WORD_END.test(css);
+              if (RE_WORD_END.lastIndex === 0) {
+                next = css.length - 1;
+              } else {
+                next = RE_WORD_END.lastIndex - 2;
+              }
+              currentToken = ["word", css.slice(pos, next + 1), pos, next];
+              buffer.push(currentToken);
+              pos = next;
+            }
+            break;
+          }
+        }
+        pos++;
+        return currentToken;
+      }
+      __name(nextToken, "nextToken");
+      function back(token) {
+        returned.push(token);
+      }
+      __name(back, "back");
+      return {
+        back,
+        endOfFile,
+        nextToken,
+        position
+      };
+    }, "tokenizer");
+  }
+});
+
+// src/postcss/terminal-highlight.js
+var require_terminal_highlight = __commonJS({
+  "src/postcss/terminal-highlight.js"(exports, module) {
+    "use strict";
+    var pico = require_picocolors();
+    var tokenizer = require_tokenize();
+    var Input;
+    function registerInput(dependant) {
+      Input = dependant;
+    }
+    __name(registerInput, "registerInput");
+    var HIGHLIGHT_THEME = {
+      ";": pico.yellow,
+      ":": pico.yellow,
+      "(": pico.cyan,
+      ")": pico.cyan,
+      "[": pico.yellow,
+      "]": pico.yellow,
+      "{": pico.yellow,
+      "}": pico.yellow,
+      "at-word": pico.cyan,
+      "brackets": pico.cyan,
+      "call": pico.cyan,
+      "class": pico.yellow,
+      "comment": pico.gray,
+      "hash": pico.magenta,
+      "string": pico.green
+    };
+    function getTokenType([type, value], processor) {
+      if (type === "word") {
+        if (value[0] === ".") {
+          return "class";
+        }
+        if (value[0] === "#") {
+          return "hash";
+        }
+      }
+      if (!processor.endOfFile()) {
+        let next = processor.nextToken();
+        processor.back(next);
+        if (next[0] === "brackets" || next[0] === "(") return "call";
+      }
+      return type;
+    }
+    __name(getTokenType, "getTokenType");
+    function terminalHighlight(css) {
+      let processor = tokenizer(new Input(css), { ignoreErrors: true });
+      let result = "";
+      while (!processor.endOfFile()) {
+        let token = processor.nextToken();
+        let color = HIGHLIGHT_THEME[getTokenType(token, processor)];
+        if (color) {
+          result += token[1].split(/\r?\n/).map((i) => color(i)).join("\n");
+        } else {
+          result += token[1];
+        }
+      }
+      return result;
+    }
+    __name(terminalHighlight, "terminalHighlight");
+    terminalHighlight.registerInput = registerInput;
+    module.exports = terminalHighlight;
+  }
+});
+
+// src/postcss/css-syntax-error.js
+var require_css_syntax_error = __commonJS({
+  "src/postcss/css-syntax-error.js"(exports, module) {
+    "use strict";
+    var pico = require_picocolors();
+    var terminalHighlight = require_terminal_highlight();
+    var CssSyntaxError = class _CssSyntaxError extends Error {
+      static {
+        __name(this, "CssSyntaxError");
+      }
+      constructor(message, line, column, source, file, plugin) {
+        super(message);
+        this.name = "CssSyntaxError";
+        this.reason = message;
+        if (file) {
+          this.file = file;
+        }
+        if (source) {
+          this.source = source;
+        }
+        if (plugin) {
+          this.plugin = plugin;
+        }
+        if (typeof line !== "undefined" && typeof column !== "undefined") {
+          if (typeof line === "number") {
+            this.line = line;
+            this.column = column;
+          } else {
+            this.line = line.line;
+            this.column = line.column;
+            this.endLine = column.line;
+            this.endColumn = column.column;
+          }
+        }
+        this.setMessage();
+        if (Error.captureStackTrace) {
+          Error.captureStackTrace(this, _CssSyntaxError);
+        }
+      }
+      setMessage() {
+        this.message = this.plugin ? this.plugin + ": " : "";
+        this.message += this.file ? this.file : "<css input>";
+        if (typeof this.line !== "undefined") {
+          this.message += ":" + this.line + ":" + this.column;
+        }
+        this.message += ": " + this.reason;
+      }
+      showSourceCode(color) {
+        if (!this.source) return "";
+        let css = this.source;
+        if (color == null) color = pico.isColorSupported;
+        let aside = /* @__PURE__ */ __name((text) => text, "aside");
+        let mark = /* @__PURE__ */ __name((text) => text, "mark");
+        let highlight = /* @__PURE__ */ __name((text) => text, "highlight");
+        if (color) {
+          let { bold, gray, red } = pico.createColors(true);
+          mark = /* @__PURE__ */ __name((text) => bold(red(text)), "mark");
+          aside = /* @__PURE__ */ __name((text) => gray(text), "aside");
+          if (terminalHighlight) {
+            highlight = /* @__PURE__ */ __name((text) => terminalHighlight(text), "highlight");
+          }
+        }
+        let lines = css.split(/\r?\n/);
+        let start = Math.max(this.line - 3, 0);
+        let end = Math.min(this.line + 2, lines.length);
+        let maxWidth = String(end).length;
+        return lines.slice(start, end).map((line, index) => {
+          let number = start + 1 + index;
+          let gutter = " " + (" " + number).slice(-maxWidth) + " | ";
+          if (number === this.line) {
+            if (line.length > 160) {
+              let padding = 20;
+              let subLineStart = Math.max(0, this.column - padding);
+              let subLineEnd = Math.max(
+                this.column + padding,
+                this.endColumn + padding
+              );
+              let subLine = line.slice(subLineStart, subLineEnd);
+              let spacing2 = aside(gutter.replace(/\d/g, " ")) + line.slice(0, Math.min(this.column - 1, padding - 1)).replace(/[^\t]/g, " ");
+              return mark(">") + aside(gutter) + highlight(subLine) + "\n " + spacing2 + mark("^");
+            }
+            let spacing = aside(gutter.replace(/\d/g, " ")) + line.slice(0, this.column - 1).replace(/[^\t]/g, " ");
+            return mark(">") + aside(gutter) + highlight(line) + "\n " + spacing + mark("^");
+          }
+          return " " + aside(gutter) + highlight(line);
+        }).join("\n");
+      }
+      toString() {
+        let code = this.showSourceCode();
+        if (code) {
+          code = "\n\n" + code + "\n";
+        }
+        return this.name + ": " + this.message + code;
+      }
+    };
+    module.exports = CssSyntaxError;
+    CssSyntaxError.default = CssSyntaxError;
+  }
+});
+
+// src/postcss/stringifier.js
+var require_stringifier = __commonJS({
+  "src/postcss/stringifier.js"(exports, module) {
+    "use strict";
+    var DEFAULT_RAW = {
+      after: "\n",
+      beforeClose: "\n",
+      beforeComment: "\n",
+      beforeDecl: "\n",
+      beforeOpen: " ",
+      beforeRule: "\n",
+      colon: ": ",
+      commentLeft: " ",
+      commentRight: " ",
+      emptyBody: "",
+      indent: "    ",
+      semicolon: false
+    };
+    function capitalize(str) {
+      return str[0].toUpperCase() + str.slice(1);
+    }
+    __name(capitalize, "capitalize");
+    var Stringifier = class {
+      static {
+        __name(this, "Stringifier");
+      }
+      constructor(builder) {
+        this.builder = builder;
+      }
+      atrule(node, semicolon) {
+        let name = "@" + node.name;
+        let params = node.params ? this.rawValue(node, "params") : "";
+        if (typeof node.raws.afterName !== "undefined") {
+          name += node.raws.afterName;
+        } else if (params) {
+          name += " ";
+        }
+        if (node.nodes) {
+          this.block(node, name + params);
+        } else {
+          let end = (node.raws.between || "") + (semicolon ? ";" : "");
+          this.builder(name + params + end, node);
+        }
+      }
+      beforeAfter(node, detect) {
+        let value;
+        if (node.type === "decl") {
+          value = this.raw(node, null, "beforeDecl");
+        } else if (node.type === "comment") {
+          value = this.raw(node, null, "beforeComment");
+        } else if (detect === "before") {
+          value = this.raw(node, null, "beforeRule");
+        } else {
+          value = this.raw(node, null, "beforeClose");
+        }
+        let buf = node.parent;
+        let depth = 0;
+        while (buf && buf.type !== "root") {
+          depth += 1;
+          buf = buf.parent;
+        }
+        if (value.includes("\n")) {
+          let indent = this.raw(node, null, "indent");
+          if (indent.length) {
+            for (let step = 0; step < depth; step++) value += indent;
+          }
+        }
+        return value;
+      }
+      block(node, start) {
+        let between = this.raw(node, "between", "beforeOpen");
+        this.builder(start + between + "{", node, "start");
+        let after;
+        if (node.nodes && node.nodes.length) {
+          this.body(node);
+          after = this.raw(node, "after");
+        } else {
+          after = this.raw(node, "after", "emptyBody");
+        }
+        if (after) this.builder(after);
+        this.builder("}", node, "end");
+      }
+      body(node) {
+        let last = node.nodes.length - 1;
+        while (last > 0) {
+          if (node.nodes[last].type !== "comment") break;
+          last -= 1;
+        }
+        let semicolon = this.raw(node, "semicolon");
+        for (let i = 0; i < node.nodes.length; i++) {
+          let child = node.nodes[i];
+          let before = this.raw(child, "before");
+          if (before) this.builder(before);
+          this.stringify(child, last !== i || semicolon);
+        }
+      }
+      comment(node) {
+        let left = this.raw(node, "left", "commentLeft");
+        let right = this.raw(node, "right", "commentRight");
+        this.builder("/*" + left + node.text + right + "*/", node);
+      }
+      decl(node, semicolon) {
+        let between = this.raw(node, "between", "colon");
+        let string = node.prop + between + this.rawValue(node, "value");
+        if (node.important) {
+          string += node.raws.important || " !important";
+        }
+        if (semicolon) string += ";";
+        this.builder(string, node);
+      }
+      document(node) {
+        this.body(node);
+      }
+      raw(node, own, detect) {
+        let value;
+        if (!detect) detect = own;
+        if (own) {
+          value = node.raws[own];
+          if (typeof value !== "undefined") return value;
+        }
+        let parent = node.parent;
+        if (detect === "before") {
+          if (!parent || parent.type === "root" && parent.first === node) {
+            return "";
+          }
+          if (parent && parent.type === "document") {
+            return "";
+          }
+        }
+        if (!parent) return DEFAULT_RAW[detect];
+        let root = node.root();
+        if (!root.rawCache) root.rawCache = {};
+        if (typeof root.rawCache[detect] !== "undefined") {
+          return root.rawCache[detect];
+        }
+        if (detect === "before" || detect === "after") {
+          return this.beforeAfter(node, detect);
+        } else {
+          let method = "raw" + capitalize(detect);
+          if (this[method]) {
+            value = this[method](root, node);
+          } else {
+            root.walk((i) => {
+              value = i.raws[own];
+              if (typeof value !== "undefined") return false;
+            });
+          }
+        }
+        if (typeof value === "undefined") value = DEFAULT_RAW[detect];
+        root.rawCache[detect] = value;
+        return value;
+      }
+      rawBeforeClose(root) {
+        let value;
+        root.walk((i) => {
+          if (i.nodes && i.nodes.length > 0) {
+            if (typeof i.raws.after !== "undefined") {
+              value = i.raws.after;
+              if (value.includes("\n")) {
+                value = value.replace(/[^\n]+$/, "");
+              }
+              return false;
+            }
+          }
+        });
+        if (value) value = value.replace(/\S/g, "");
+        return value;
+      }
+      rawBeforeComment(root, node) {
+        let value;
+        root.walkComments((i) => {
+          if (typeof i.raws.before !== "undefined") {
+            value = i.raws.before;
+            if (value.includes("\n")) {
+              value = value.replace(/[^\n]+$/, "");
+            }
+            return false;
+          }
+        });
+        if (typeof value === "undefined") {
+          value = this.raw(node, null, "beforeDecl");
+        } else if (value) {
+          value = value.replace(/\S/g, "");
+        }
+        return value;
+      }
+      rawBeforeDecl(root, node) {
+        let value;
+        root.walkDecls((i) => {
+          if (typeof i.raws.before !== "undefined") {
+            value = i.raws.before;
+            if (value.includes("\n")) {
+              value = value.replace(/[^\n]+$/, "");
+            }
+            return false;
+          }
+        });
+        if (typeof value === "undefined") {
+          value = this.raw(node, null, "beforeRule");
+        } else if (value) {
+          value = value.replace(/\S/g, "");
+        }
+        return value;
+      }
+      rawBeforeOpen(root) {
+        let value;
+        root.walk((i) => {
+          if (i.type !== "decl") {
+            value = i.raws.between;
+            if (typeof value !== "undefined") return false;
+          }
+        });
+        return value;
+      }
+      rawBeforeRule(root) {
+        let value;
+        root.walk((i) => {
+          if (i.nodes && (i.parent !== root || root.first !== i)) {
+            if (typeof i.raws.before !== "undefined") {
+              value = i.raws.before;
+              if (value.includes("\n")) {
+                value = value.replace(/[^\n]+$/, "");
+              }
+              return false;
+            }
+          }
+        });
+        if (value) value = value.replace(/\S/g, "");
+        return value;
+      }
+      rawColon(root) {
+        let value;
+        root.walkDecls((i) => {
+          if (typeof i.raws.between !== "undefined") {
+            value = i.raws.between.replace(/[^\s:]/g, "");
+            return false;
+          }
+        });
+        return value;
+      }
+      rawEmptyBody(root) {
+        let value;
+        root.walk((i) => {
+          if (i.nodes && i.nodes.length === 0) {
+            value = i.raws.after;
+            if (typeof value !== "undefined") return false;
+          }
+        });
+        return value;
+      }
+      rawIndent(root) {
+        if (root.raws.indent) return root.raws.indent;
+        let value;
+        root.walk((i) => {
+          let p = i.parent;
+          if (p && p !== root && p.parent && p.parent === root) {
+            if (typeof i.raws.before !== "undefined") {
+              let parts = i.raws.before.split("\n");
+              value = parts[parts.length - 1];
+              value = value.replace(/\S/g, "");
+              return false;
+            }
+          }
+        });
+        return value;
+      }
+      rawSemicolon(root) {
+        let value;
+        root.walk((i) => {
+          if (i.nodes && i.nodes.length && i.last.type === "decl") {
+            value = i.raws.semicolon;
+            if (typeof value !== "undefined") return false;
+          }
+        });
+        return value;
+      }
+      rawValue(node, prop) {
+        let value = node[prop];
+        let raw = node.raws[prop];
+        if (raw && raw.value === value) {
+          return raw.raw;
+        }
+        return value;
+      }
+      root(node) {
+        this.body(node);
+        if (node.raws.after) this.builder(node.raws.after);
+      }
+      rule(node) {
+        this.block(node, this.rawValue(node, "selector"));
+        if (node.raws.ownSemicolon) {
+          this.builder(node.raws.ownSemicolon, node, "end");
+        }
+      }
+      stringify(node, semicolon) {
+        if (!this[node.type]) {
+          throw new Error(
+            "Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier."
+          );
+        }
+        this[node.type](node, semicolon);
+      }
+    };
+    module.exports = Stringifier;
+    Stringifier.default = Stringifier;
+  }
+});
+
+// src/postcss/stringify.js
+var require_stringify = __commonJS({
+  "src/postcss/stringify.js"(exports, module) {
+    "use strict";
+    var Stringifier = require_stringifier();
+    function stringify(node, builder) {
+      let str = new Stringifier(builder);
+      str.stringify(node);
+    }
+    __name(stringify, "stringify");
+    module.exports = stringify;
+    stringify.default = stringify;
+  }
+});
+
+// src/postcss/symbols.js
+var require_symbols = __commonJS({
+  "src/postcss/symbols.js"(exports, module) {
+    "use strict";
+    module.exports.isClean = Symbol("isClean");
+    module.exports.my = Symbol("my");
+  }
+});
+
+// src/postcss/node.js
+var require_node = __commonJS({
+  "src/postcss/node.js"(exports, module) {
+    "use strict";
+    var CssSyntaxError = require_css_syntax_error();
+    var Stringifier = require_stringifier();
+    var stringify = require_stringify();
+    var { isClean, my } = require_symbols();
+    function cloneNode(obj, parent) {
+      let cloned = new obj.constructor();
+      for (let i in obj) {
+        if (!Object.prototype.hasOwnProperty.call(obj, i)) {
+          continue;
+        }
+        if (i === "proxyCache") continue;
+        let value = obj[i];
+        let type = typeof value;
+        if (i === "parent" && type === "object") {
+          if (parent) cloned[i] = parent;
+        } else if (i === "source") {
+          cloned[i] = value;
+        } else if (Array.isArray(value)) {
+          cloned[i] = value.map((j) => cloneNode(j, cloned));
+        } else {
+          if (type === "object" && value !== null) value = cloneNode(value);
+          cloned[i] = value;
+        }
+      }
+      return cloned;
+    }
+    __name(cloneNode, "cloneNode");
+    function sourceOffset(inputCSS, position) {
+      if (position && typeof position.offset !== "undefined") {
+        return position.offset;
+      }
+      let column = 1;
+      let line = 1;
+      let offset = 0;
+      for (let i = 0; i < inputCSS.length; i++) {
+        if (line === position.line && column === position.column) {
+          offset = i;
+          break;
+        }
+        if (inputCSS[i] === "\n") {
+          column = 1;
+          line += 1;
+        } else {
+          column += 1;
+        }
+      }
+      return offset;
+    }
+    __name(sourceOffset, "sourceOffset");
+    var Node = class {
+      static {
+        __name(this, "Node");
+      }
+      constructor(defaults = {}) {
+        this.raws = {};
+        this[isClean] = false;
+        this[my] = true;
+        for (let name in defaults) {
+          if (name === "nodes") {
+            this.nodes = [];
+            for (let node of defaults[name]) {
+              if (typeof node.clone === "function") {
+                this.append(node.clone());
+              } else {
+                this.append(node);
+              }
+            }
+          } else {
+            this[name] = defaults[name];
+          }
+        }
+      }
+      addToError(error) {
+        error.postcssNode = this;
+        if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
+          let s = this.source;
+          error.stack = error.stack.replace(
+            /\n\s{4}at /,
+            `$&${s.input.from}:${s.start.line}:${s.start.column}$&`
+          );
+        }
+        return error;
+      }
+      after(add) {
+        this.parent.insertAfter(this, add);
+        return this;
+      }
+      assign(overrides = {}) {
+        for (let name in overrides) {
+          this[name] = overrides[name];
+        }
+        return this;
+      }
+      before(add) {
+        this.parent.insertBefore(this, add);
+        return this;
+      }
+      cleanRaws(keepBetween) {
+        delete this.raws.before;
+        delete this.raws.after;
+        if (!keepBetween) delete this.raws.between;
+      }
+      clone(overrides = {}) {
+        let cloned = cloneNode(this);
+        for (let name in overrides) {
+          cloned[name] = overrides[name];
+        }
+        return cloned;
+      }
+      cloneAfter(overrides = {}) {
+        let cloned = this.clone(overrides);
+        this.parent.insertAfter(this, cloned);
+        return cloned;
+      }
+      cloneBefore(overrides = {}) {
+        let cloned = this.clone(overrides);
+        this.parent.insertBefore(this, cloned);
+        return cloned;
+      }
+      error(message, opts = {}) {
+        if (this.source) {
+          let { end, start } = this.rangeBy(opts);
+          return this.source.input.error(
+            message,
+            { column: start.column, line: start.line },
+            { column: end.column, line: end.line },
+            opts
+          );
+        }
+        return new CssSyntaxError(message);
+      }
+      getProxyProcessor() {
+        return {
+          get(node, prop) {
+            if (prop === "proxyOf") {
+              return node;
+            } else if (prop === "root") {
+              return () => node.root().toProxy();
+            } else {
+              return node[prop];
+            }
+          },
+          set(node, prop, value) {
+            if (node[prop] === value) return true;
+            node[prop] = value;
+            if (prop === "prop" || prop === "value" || prop === "name" || prop === "params" || prop === "important" || /* c8 ignore next */
+            prop === "text") {
+              node.markDirty();
+            }
+            return true;
+          }
+        };
+      }
+      /* c8 ignore next 3 */
+      markClean() {
+        this[isClean] = true;
+      }
+      markDirty() {
+        if (this[isClean]) {
+          this[isClean] = false;
+          let next = this;
+          while (next = next.parent) {
+            next[isClean] = false;
+          }
+        }
+      }
+      next() {
+        if (!this.parent) return void 0;
+        let index = this.parent.index(this);
+        return this.parent.nodes[index + 1];
+      }
+      positionBy(opts) {
+        let pos = this.source.start;
+        if (opts.index) {
+          pos = this.positionInside(opts.index);
+        } else if (opts.word) {
+          let stringRepresentation = this.source.input.css.slice(
+            sourceOffset(this.source.input.css, this.source.start),
+            sourceOffset(this.source.input.css, this.source.end)
+          );
+          let index = stringRepresentation.indexOf(opts.word);
+          if (index !== -1) pos = this.positionInside(index);
+        }
+        return pos;
+      }
+      positionInside(index) {
+        let column = this.source.start.column;
+        let line = this.source.start.line;
+        let offset = sourceOffset(this.source.input.css, this.source.start);
+        let end = offset + index;
+        for (let i = offset; i < end; i++) {
+          if (this.source.input.css[i] === "\n") {
+            column = 1;
+            line += 1;
+          } else {
+            column += 1;
+          }
+        }
+        return { column, line };
+      }
+      prev() {
+        if (!this.parent) return void 0;
+        let index = this.parent.index(this);
+        return this.parent.nodes[index - 1];
+      }
+      rangeBy(opts) {
+        let start = {
+          column: this.source.start.column,
+          line: this.source.start.line
+        };
+        let end = this.source.end ? {
+          column: this.source.end.column + 1,
+          line: this.source.end.line
+        } : {
+          column: start.column + 1,
+          line: start.line
+        };
+        if (opts.word) {
+          let stringRepresentation = this.source.input.css.slice(
+            sourceOffset(this.source.input.css, this.source.start),
+            sourceOffset(this.source.input.css, this.source.end)
+          );
+          let index = stringRepresentation.indexOf(opts.word);
+          if (index !== -1) {
+            start = this.positionInside(index);
+            end = this.positionInside(
+              index + opts.word.length
+            );
+          }
+        } else {
+          if (opts.start) {
+            start = {
+              column: opts.start.column,
+              line: opts.start.line
+            };
+          } else if (opts.index) {
+            start = this.positionInside(opts.index);
+          }
+          if (opts.end) {
+            end = {
+              column: opts.end.column,
+              line: opts.end.line
+            };
+          } else if (typeof opts.endIndex === "number") {
+            end = this.positionInside(opts.endIndex);
+          } else if (opts.index) {
+            end = this.positionInside(opts.index + 1);
+          }
+        }
+        if (end.line < start.line || end.line === start.line && end.column <= start.column) {
+          end = { column: start.column + 1, line: start.line };
+        }
+        return { end, start };
+      }
+      raw(prop, defaultType) {
+        let str = new Stringifier();
+        return str.raw(this, prop, defaultType);
+      }
+      remove() {
+        if (this.parent) {
+          this.parent.removeChild(this);
+        }
+        this.parent = void 0;
+        return this;
+      }
+      replaceWith(...nodes) {
+        if (this.parent) {
+          let bookmark = this;
+          let foundSelf = false;
+          for (let node of nodes) {
+            if (node === this) {
+              foundSelf = true;
+            } else if (foundSelf) {
+              this.parent.insertAfter(bookmark, node);
+              bookmark = node;
+            } else {
+              this.parent.insertBefore(bookmark, node);
+            }
+          }
+          if (!foundSelf) {
+            this.remove();
+          }
+        }
+        return this;
+      }
+      root() {
+        let result = this;
+        while (result.parent && result.parent.type !== "document") {
+          result = result.parent;
+        }
+        return result;
+      }
+      toJSON(_, inputs) {
+        let fixed = {};
+        let emitInputs = inputs == null;
+        inputs = inputs || /* @__PURE__ */ new Map();
+        let inputsNextIndex = 0;
+        for (let name in this) {
+          if (!Object.prototype.hasOwnProperty.call(this, name)) {
+            continue;
+          }
+          if (name === "parent" || name === "proxyCache") continue;
+          let value = this[name];
+          if (Array.isArray(value)) {
+            fixed[name] = value.map((i) => {
+              if (typeof i === "object" && i.toJSON) {
+                return i.toJSON(null, inputs);
+              } else {
+                return i;
+              }
+            });
+          } else if (typeof value === "object" && value.toJSON) {
+            fixed[name] = value.toJSON(null, inputs);
+          } else if (name === "source") {
+            let inputId = inputs.get(value.input);
+            if (inputId == null) {
+              inputId = inputsNextIndex;
+              inputs.set(value.input, inputsNextIndex);
+              inputsNextIndex++;
+            }
+            fixed[name] = {
+              end: value.end,
+              inputId,
+              start: value.start
+            };
+          } else {
+            fixed[name] = value;
+          }
+        }
+        if (emitInputs) {
+          fixed.inputs = [...inputs.keys()].map((input) => input.toJSON());
+        }
+        return fixed;
+      }
+      toProxy() {
+        if (!this.proxyCache) {
+          this.proxyCache = new Proxy(this, this.getProxyProcessor());
+        }
+        return this.proxyCache;
+      }
+      toString(stringifier = stringify) {
+        if (stringifier.stringify) stringifier = stringifier.stringify;
+        let result = "";
+        stringifier(this, (i) => {
+          result += i;
+        });
+        return result;
+      }
+      warn(result, text, opts) {
+        let data = { node: this };
+        for (let i in opts) data[i] = opts[i];
+        return result.warn(text, data);
+      }
+      get proxyOf() {
+        return this;
+      }
+    };
+    module.exports = Node;
+    Node.default = Node;
+  }
+});
+
+// src/postcss/comment.js
+var require_comment = __commonJS({
+  "src/postcss/comment.js"(exports, module) {
+    "use strict";
+    var Node = require_node();
+    var Comment = class extends Node {
+      static {
+        __name(this, "Comment");
+      }
+      constructor(defaults) {
+        super(defaults);
+        this.type = "comment";
+      }
+    };
+    module.exports = Comment;
+    Comment.default = Comment;
+  }
+});
+
+// src/postcss/declaration.js
+var require_declaration = __commonJS({
+  "src/postcss/declaration.js"(exports, module) {
+    "use strict";
+    var Node = require_node();
+    var Declaration = class extends Node {
+      static {
+        __name(this, "Declaration");
+      }
+      constructor(defaults) {
+        if (defaults && typeof defaults.value !== "undefined" && typeof defaults.value !== "string") {
+          defaults = { ...defaults, value: String(defaults.value) };
+        }
+        super(defaults);
+        this.type = "decl";
+      }
+      get variable() {
+        return this.prop.startsWith("--") || this.prop[0] === "$";
+      }
+    };
+    module.exports = Declaration;
+    Declaration.default = Declaration;
+  }
+});
+
+// src/postcss/container.js
+var require_container = __commonJS({
+  "src/postcss/container.js"(exports, module) {
+    "use strict";
+    var Comment = require_comment();
+    var Declaration = require_declaration();
+    var Node = require_node();
+    var { isClean, my } = require_symbols();
+    var AtRule;
+    var parse;
+    var Root;
+    var Rule;
+    function cleanSource(nodes) {
+      return nodes.map((i) => {
+        if (i.nodes) i.nodes = cleanSource(i.nodes);
+        delete i.source;
+        return i;
+      });
+    }
+    __name(cleanSource, "cleanSource");
+    function markTreeDirty(node) {
+      node[isClean] = false;
+      if (node.proxyOf.nodes) {
+        for (let i of node.proxyOf.nodes) {
+          markTreeDirty(i);
+        }
+      }
+    }
+    __name(markTreeDirty, "markTreeDirty");
+    var Container = class _Container extends Node {
+      static {
+        __name(this, "Container");
+      }
+      append(...children) {
+        for (let child of children) {
+          let nodes = this.normalize(child, this.last);
+          for (let node of nodes) this.proxyOf.nodes.push(node);
+        }
+        this.markDirty();
+        return this;
+      }
+      cleanRaws(keepBetween) {
+        super.cleanRaws(keepBetween);
+        if (this.nodes) {
+          for (let node of this.nodes) node.cleanRaws(keepBetween);
+        }
+      }
+      each(callback) {
+        if (!this.proxyOf.nodes) return void 0;
+        let iterator = this.getIterator();
+        let index, result;
+        while (this.indexes[iterator] < this.proxyOf.nodes.length) {
+          index = this.indexes[iterator];
+          result = callback(this.proxyOf.nodes[index], index);
+          if (result === false) break;
+          this.indexes[iterator] += 1;
+        }
+        delete this.indexes[iterator];
+        return result;
+      }
+      every(condition) {
+        return this.nodes.every(condition);
+      }
+      getIterator() {
+        if (!this.lastEach) this.lastEach = 0;
+        if (!this.indexes) this.indexes = {};
+        this.lastEach += 1;
+        let iterator = this.lastEach;
+        this.indexes[iterator] = 0;
+        return iterator;
+      }
+      getProxyProcessor() {
+        return {
+          get(node, prop) {
+            if (prop === "proxyOf") {
+              return node;
+            } else if (!node[prop]) {
+              return node[prop];
+            } else if (prop === "each" || typeof prop === "string" && prop.startsWith("walk")) {
+              return (...args) => {
+                return node[prop](
+                  ...args.map((i) => {
+                    if (typeof i === "function") {
+                      return (child, index) => i(child.toProxy(), index);
+                    } else {
+                      return i;
+                    }
+                  })
+                );
+              };
+            } else if (prop === "every" || prop === "some") {
+              return (cb) => {
+                return node[prop](
+                  (child, ...other) => cb(child.toProxy(), ...other)
+                );
+              };
+            } else if (prop === "root") {
+              return () => node.root().toProxy();
+            } else if (prop === "nodes") {
+              return node.nodes.map((i) => i.toProxy());
+            } else if (prop === "first" || prop === "last") {
+              return node[prop].toProxy();
+            } else {
+              return node[prop];
+            }
+          },
+          set(node, prop, value) {
+            if (node[prop] === value) return true;
+            node[prop] = value;
+            if (prop === "name" || prop === "params" || prop === "selector") {
+              node.markDirty();
+            }
+            return true;
+          }
+        };
+      }
+      index(child) {
+        if (typeof child === "number") return child;
+        if (child.proxyOf) child = child.proxyOf;
+        return this.proxyOf.nodes.indexOf(child);
+      }
+      insertAfter(exist, add) {
+        let existIndex = this.index(exist);
+        let nodes = this.normalize(add, this.proxyOf.nodes[existIndex]).reverse();
+        existIndex = this.index(exist);
+        for (let node of nodes) this.proxyOf.nodes.splice(existIndex + 1, 0, node);
+        let index;
+        for (let id in this.indexes) {
+          index = this.indexes[id];
+          if (existIndex < index) {
+            this.indexes[id] = index + nodes.length;
+          }
+        }
+        this.markDirty();
+        return this;
+      }
+      insertBefore(exist, add) {
+        let existIndex = this.index(exist);
+        let type = existIndex === 0 ? "prepend" : false;
+        let nodes = this.normalize(
+          add,
+          this.proxyOf.nodes[existIndex],
+          type
+        ).reverse();
+        existIndex = this.index(exist);
+        for (let node of nodes) this.proxyOf.nodes.splice(existIndex, 0, node);
+        let index;
+        for (let id in this.indexes) {
+          index = this.indexes[id];
+          if (existIndex <= index) {
+            this.indexes[id] = index + nodes.length;
+          }
+        }
+        this.markDirty();
+        return this;
+      }
+      normalize(nodes, sample) {
+        if (typeof nodes === "string") {
+          nodes = cleanSource(parse(nodes).nodes);
+        } else if (typeof nodes === "undefined") {
+          nodes = [];
+        } else if (Array.isArray(nodes)) {
+          nodes = nodes.slice(0);
+          for (let i of nodes) {
+            if (i.parent) i.parent.removeChild(i, "ignore");
+          }
+        } else if (nodes.type === "root" && this.type !== "document") {
+          nodes = nodes.nodes.slice(0);
+          for (let i of nodes) {
+            if (i.parent) i.parent.removeChild(i, "ignore");
+          }
+        } else if (nodes.type) {
+          nodes = [nodes];
+        } else if (nodes.prop) {
+          if (typeof nodes.value === "undefined") {
+            throw new Error("Value field is missed in node creation");
+          } else if (typeof nodes.value !== "string") {
+            nodes.value = String(nodes.value);
+          }
+          nodes = [new Declaration(nodes)];
+        } else if (nodes.selector || nodes.selectors) {
+          nodes = [new Rule(nodes)];
+        } else if (nodes.name) {
+          nodes = [new AtRule(nodes)];
+        } else if (nodes.text) {
+          nodes = [new Comment(nodes)];
+        } else {
+          throw new Error("Unknown node type in node creation");
+        }
+        let processed = nodes.map((i) => {
+          if (!i[my]) _Container.rebuild(i);
+          i = i.proxyOf;
+          if (i.parent) i.parent.removeChild(i);
+          if (i[isClean]) markTreeDirty(i);
+          if (!i.raws) i.raws = {};
+          if (typeof i.raws.before === "undefined") {
+            if (sample && typeof sample.raws.before !== "undefined") {
+              i.raws.before = sample.raws.before.replace(/\S/g, "");
+            }
+          }
+          i.parent = this.proxyOf;
+          return i;
+        });
+        return processed;
+      }
+      prepend(...children) {
+        children = children.reverse();
+        for (let child of children) {
+          let nodes = this.normalize(child, this.first, "prepend").reverse();
+          for (let node of nodes) this.proxyOf.nodes.unshift(node);
+          for (let id in this.indexes) {
+            this.indexes[id] = this.indexes[id] + nodes.length;
+          }
+        }
+        this.markDirty();
+        return this;
+      }
+      push(child) {
+        child.parent = this;
+        this.proxyOf.nodes.push(child);
+        return this;
+      }
+      removeAll() {
+        for (let node of this.proxyOf.nodes) node.parent = void 0;
+        this.proxyOf.nodes = [];
+        this.markDirty();
+        return this;
+      }
+      removeChild(child) {
+        child = this.index(child);
+        this.proxyOf.nodes[child].parent = void 0;
+        this.proxyOf.nodes.splice(child, 1);
+        let index;
+        for (let id in this.indexes) {
+          index = this.indexes[id];
+          if (index >= child) {
+            this.indexes[id] = index - 1;
+          }
+        }
+        this.markDirty();
+        return this;
+      }
+      replaceValues(pattern, opts, callback) {
+        if (!callback) {
+          callback = opts;
+          opts = {};
+        }
+        this.walkDecls((decl) => {
+          if (opts.props && !opts.props.includes(decl.prop)) return;
+          if (opts.fast && !decl.value.includes(opts.fast)) return;
+          decl.value = decl.value.replace(pattern, callback);
+        });
+        this.markDirty();
+        return this;
+      }
+      some(condition) {
+        return this.nodes.some(condition);
+      }
+      walk(callback) {
+        return this.each((child, i) => {
+          let result;
+          try {
+            result = callback(child, i);
+          } catch (e) {
+            throw child.addToError(e);
+          }
+          if (result !== false && child.walk) {
+            result = child.walk(callback);
+          }
+          return result;
+        });
+      }
+      walkAtRules(name, callback) {
+        if (!callback) {
+          callback = name;
+          return this.walk((child, i) => {
+            if (child.type === "atrule") {
+              return callback(child, i);
+            }
+          });
+        }
+        if (name instanceof RegExp) {
+          return this.walk((child, i) => {
+            if (child.type === "atrule" && name.test(child.name)) {
+              return callback(child, i);
+            }
+          });
+        }
+        return this.walk((child, i) => {
+          if (child.type === "atrule" && child.name === name) {
+            return callback(child, i);
+          }
+        });
+      }
+      walkComments(callback) {
+        return this.walk((child, i) => {
+          if (child.type === "comment") {
+            return callback(child, i);
+          }
+        });
+      }
+      walkDecls(prop, callback) {
+        if (!callback) {
+          callback = prop;
+          return this.walk((child, i) => {
+            if (child.type === "decl") {
+              return callback(child, i);
+            }
+          });
+        }
+        if (prop instanceof RegExp) {
+          return this.walk((child, i) => {
+            if (child.type === "decl" && prop.test(child.prop)) {
+              return callback(child, i);
+            }
+          });
+        }
+        return this.walk((child, i) => {
+          if (child.type === "decl" && child.prop === prop) {
+            return callback(child, i);
+          }
+        });
+      }
+      walkRules(selector, callback) {
+        if (!callback) {
+          callback = selector;
+          return this.walk((child, i) => {
+            if (child.type === "rule") {
+              return callback(child, i);
+            }
+          });
+        }
+        if (selector instanceof RegExp) {
+          return this.walk((child, i) => {
+            if (child.type === "rule" && selector.test(child.selector)) {
+              return callback(child, i);
+            }
+          });
+        }
+        return this.walk((child, i) => {
+          if (child.type === "rule" && child.selector === selector) {
+            return callback(child, i);
+          }
+        });
+      }
+      get first() {
+        if (!this.proxyOf.nodes) return void 0;
+        return this.proxyOf.nodes[0];
+      }
+      get last() {
+        if (!this.proxyOf.nodes) return void 0;
+        return this.proxyOf.nodes[this.proxyOf.nodes.length - 1];
+      }
+    };
+    Container.registerParse = (dependant) => {
+      parse = dependant;
+    };
+    Container.registerRule = (dependant) => {
+      Rule = dependant;
+    };
+    Container.registerAtRule = (dependant) => {
+      AtRule = dependant;
+    };
+    Container.registerRoot = (dependant) => {
+      Root = dependant;
+    };
+    module.exports = Container;
+    Container.default = Container;
+    Container.rebuild = (node) => {
+      if (node.type === "atrule") {
+        Object.setPrototypeOf(node, AtRule.prototype);
+      } else if (node.type === "rule") {
+        Object.setPrototypeOf(node, Rule.prototype);
+      } else if (node.type === "decl") {
+        Object.setPrototypeOf(node, Declaration.prototype);
+      } else if (node.type === "comment") {
+        Object.setPrototypeOf(node, Comment.prototype);
+      } else if (node.type === "root") {
+        Object.setPrototypeOf(node, Root.prototype);
+      }
+      node[my] = true;
+      if (node.nodes) {
+        node.nodes.forEach((child) => {
+          Container.rebuild(child);
+        });
+      }
+    };
+  }
+});
+
+// src/postcss/list.js
+var require_list = __commonJS({
+  "src/postcss/list.js"(exports, module) {
+    "use strict";
+    var list = {
+      comma(string) {
+        return list.split(string, [","], true);
+      },
+      space(string) {
+        let spaces = [" ", "\n", "	"];
+        return list.split(string, spaces);
+      },
+      split(string, separators, last) {
+        let array = [];
+        let current = "";
+        let split = false;
+        let func = 0;
+        let inQuote = false;
+        let prevQuote = "";
+        let escape = false;
+        for (let letter of string) {
+          if (escape) {
+            escape = false;
+          } else if (letter === "\\") {
+            escape = true;
+          } else if (inQuote) {
+            if (letter === prevQuote) {
+              inQuote = false;
+            }
+          } else if (letter === '"' || letter === "'") {
+            inQuote = true;
+            prevQuote = letter;
+          } else if (letter === "(") {
+            func += 1;
+          } else if (letter === ")") {
+            if (func > 0) func -= 1;
+          } else if (func === 0) {
+            if (separators.includes(letter)) split = true;
+          }
+          if (split) {
+            if (current !== "") array.push(current.trim());
+            current = "";
+            split = false;
+          } else {
+            current += letter;
+          }
+        }
+        if (last || current !== "") array.push(current.trim());
+        return array;
+      }
+    };
+    module.exports = list;
+    list.default = list;
+  }
+});
+
+// src/postcss/rule.js
+var require_rule = __commonJS({
+  "src/postcss/rule.js"(exports, module) {
+    var Container = require_container();
+    var list = require_list();
+    var Rule = class extends Container {
+      static {
+        __name(this, "Rule");
+      }
+      constructor(defaults) {
+        super(defaults);
+        this.type = "rule";
+        if (!this.nodes) this.nodes = [];
+      }
+      get selectors() {
+        return list.comma(this.selector);
+      }
+      set selectors(values) {
+        let match = this.selector ? this.selector.match(/,\s*/) : null;
+        let sep = match ? match[0] : "," + this.raw("between", "beforeOpen");
+        this.selector = values.join(sep);
+      }
+    };
+    module.exports = Rule;
+    Rule.default = Rule;
+    Container.registerRule(Rule);
+  }
+});
+export default require_rule();
 //# sourceMappingURL=rule.js.map

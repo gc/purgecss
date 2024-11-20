@@ -2,7 +2,7 @@ import * as esbuild from "esbuild";
 
 await esbuild.build({
 	keepNames: true,
-	minify: true,
+	minify: false,
 	bundle: true,
 	sourcemap: true,
 	platform: "node",

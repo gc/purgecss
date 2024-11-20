@@ -1,22 +1,1162 @@
-var ce=Object.defineProperty;var f=(o,e)=>ce(o,"name",{value:e,configurable:!0});var p=(o,e)=>()=>(e||o((e={exports:{}}).exports,e),e.exports);var U=p((Be,v)=>{var R=process||{},q=R.argv||[],L=R.env||{},ue=!(L.NO_COLOR||q.includes("--no-color"))&&(!!L.FORCE_COLOR||q.includes("--color")||R.platform==="win32"||(R.stdout||{}).isTTY&&L.TERM!=="dumb"||!!L.CI),he=f((o,e,r=o)=>t=>{let i=""+t,n=i.indexOf(e,o.length);return~n?o+me(i,e,r,n)+e:o+i+e},"formatter"),me=f((o,e,r,t)=>{let i="",n=0;do i+=o.substring(n,t)+r,n=t+e.length,t=o.indexOf(e,n);while(~t);return i+o.substring(n)},"replaceClose"),F=f((o=ue)=>{let e=o?he:()=>String;return{isColorSupported:o,reset:e("\x1B[0m","\x1B[0m"),bold:e("\x1B[1m","\x1B[22m","\x1B[22m\x1B[1m"),dim:e("\x1B[2m","\x1B[22m","\x1B[22m\x1B[2m"),italic:e("\x1B[3m","\x1B[23m"),underline:e("\x1B[4m","\x1B[24m"),inverse:e("\x1B[7m","\x1B[27m"),hidden:e("\x1B[8m","\x1B[28m"),strikethrough:e("\x1B[9m","\x1B[29m"),black:e("\x1B[30m","\x1B[39m"),red:e("\x1B[31m","\x1B[39m"),green:e("\x1B[32m","\x1B[39m"),yellow:e("\x1B[33m","\x1B[39m"),blue:e("\x1B[34m","\x1B[39m"),magenta:e("\x1B[35m","\x1B[39m"),cyan:e("\x1B[36m","\x1B[39m"),white:e("\x1B[37m","\x1B[39m"),gray:e("\x1B[90m","\x1B[39m"),bgBlack:e("\x1B[40m","\x1B[49m"),bgRed:e("\x1B[41m","\x1B[49m"),bgGreen:e("\x1B[42m","\x1B[49m"),bgYellow:e("\x1B[43m","\x1B[49m"),bgBlue:e("\x1B[44m","\x1B[49m"),bgMagenta:e("\x1B[45m","\x1B[49m"),bgCyan:e("\x1B[46m","\x1B[49m"),bgWhite:e("\x1B[47m","\x1B[49m"),blackBright:e("\x1B[90m","\x1B[39m"),redBright:e("\x1B[91m","\x1B[39m"),greenBright:e("\x1B[92m","\x1B[39m"),yellowBright:e("\x1B[93m","\x1B[39m"),blueBright:e("\x1B[94m","\x1B[39m"),magentaBright:e("\x1B[95m","\x1B[39m"),cyanBright:e("\x1B[96m","\x1B[39m"),whiteBright:e("\x1B[97m","\x1B[39m"),bgBlackBright:e("\x1B[100m","\x1B[49m"),bgRedBright:e("\x1B[101m","\x1B[49m"),bgGreenBright:e("\x1B[102m","\x1B[49m"),bgYellowBright:e("\x1B[103m","\x1B[49m"),bgBlueBright:e("\x1B[104m","\x1B[49m"),bgMagentaBright:e("\x1B[105m","\x1B[49m"),bgCyanBright:e("\x1B[106m","\x1B[49m"),bgWhiteBright:e("\x1B[107m","\x1B[49m")}},"createColors");v.exports=F();v.exports.createColors=F});var K=p((Re,G)=>{"use strict";var N=/[\t\n\f\r "#'()/;[\\\]{}]/g,I=/[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g,de=/.[\r\n"'(/\\]/,$=/[\da-f]/i;G.exports=f(function(e,r={}){let t=e.css.valueOf(),i=r.ignoreErrors,n,a,u,s,k,c,d,b,h,B,x=t.length,l=0,y=[],w=[];function T(){return l}f(T,"position");function _(g){throw e.error("Unclosed "+g,l)}f(_,"unclosed");function ae(){return w.length===0&&l>=x}f(ae,"endOfFile");function oe(g){if(w.length)return w.pop();if(l>=x)return;let P=g?g.ignoreUnclosed:!1;switch(n=t.charCodeAt(l),n){case 10:case 32:case 9:case 13:case 12:{s=l;do s+=1,n=t.charCodeAt(s);while(n===32||n===10||n===9||n===13||n===12);c=["space",t.slice(l,s)],l=s-1;break}case 91:case 93:case 123:case 125:case 58:case 59:case 41:{let W=String.fromCharCode(n);c=[W,W,l];break}case 40:{if(B=y.length?y.pop()[1]:"",h=t.charCodeAt(l+1),B==="url"&&h!==39&&h!==34&&h!==32&&h!==10&&h!==9&&h!==12&&h!==13){s=l;do{if(d=!1,s=t.indexOf(")",s+1),s===-1)if(i||P){s=l;break}else _("bracket");for(b=s;t.charCodeAt(b-1)===92;)b-=1,d=!d}while(d);c=["brackets",t.slice(l,s+1),l,s],l=s}else s=t.indexOf(")",l+1),a=t.slice(l,s+1),s===-1||de.test(a)?c=["(","(",l]:(c=["brackets",a,l,s],l=s);break}case 39:case 34:{k=n===39?"'":'"',s=l;do{if(d=!1,s=t.indexOf(k,s+1),s===-1)if(i||P){s=l+1;break}else _("string");for(b=s;t.charCodeAt(b-1)===92;)b-=1,d=!d}while(d);c=["string",t.slice(l,s+1),l,s],l=s;break}case 64:{N.lastIndex=l+1,N.test(t),N.lastIndex===0?s=t.length-1:s=N.lastIndex-2,c=["at-word",t.slice(l,s+1),l,s],l=s;break}case 92:{for(s=l,u=!0;t.charCodeAt(s+1)===92;)s+=1,u=!u;if(n=t.charCodeAt(s+1),u&&n!==47&&n!==32&&n!==10&&n!==9&&n!==13&&n!==12&&(s+=1,$.test(t.charAt(s)))){for(;$.test(t.charAt(s+1));)s+=1;t.charCodeAt(s+1)===32&&(s+=1)}c=["word",t.slice(l,s+1),l,s],l=s;break}default:{n===47&&t.charCodeAt(l+1)===42?(s=t.indexOf("*/",l+2)+1,s===0&&(i||P?s=t.length:_("comment")),c=["comment",t.slice(l,s+1),l,s],l=s):(I.lastIndex=l+1,I.test(t),I.lastIndex===0?s=t.length-1:s=I.lastIndex-2,c=["word",t.slice(l,s+1),l,s],y.push(c),l=s);break}}return l++,c}f(oe,"nextToken");function fe(g){w.push(g)}return f(fe,"back"),{back:fe,endOfFile:ae,nextToken:oe,position:T}},"tokenizer")});var V=p((Ie,j)=>{"use strict";var m=U(),be=K(),Y;function pe(o){Y=o}f(pe,"registerInput");var xe={";":m.yellow,":":m.yellow,"(":m.cyan,")":m.cyan,"[":m.yellow,"]":m.yellow,"{":m.yellow,"}":m.yellow,"at-word":m.cyan,brackets:m.cyan,call:m.cyan,class:m.yellow,comment:m.gray,hash:m.magenta,string:m.green};function we([o,e],r){if(o==="word"){if(e[0]===".")return"class";if(e[0]==="#")return"hash"}if(!r.endOfFile()){let t=r.nextToken();if(r.back(t),t[0]==="brackets"||t[0]==="(")return"call"}return o}f(we,"getTokenType");function J(o){let e=be(new Y(o),{ignoreErrors:!0}),r="";for(;!e.endOfFile();){let t=e.nextToken(),i=xe[we(t,e)];i?r+=t[1].split(/\r?\n/).map(n=>i(n)).join(`
-`):r+=t[1]}return r}f(J,"terminalHighlight");J.registerInput=pe;j.exports=J});var ee=p((_e,Z)=>{"use strict";var z=U(),X=V(),C=class o extends Error{static{f(this,"CssSyntaxError")}constructor(e,r,t,i,n,a){super(e),this.name="CssSyntaxError",this.reason=e,n&&(this.file=n),i&&(this.source=i),a&&(this.plugin=a),typeof r<"u"&&typeof t<"u"&&(typeof r=="number"?(this.line=r,this.column=t):(this.line=r.line,this.column=r.column,this.endLine=t.line,this.endColumn=t.column)),this.setMessage(),Error.captureStackTrace&&Error.captureStackTrace(this,o)}setMessage(){this.message=this.plugin?this.plugin+": ":"",this.message+=this.file?this.file:"<css input>",typeof this.line<"u"&&(this.message+=":"+this.line+":"+this.column),this.message+=": "+this.reason}showSourceCode(e){if(!this.source)return"";let r=this.source;e==null&&(e=z.isColorSupported);let t=f(c=>c,"aside"),i=f(c=>c,"mark"),n=f(c=>c,"highlight");if(e){let{bold:c,gray:d,red:b}=z.createColors(!0);i=f(h=>c(b(h)),"mark"),t=f(h=>d(h),"aside"),X&&(n=f(h=>X(h),"highlight"))}let a=r.split(/\r?\n/),u=Math.max(this.line-3,0),s=Math.min(this.line+2,a.length),k=String(s).length;return a.slice(u,s).map((c,d)=>{let b=u+1+d,h=" "+(" "+b).slice(-k)+" | ";if(b===this.line){if(c.length>160){let x=20,l=Math.max(0,this.column-x),y=Math.max(this.column+x,this.endColumn+x),w=c.slice(l,y),T=t(h.replace(/\d/g," "))+c.slice(0,Math.min(this.column-1,x-1)).replace(/[^\t]/g," ");return i(">")+t(h)+n(w)+`
- `+T+i("^")}let B=t(h.replace(/\d/g," "))+c.slice(0,this.column-1).replace(/[^\t]/g," ");return i(">")+t(h)+n(c)+`
- `+B+i("^")}return" "+t(h)+n(c)}).join(`
-`)}toString(){let e=this.showSourceCode();return e&&(e=`
+var __defProp = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
 
-`+e+`
-`),this.name+": "+this.message+e}};Z.exports=C;C.default=C});var D=p((ve,re)=>{"use strict";var te={after:`
-`,beforeClose:`
-`,beforeComment:`
-`,beforeDecl:`
-`,beforeOpen:" ",beforeRule:`
-`,colon:": ",commentLeft:" ",commentRight:" ",emptyBody:"",indent:"    ",semicolon:!1};function ge(o){return o[0].toUpperCase()+o.slice(1)}f(ge,"capitalize");var E=class{static{f(this,"Stringifier")}constructor(e){this.builder=e}atrule(e,r){let t="@"+e.name,i=e.params?this.rawValue(e,"params"):"";if(typeof e.raws.afterName<"u"?t+=e.raws.afterName:i&&(t+=" "),e.nodes)this.block(e,t+i);else{let n=(e.raws.between||"")+(r?";":"");this.builder(t+i+n,e)}}beforeAfter(e,r){let t;e.type==="decl"?t=this.raw(e,null,"beforeDecl"):e.type==="comment"?t=this.raw(e,null,"beforeComment"):r==="before"?t=this.raw(e,null,"beforeRule"):t=this.raw(e,null,"beforeClose");let i=e.parent,n=0;for(;i&&i.type!=="root";)n+=1,i=i.parent;if(t.includes(`
-`)){let a=this.raw(e,null,"indent");if(a.length)for(let u=0;u<n;u++)t+=a}return t}block(e,r){let t=this.raw(e,"between","beforeOpen");this.builder(r+t+"{",e,"start");let i;e.nodes&&e.nodes.length?(this.body(e),i=this.raw(e,"after")):i=this.raw(e,"after","emptyBody"),i&&this.builder(i),this.builder("}",e,"end")}body(e){let r=e.nodes.length-1;for(;r>0&&e.nodes[r].type==="comment";)r-=1;let t=this.raw(e,"semicolon");for(let i=0;i<e.nodes.length;i++){let n=e.nodes[i],a=this.raw(n,"before");a&&this.builder(a),this.stringify(n,r!==i||t)}}comment(e){let r=this.raw(e,"left","commentLeft"),t=this.raw(e,"right","commentRight");this.builder("/*"+r+e.text+t+"*/",e)}decl(e,r){let t=this.raw(e,"between","colon"),i=e.prop+t+this.rawValue(e,"value");e.important&&(i+=e.raws.important||" !important"),r&&(i+=";"),this.builder(i,e)}document(e){this.body(e)}raw(e,r,t){let i;if(t||(t=r),r&&(i=e.raws[r],typeof i<"u"))return i;let n=e.parent;if(t==="before"&&(!n||n.type==="root"&&n.first===e||n&&n.type==="document"))return"";if(!n)return te[t];let a=e.root();if(a.rawCache||(a.rawCache={}),typeof a.rawCache[t]<"u")return a.rawCache[t];if(t==="before"||t==="after")return this.beforeAfter(e,t);{let u="raw"+ge(t);this[u]?i=this[u](a,e):a.walk(s=>{if(i=s.raws[r],typeof i<"u")return!1})}return typeof i>"u"&&(i=te[t]),a.rawCache[t]=i,i}rawBeforeClose(e){let r;return e.walk(t=>{if(t.nodes&&t.nodes.length>0&&typeof t.raws.after<"u")return r=t.raws.after,r.includes(`
-`)&&(r=r.replace(/[^\n]+$/,"")),!1}),r&&(r=r.replace(/\S/g,"")),r}rawBeforeComment(e,r){let t;return e.walkComments(i=>{if(typeof i.raws.before<"u")return t=i.raws.before,t.includes(`
-`)&&(t=t.replace(/[^\n]+$/,"")),!1}),typeof t>"u"?t=this.raw(r,null,"beforeDecl"):t&&(t=t.replace(/\S/g,"")),t}rawBeforeDecl(e,r){let t;return e.walkDecls(i=>{if(typeof i.raws.before<"u")return t=i.raws.before,t.includes(`
-`)&&(t=t.replace(/[^\n]+$/,"")),!1}),typeof t>"u"?t=this.raw(r,null,"beforeRule"):t&&(t=t.replace(/\S/g,"")),t}rawBeforeOpen(e){let r;return e.walk(t=>{if(t.type!=="decl"&&(r=t.raws.between,typeof r<"u"))return!1}),r}rawBeforeRule(e){let r;return e.walk(t=>{if(t.nodes&&(t.parent!==e||e.first!==t)&&typeof t.raws.before<"u")return r=t.raws.before,r.includes(`
-`)&&(r=r.replace(/[^\n]+$/,"")),!1}),r&&(r=r.replace(/\S/g,"")),r}rawColon(e){let r;return e.walkDecls(t=>{if(typeof t.raws.between<"u")return r=t.raws.between.replace(/[^\s:]/g,""),!1}),r}rawEmptyBody(e){let r;return e.walk(t=>{if(t.nodes&&t.nodes.length===0&&(r=t.raws.after,typeof r<"u"))return!1}),r}rawIndent(e){if(e.raws.indent)return e.raws.indent;let r;return e.walk(t=>{let i=t.parent;if(i&&i!==e&&i.parent&&i.parent===e&&typeof t.raws.before<"u"){let n=t.raws.before.split(`
-`);return r=n[n.length-1],r=r.replace(/\S/g,""),!1}}),r}rawSemicolon(e){let r;return e.walk(t=>{if(t.nodes&&t.nodes.length&&t.last.type==="decl"&&(r=t.raws.semicolon,typeof r<"u"))return!1}),r}rawValue(e,r){let t=e[r],i=e.raws[r];return i&&i.value===t?i.raw:t}root(e){this.body(e),e.raws.after&&this.builder(e.raws.after)}rule(e){this.block(e,this.rawValue(e,"selector")),e.raws.ownSemicolon&&this.builder(e.raws.ownSemicolon,e,"end")}stringify(e,r){if(!this[e.type])throw new Error("Unknown AST node type "+e.type+". Maybe you need to change PostCSS stringifier.");this[e.type](e,r)}};re.exports=E;E.default=E});var ne=p((De,ie)=>{"use strict";var ye=D();function H(o,e){new ye(e).stringify(o)}f(H,"stringify");ie.exports=H;H.default=H});var se=p((Me,M)=>{"use strict";M.exports.isClean=Symbol("isClean");M.exports.my=Symbol("my")});var Oe=p((Qe,le)=>{var Ce=ee(),Ee=D(),Se=ne(),{isClean:S,my:Ae}=se();function Q(o,e){let r=new o.constructor;for(let t in o){if(!Object.prototype.hasOwnProperty.call(o,t)||t==="proxyCache")continue;let i=o[t],n=typeof i;t==="parent"&&n==="object"?e&&(r[t]=e):t==="source"?r[t]=i:Array.isArray(i)?r[t]=i.map(a=>Q(a,r)):(n==="object"&&i!==null&&(i=Q(i)),r[t]=i)}return r}f(Q,"cloneNode");function A(o,e){if(e&&typeof e.offset<"u")return e.offset;let r=1,t=1,i=0;for(let n=0;n<o.length;n++){if(t===e.line&&r===e.column){i=n;break}o[n]===`
-`?(r=1,t+=1):r+=1}return i}f(A,"sourceOffset");var O=class{static{f(this,"Node")}constructor(e={}){this.raws={},this[S]=!1,this[Ae]=!0;for(let r in e)if(r==="nodes"){this.nodes=[];for(let t of e[r])typeof t.clone=="function"?this.append(t.clone()):this.append(t)}else this[r]=e[r]}addToError(e){if(e.postcssNode=this,e.stack&&this.source&&/\n\s{4}at /.test(e.stack)){let r=this.source;e.stack=e.stack.replace(/\n\s{4}at /,`$&${r.input.from}:${r.start.line}:${r.start.column}$&`)}return e}after(e){return this.parent.insertAfter(this,e),this}assign(e={}){for(let r in e)this[r]=e[r];return this}before(e){return this.parent.insertBefore(this,e),this}cleanRaws(e){delete this.raws.before,delete this.raws.after,e||delete this.raws.between}clone(e={}){let r=Q(this);for(let t in e)r[t]=e[t];return r}cloneAfter(e={}){let r=this.clone(e);return this.parent.insertAfter(this,r),r}cloneBefore(e={}){let r=this.clone(e);return this.parent.insertBefore(this,r),r}error(e,r={}){if(this.source){let{end:t,start:i}=this.rangeBy(r);return this.source.input.error(e,{column:i.column,line:i.line},{column:t.column,line:t.line},r)}return new Ce(e)}getProxyProcessor(){return{get(e,r){return r==="proxyOf"?e:r==="root"?()=>e.root().toProxy():e[r]},set(e,r,t){return e[r]===t||(e[r]=t,(r==="prop"||r==="value"||r==="name"||r==="params"||r==="important"||r==="text")&&e.markDirty()),!0}}}markClean(){this[S]=!0}markDirty(){if(this[S]){this[S]=!1;let e=this;for(;e=e.parent;)e[S]=!1}}next(){if(!this.parent)return;let e=this.parent.index(this);return this.parent.nodes[e+1]}positionBy(e){let r=this.source.start;if(e.index)r=this.positionInside(e.index);else if(e.word){let i=this.source.input.css.slice(A(this.source.input.css,this.source.start),A(this.source.input.css,this.source.end)).indexOf(e.word);i!==-1&&(r=this.positionInside(i))}return r}positionInside(e){let r=this.source.start.column,t=this.source.start.line,i=A(this.source.input.css,this.source.start),n=i+e;for(let a=i;a<n;a++)this.source.input.css[a]===`
-`?(r=1,t+=1):r+=1;return{column:r,line:t}}prev(){if(!this.parent)return;let e=this.parent.index(this);return this.parent.nodes[e-1]}rangeBy(e){let r={column:this.source.start.column,line:this.source.start.line},t=this.source.end?{column:this.source.end.column+1,line:this.source.end.line}:{column:r.column+1,line:r.line};if(e.word){let n=this.source.input.css.slice(A(this.source.input.css,this.source.start),A(this.source.input.css,this.source.end)).indexOf(e.word);n!==-1&&(r=this.positionInside(n),t=this.positionInside(n+e.word.length))}else e.start?r={column:e.start.column,line:e.start.line}:e.index&&(r=this.positionInside(e.index)),e.end?t={column:e.end.column,line:e.end.line}:typeof e.endIndex=="number"?t=this.positionInside(e.endIndex):e.index&&(t=this.positionInside(e.index+1));return(t.line<r.line||t.line===r.line&&t.column<=r.column)&&(t={column:r.column+1,line:r.line}),{end:t,start:r}}raw(e,r){return new Ee().raw(this,e,r)}remove(){return this.parent&&this.parent.removeChild(this),this.parent=void 0,this}replaceWith(...e){if(this.parent){let r=this,t=!1;for(let i of e)i===this?t=!0:t?(this.parent.insertAfter(r,i),r=i):this.parent.insertBefore(r,i);t||this.remove()}return this}root(){let e=this;for(;e.parent&&e.parent.type!=="document";)e=e.parent;return e}toJSON(e,r){let t={},i=r==null;r=r||new Map;let n=0;for(let a in this){if(!Object.prototype.hasOwnProperty.call(this,a)||a==="parent"||a==="proxyCache")continue;let u=this[a];if(Array.isArray(u))t[a]=u.map(s=>typeof s=="object"&&s.toJSON?s.toJSON(null,r):s);else if(typeof u=="object"&&u.toJSON)t[a]=u.toJSON(null,r);else if(a==="source"){let s=r.get(u.input);s==null&&(s=n,r.set(u.input,n),n++),t[a]={end:u.end,inputId:s,start:u.start}}else t[a]=u}return i&&(t.inputs=[...r.keys()].map(a=>a.toJSON())),t}toProxy(){return this.proxyCache||(this.proxyCache=new Proxy(this,this.getProxyProcessor())),this.proxyCache}toString(e=Se){e.stringify&&(e=e.stringify);let r="";return e(this,t=>{r+=t}),r}warn(e,r,t){let i={node:this};for(let n in t)i[n]=t[n];return e.warn(r,i)}get proxyOf(){return this}};le.exports=O;O.default=O});export default Oe();
+// node_modules/.pnpm/picocolors@1.1.1/node_modules/picocolors/picocolors.js
+var require_picocolors = __commonJS({
+  "node_modules/.pnpm/picocolors@1.1.1/node_modules/picocolors/picocolors.js"(exports, module) {
+    var p = process || {};
+    var argv = p.argv || [];
+    var env = p.env || {};
+    var isColorSupported = !(!!env.NO_COLOR || argv.includes("--no-color")) && (!!env.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env.TERM !== "dumb" || !!env.CI);
+    var formatter = /* @__PURE__ */ __name((open, close, replace = open) => (input) => {
+      let string = "" + input, index = string.indexOf(close, open.length);
+      return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
+    }, "formatter");
+    var replaceClose = /* @__PURE__ */ __name((string, close, replace, index) => {
+      let result = "", cursor = 0;
+      do {
+        result += string.substring(cursor, index) + replace;
+        cursor = index + close.length;
+        index = string.indexOf(close, cursor);
+      } while (~index);
+      return result + string.substring(cursor);
+    }, "replaceClose");
+    var createColors = /* @__PURE__ */ __name((enabled = isColorSupported) => {
+      let f = enabled ? formatter : () => String;
+      return {
+        isColorSupported: enabled,
+        reset: f("\x1B[0m", "\x1B[0m"),
+        bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
+        dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
+        italic: f("\x1B[3m", "\x1B[23m"),
+        underline: f("\x1B[4m", "\x1B[24m"),
+        inverse: f("\x1B[7m", "\x1B[27m"),
+        hidden: f("\x1B[8m", "\x1B[28m"),
+        strikethrough: f("\x1B[9m", "\x1B[29m"),
+        black: f("\x1B[30m", "\x1B[39m"),
+        red: f("\x1B[31m", "\x1B[39m"),
+        green: f("\x1B[32m", "\x1B[39m"),
+        yellow: f("\x1B[33m", "\x1B[39m"),
+        blue: f("\x1B[34m", "\x1B[39m"),
+        magenta: f("\x1B[35m", "\x1B[39m"),
+        cyan: f("\x1B[36m", "\x1B[39m"),
+        white: f("\x1B[37m", "\x1B[39m"),
+        gray: f("\x1B[90m", "\x1B[39m"),
+        bgBlack: f("\x1B[40m", "\x1B[49m"),
+        bgRed: f("\x1B[41m", "\x1B[49m"),
+        bgGreen: f("\x1B[42m", "\x1B[49m"),
+        bgYellow: f("\x1B[43m", "\x1B[49m"),
+        bgBlue: f("\x1B[44m", "\x1B[49m"),
+        bgMagenta: f("\x1B[45m", "\x1B[49m"),
+        bgCyan: f("\x1B[46m", "\x1B[49m"),
+        bgWhite: f("\x1B[47m", "\x1B[49m"),
+        blackBright: f("\x1B[90m", "\x1B[39m"),
+        redBright: f("\x1B[91m", "\x1B[39m"),
+        greenBright: f("\x1B[92m", "\x1B[39m"),
+        yellowBright: f("\x1B[93m", "\x1B[39m"),
+        blueBright: f("\x1B[94m", "\x1B[39m"),
+        magentaBright: f("\x1B[95m", "\x1B[39m"),
+        cyanBright: f("\x1B[96m", "\x1B[39m"),
+        whiteBright: f("\x1B[97m", "\x1B[39m"),
+        bgBlackBright: f("\x1B[100m", "\x1B[49m"),
+        bgRedBright: f("\x1B[101m", "\x1B[49m"),
+        bgGreenBright: f("\x1B[102m", "\x1B[49m"),
+        bgYellowBright: f("\x1B[103m", "\x1B[49m"),
+        bgBlueBright: f("\x1B[104m", "\x1B[49m"),
+        bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
+        bgCyanBright: f("\x1B[106m", "\x1B[49m"),
+        bgWhiteBright: f("\x1B[107m", "\x1B[49m")
+      };
+    }, "createColors");
+    module.exports = createColors();
+    module.exports.createColors = createColors;
+  }
+});
+
+// src/postcss/tokenize.js
+var require_tokenize = __commonJS({
+  "src/postcss/tokenize.js"(exports, module) {
+    "use strict";
+    var SINGLE_QUOTE = "'".charCodeAt(0);
+    var DOUBLE_QUOTE = '"'.charCodeAt(0);
+    var BACKSLASH = "\\".charCodeAt(0);
+    var SLASH = "/".charCodeAt(0);
+    var NEWLINE = "\n".charCodeAt(0);
+    var SPACE = " ".charCodeAt(0);
+    var FEED = "\f".charCodeAt(0);
+    var TAB = "	".charCodeAt(0);
+    var CR = "\r".charCodeAt(0);
+    var OPEN_SQUARE = "[".charCodeAt(0);
+    var CLOSE_SQUARE = "]".charCodeAt(0);
+    var OPEN_PARENTHESES = "(".charCodeAt(0);
+    var CLOSE_PARENTHESES = ")".charCodeAt(0);
+    var OPEN_CURLY = "{".charCodeAt(0);
+    var CLOSE_CURLY = "}".charCodeAt(0);
+    var SEMICOLON = ";".charCodeAt(0);
+    var ASTERISK = "*".charCodeAt(0);
+    var COLON = ":".charCodeAt(0);
+    var AT = "@".charCodeAt(0);
+    var RE_AT_END = /[\t\n\f\r "#'()/;[\\\]{}]/g;
+    var RE_WORD_END = /[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g;
+    var RE_BAD_BRACKET = /.[\r\n"'(/\\]/;
+    var RE_HEX_ESCAPE = /[\da-f]/i;
+    module.exports = /* @__PURE__ */ __name(function tokenizer(input, options = {}) {
+      let css = input.css.valueOf();
+      let ignore = options.ignoreErrors;
+      let code, content, escape, next, quote;
+      let currentToken, escaped, escapePos, n, prev;
+      let length = css.length;
+      let pos = 0;
+      let buffer = [];
+      let returned = [];
+      function position() {
+        return pos;
+      }
+      __name(position, "position");
+      function unclosed(what) {
+        throw input.error("Unclosed " + what, pos);
+      }
+      __name(unclosed, "unclosed");
+      function endOfFile() {
+        return returned.length === 0 && pos >= length;
+      }
+      __name(endOfFile, "endOfFile");
+      function nextToken(opts) {
+        if (returned.length) return returned.pop();
+        if (pos >= length) return;
+        let ignoreUnclosed = opts ? opts.ignoreUnclosed : false;
+        code = css.charCodeAt(pos);
+        switch (code) {
+          case NEWLINE:
+          case SPACE:
+          case TAB:
+          case CR:
+          case FEED: {
+            next = pos;
+            do {
+              next += 1;
+              code = css.charCodeAt(next);
+            } while (code === SPACE || code === NEWLINE || code === TAB || code === CR || code === FEED);
+            currentToken = ["space", css.slice(pos, next)];
+            pos = next - 1;
+            break;
+          }
+          case OPEN_SQUARE:
+          case CLOSE_SQUARE:
+          case OPEN_CURLY:
+          case CLOSE_CURLY:
+          case COLON:
+          case SEMICOLON:
+          case CLOSE_PARENTHESES: {
+            let controlChar = String.fromCharCode(code);
+            currentToken = [controlChar, controlChar, pos];
+            break;
+          }
+          case OPEN_PARENTHESES: {
+            prev = buffer.length ? buffer.pop()[1] : "";
+            n = css.charCodeAt(pos + 1);
+            if (prev === "url" && n !== SINGLE_QUOTE && n !== DOUBLE_QUOTE && n !== SPACE && n !== NEWLINE && n !== TAB && n !== FEED && n !== CR) {
+              next = pos;
+              do {
+                escaped = false;
+                next = css.indexOf(")", next + 1);
+                if (next === -1) {
+                  if (ignore || ignoreUnclosed) {
+                    next = pos;
+                    break;
+                  } else {
+                    unclosed("bracket");
+                  }
+                }
+                escapePos = next;
+                while (css.charCodeAt(escapePos - 1) === BACKSLASH) {
+                  escapePos -= 1;
+                  escaped = !escaped;
+                }
+              } while (escaped);
+              currentToken = ["brackets", css.slice(pos, next + 1), pos, next];
+              pos = next;
+            } else {
+              next = css.indexOf(")", pos + 1);
+              content = css.slice(pos, next + 1);
+              if (next === -1 || RE_BAD_BRACKET.test(content)) {
+                currentToken = ["(", "(", pos];
+              } else {
+                currentToken = ["brackets", content, pos, next];
+                pos = next;
+              }
+            }
+            break;
+          }
+          case SINGLE_QUOTE:
+          case DOUBLE_QUOTE: {
+            quote = code === SINGLE_QUOTE ? "'" : '"';
+            next = pos;
+            do {
+              escaped = false;
+              next = css.indexOf(quote, next + 1);
+              if (next === -1) {
+                if (ignore || ignoreUnclosed) {
+                  next = pos + 1;
+                  break;
+                } else {
+                  unclosed("string");
+                }
+              }
+              escapePos = next;
+              while (css.charCodeAt(escapePos - 1) === BACKSLASH) {
+                escapePos -= 1;
+                escaped = !escaped;
+              }
+            } while (escaped);
+            currentToken = ["string", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          case AT: {
+            RE_AT_END.lastIndex = pos + 1;
+            RE_AT_END.test(css);
+            if (RE_AT_END.lastIndex === 0) {
+              next = css.length - 1;
+            } else {
+              next = RE_AT_END.lastIndex - 2;
+            }
+            currentToken = ["at-word", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          case BACKSLASH: {
+            next = pos;
+            escape = true;
+            while (css.charCodeAt(next + 1) === BACKSLASH) {
+              next += 1;
+              escape = !escape;
+            }
+            code = css.charCodeAt(next + 1);
+            if (escape && code !== SLASH && code !== SPACE && code !== NEWLINE && code !== TAB && code !== CR && code !== FEED) {
+              next += 1;
+              if (RE_HEX_ESCAPE.test(css.charAt(next))) {
+                while (RE_HEX_ESCAPE.test(css.charAt(next + 1))) {
+                  next += 1;
+                }
+                if (css.charCodeAt(next + 1) === SPACE) {
+                  next += 1;
+                }
+              }
+            }
+            currentToken = ["word", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          default: {
+            if (code === SLASH && css.charCodeAt(pos + 1) === ASTERISK) {
+              next = css.indexOf("*/", pos + 2) + 1;
+              if (next === 0) {
+                if (ignore || ignoreUnclosed) {
+                  next = css.length;
+                } else {
+                  unclosed("comment");
+                }
+              }
+              currentToken = ["comment", css.slice(pos, next + 1), pos, next];
+              pos = next;
+            } else {
+              RE_WORD_END.lastIndex = pos + 1;
+              RE_WORD_END.test(css);
+              if (RE_WORD_END.lastIndex === 0) {
+                next = css.length - 1;
+              } else {
+                next = RE_WORD_END.lastIndex - 2;
+              }
+              currentToken = ["word", css.slice(pos, next + 1), pos, next];
+              buffer.push(currentToken);
+              pos = next;
+            }
+            break;
+          }
+        }
+        pos++;
+        return currentToken;
+      }
+      __name(nextToken, "nextToken");
+      function back(token) {
+        returned.push(token);
+      }
+      __name(back, "back");
+      return {
+        back,
+        endOfFile,
+        nextToken,
+        position
+      };
+    }, "tokenizer");
+  }
+});
+
+// src/postcss/terminal-highlight.js
+var require_terminal_highlight = __commonJS({
+  "src/postcss/terminal-highlight.js"(exports, module) {
+    "use strict";
+    var pico = require_picocolors();
+    var tokenizer = require_tokenize();
+    var Input;
+    function registerInput(dependant) {
+      Input = dependant;
+    }
+    __name(registerInput, "registerInput");
+    var HIGHLIGHT_THEME = {
+      ";": pico.yellow,
+      ":": pico.yellow,
+      "(": pico.cyan,
+      ")": pico.cyan,
+      "[": pico.yellow,
+      "]": pico.yellow,
+      "{": pico.yellow,
+      "}": pico.yellow,
+      "at-word": pico.cyan,
+      "brackets": pico.cyan,
+      "call": pico.cyan,
+      "class": pico.yellow,
+      "comment": pico.gray,
+      "hash": pico.magenta,
+      "string": pico.green
+    };
+    function getTokenType([type, value], processor) {
+      if (type === "word") {
+        if (value[0] === ".") {
+          return "class";
+        }
+        if (value[0] === "#") {
+          return "hash";
+        }
+      }
+      if (!processor.endOfFile()) {
+        let next = processor.nextToken();
+        processor.back(next);
+        if (next[0] === "brackets" || next[0] === "(") return "call";
+      }
+      return type;
+    }
+    __name(getTokenType, "getTokenType");
+    function terminalHighlight(css) {
+      let processor = tokenizer(new Input(css), { ignoreErrors: true });
+      let result = "";
+      while (!processor.endOfFile()) {
+        let token = processor.nextToken();
+        let color = HIGHLIGHT_THEME[getTokenType(token, processor)];
+        if (color) {
+          result += token[1].split(/\r?\n/).map((i) => color(i)).join("\n");
+        } else {
+          result += token[1];
+        }
+      }
+      return result;
+    }
+    __name(terminalHighlight, "terminalHighlight");
+    terminalHighlight.registerInput = registerInput;
+    module.exports = terminalHighlight;
+  }
+});
+
+// src/postcss/css-syntax-error.js
+var require_css_syntax_error = __commonJS({
+  "src/postcss/css-syntax-error.js"(exports, module) {
+    "use strict";
+    var pico = require_picocolors();
+    var terminalHighlight = require_terminal_highlight();
+    var CssSyntaxError = class _CssSyntaxError extends Error {
+      static {
+        __name(this, "CssSyntaxError");
+      }
+      constructor(message, line, column, source, file, plugin) {
+        super(message);
+        this.name = "CssSyntaxError";
+        this.reason = message;
+        if (file) {
+          this.file = file;
+        }
+        if (source) {
+          this.source = source;
+        }
+        if (plugin) {
+          this.plugin = plugin;
+        }
+        if (typeof line !== "undefined" && typeof column !== "undefined") {
+          if (typeof line === "number") {
+            this.line = line;
+            this.column = column;
+          } else {
+            this.line = line.line;
+            this.column = line.column;
+            this.endLine = column.line;
+            this.endColumn = column.column;
+          }
+        }
+        this.setMessage();
+        if (Error.captureStackTrace) {
+          Error.captureStackTrace(this, _CssSyntaxError);
+        }
+      }
+      setMessage() {
+        this.message = this.plugin ? this.plugin + ": " : "";
+        this.message += this.file ? this.file : "<css input>";
+        if (typeof this.line !== "undefined") {
+          this.message += ":" + this.line + ":" + this.column;
+        }
+        this.message += ": " + this.reason;
+      }
+      showSourceCode(color) {
+        if (!this.source) return "";
+        let css = this.source;
+        if (color == null) color = pico.isColorSupported;
+        let aside = /* @__PURE__ */ __name((text) => text, "aside");
+        let mark = /* @__PURE__ */ __name((text) => text, "mark");
+        let highlight = /* @__PURE__ */ __name((text) => text, "highlight");
+        if (color) {
+          let { bold, gray, red } = pico.createColors(true);
+          mark = /* @__PURE__ */ __name((text) => bold(red(text)), "mark");
+          aside = /* @__PURE__ */ __name((text) => gray(text), "aside");
+          if (terminalHighlight) {
+            highlight = /* @__PURE__ */ __name((text) => terminalHighlight(text), "highlight");
+          }
+        }
+        let lines = css.split(/\r?\n/);
+        let start = Math.max(this.line - 3, 0);
+        let end = Math.min(this.line + 2, lines.length);
+        let maxWidth = String(end).length;
+        return lines.slice(start, end).map((line, index) => {
+          let number = start + 1 + index;
+          let gutter = " " + (" " + number).slice(-maxWidth) + " | ";
+          if (number === this.line) {
+            if (line.length > 160) {
+              let padding = 20;
+              let subLineStart = Math.max(0, this.column - padding);
+              let subLineEnd = Math.max(
+                this.column + padding,
+                this.endColumn + padding
+              );
+              let subLine = line.slice(subLineStart, subLineEnd);
+              let spacing2 = aside(gutter.replace(/\d/g, " ")) + line.slice(0, Math.min(this.column - 1, padding - 1)).replace(/[^\t]/g, " ");
+              return mark(">") + aside(gutter) + highlight(subLine) + "\n " + spacing2 + mark("^");
+            }
+            let spacing = aside(gutter.replace(/\d/g, " ")) + line.slice(0, this.column - 1).replace(/[^\t]/g, " ");
+            return mark(">") + aside(gutter) + highlight(line) + "\n " + spacing + mark("^");
+          }
+          return " " + aside(gutter) + highlight(line);
+        }).join("\n");
+      }
+      toString() {
+        let code = this.showSourceCode();
+        if (code) {
+          code = "\n\n" + code + "\n";
+        }
+        return this.name + ": " + this.message + code;
+      }
+    };
+    module.exports = CssSyntaxError;
+    CssSyntaxError.default = CssSyntaxError;
+  }
+});
+
+// src/postcss/stringifier.js
+var require_stringifier = __commonJS({
+  "src/postcss/stringifier.js"(exports, module) {
+    "use strict";
+    var DEFAULT_RAW = {
+      after: "\n",
+      beforeClose: "\n",
+      beforeComment: "\n",
+      beforeDecl: "\n",
+      beforeOpen: " ",
+      beforeRule: "\n",
+      colon: ": ",
+      commentLeft: " ",
+      commentRight: " ",
+      emptyBody: "",
+      indent: "    ",
+      semicolon: false
+    };
+    function capitalize(str) {
+      return str[0].toUpperCase() + str.slice(1);
+    }
+    __name(capitalize, "capitalize");
+    var Stringifier = class {
+      static {
+        __name(this, "Stringifier");
+      }
+      constructor(builder) {
+        this.builder = builder;
+      }
+      atrule(node, semicolon) {
+        let name = "@" + node.name;
+        let params = node.params ? this.rawValue(node, "params") : "";
+        if (typeof node.raws.afterName !== "undefined") {
+          name += node.raws.afterName;
+        } else if (params) {
+          name += " ";
+        }
+        if (node.nodes) {
+          this.block(node, name + params);
+        } else {
+          let end = (node.raws.between || "") + (semicolon ? ";" : "");
+          this.builder(name + params + end, node);
+        }
+      }
+      beforeAfter(node, detect) {
+        let value;
+        if (node.type === "decl") {
+          value = this.raw(node, null, "beforeDecl");
+        } else if (node.type === "comment") {
+          value = this.raw(node, null, "beforeComment");
+        } else if (detect === "before") {
+          value = this.raw(node, null, "beforeRule");
+        } else {
+          value = this.raw(node, null, "beforeClose");
+        }
+        let buf = node.parent;
+        let depth = 0;
+        while (buf && buf.type !== "root") {
+          depth += 1;
+          buf = buf.parent;
+        }
+        if (value.includes("\n")) {
+          let indent = this.raw(node, null, "indent");
+          if (indent.length) {
+            for (let step = 0; step < depth; step++) value += indent;
+          }
+        }
+        return value;
+      }
+      block(node, start) {
+        let between = this.raw(node, "between", "beforeOpen");
+        this.builder(start + between + "{", node, "start");
+        let after;
+        if (node.nodes && node.nodes.length) {
+          this.body(node);
+          after = this.raw(node, "after");
+        } else {
+          after = this.raw(node, "after", "emptyBody");
+        }
+        if (after) this.builder(after);
+        this.builder("}", node, "end");
+      }
+      body(node) {
+        let last = node.nodes.length - 1;
+        while (last > 0) {
+          if (node.nodes[last].type !== "comment") break;
+          last -= 1;
+        }
+        let semicolon = this.raw(node, "semicolon");
+        for (let i = 0; i < node.nodes.length; i++) {
+          let child = node.nodes[i];
+          let before = this.raw(child, "before");
+          if (before) this.builder(before);
+          this.stringify(child, last !== i || semicolon);
+        }
+      }
+      comment(node) {
+        let left = this.raw(node, "left", "commentLeft");
+        let right = this.raw(node, "right", "commentRight");
+        this.builder("/*" + left + node.text + right + "*/", node);
+      }
+      decl(node, semicolon) {
+        let between = this.raw(node, "between", "colon");
+        let string = node.prop + between + this.rawValue(node, "value");
+        if (node.important) {
+          string += node.raws.important || " !important";
+        }
+        if (semicolon) string += ";";
+        this.builder(string, node);
+      }
+      document(node) {
+        this.body(node);
+      }
+      raw(node, own, detect) {
+        let value;
+        if (!detect) detect = own;
+        if (own) {
+          value = node.raws[own];
+          if (typeof value !== "undefined") return value;
+        }
+        let parent = node.parent;
+        if (detect === "before") {
+          if (!parent || parent.type === "root" && parent.first === node) {
+            return "";
+          }
+          if (parent && parent.type === "document") {
+            return "";
+          }
+        }
+        if (!parent) return DEFAULT_RAW[detect];
+        let root = node.root();
+        if (!root.rawCache) root.rawCache = {};
+        if (typeof root.rawCache[detect] !== "undefined") {
+          return root.rawCache[detect];
+        }
+        if (detect === "before" || detect === "after") {
+          return this.beforeAfter(node, detect);
+        } else {
+          let method = "raw" + capitalize(detect);
+          if (this[method]) {
+            value = this[method](root, node);
+          } else {
+            root.walk((i) => {
+              value = i.raws[own];
+              if (typeof value !== "undefined") return false;
+            });
+          }
+        }
+        if (typeof value === "undefined") value = DEFAULT_RAW[detect];
+        root.rawCache[detect] = value;
+        return value;
+      }
+      rawBeforeClose(root) {
+        let value;
+        root.walk((i) => {
+          if (i.nodes && i.nodes.length > 0) {
+            if (typeof i.raws.after !== "undefined") {
+              value = i.raws.after;
+              if (value.includes("\n")) {
+                value = value.replace(/[^\n]+$/, "");
+              }
+              return false;
+            }
+          }
+        });
+        if (value) value = value.replace(/\S/g, "");
+        return value;
+      }
+      rawBeforeComment(root, node) {
+        let value;
+        root.walkComments((i) => {
+          if (typeof i.raws.before !== "undefined") {
+            value = i.raws.before;
+            if (value.includes("\n")) {
+              value = value.replace(/[^\n]+$/, "");
+            }
+            return false;
+          }
+        });
+        if (typeof value === "undefined") {
+          value = this.raw(node, null, "beforeDecl");
+        } else if (value) {
+          value = value.replace(/\S/g, "");
+        }
+        return value;
+      }
+      rawBeforeDecl(root, node) {
+        let value;
+        root.walkDecls((i) => {
+          if (typeof i.raws.before !== "undefined") {
+            value = i.raws.before;
+            if (value.includes("\n")) {
+              value = value.replace(/[^\n]+$/, "");
+            }
+            return false;
+          }
+        });
+        if (typeof value === "undefined") {
+          value = this.raw(node, null, "beforeRule");
+        } else if (value) {
+          value = value.replace(/\S/g, "");
+        }
+        return value;
+      }
+      rawBeforeOpen(root) {
+        let value;
+        root.walk((i) => {
+          if (i.type !== "decl") {
+            value = i.raws.between;
+            if (typeof value !== "undefined") return false;
+          }
+        });
+        return value;
+      }
+      rawBeforeRule(root) {
+        let value;
+        root.walk((i) => {
+          if (i.nodes && (i.parent !== root || root.first !== i)) {
+            if (typeof i.raws.before !== "undefined") {
+              value = i.raws.before;
+              if (value.includes("\n")) {
+                value = value.replace(/[^\n]+$/, "");
+              }
+              return false;
+            }
+          }
+        });
+        if (value) value = value.replace(/\S/g, "");
+        return value;
+      }
+      rawColon(root) {
+        let value;
+        root.walkDecls((i) => {
+          if (typeof i.raws.between !== "undefined") {
+            value = i.raws.between.replace(/[^\s:]/g, "");
+            return false;
+          }
+        });
+        return value;
+      }
+      rawEmptyBody(root) {
+        let value;
+        root.walk((i) => {
+          if (i.nodes && i.nodes.length === 0) {
+            value = i.raws.after;
+            if (typeof value !== "undefined") return false;
+          }
+        });
+        return value;
+      }
+      rawIndent(root) {
+        if (root.raws.indent) return root.raws.indent;
+        let value;
+        root.walk((i) => {
+          let p = i.parent;
+          if (p && p !== root && p.parent && p.parent === root) {
+            if (typeof i.raws.before !== "undefined") {
+              let parts = i.raws.before.split("\n");
+              value = parts[parts.length - 1];
+              value = value.replace(/\S/g, "");
+              return false;
+            }
+          }
+        });
+        return value;
+      }
+      rawSemicolon(root) {
+        let value;
+        root.walk((i) => {
+          if (i.nodes && i.nodes.length && i.last.type === "decl") {
+            value = i.raws.semicolon;
+            if (typeof value !== "undefined") return false;
+          }
+        });
+        return value;
+      }
+      rawValue(node, prop) {
+        let value = node[prop];
+        let raw = node.raws[prop];
+        if (raw && raw.value === value) {
+          return raw.raw;
+        }
+        return value;
+      }
+      root(node) {
+        this.body(node);
+        if (node.raws.after) this.builder(node.raws.after);
+      }
+      rule(node) {
+        this.block(node, this.rawValue(node, "selector"));
+        if (node.raws.ownSemicolon) {
+          this.builder(node.raws.ownSemicolon, node, "end");
+        }
+      }
+      stringify(node, semicolon) {
+        if (!this[node.type]) {
+          throw new Error(
+            "Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier."
+          );
+        }
+        this[node.type](node, semicolon);
+      }
+    };
+    module.exports = Stringifier;
+    Stringifier.default = Stringifier;
+  }
+});
+
+// src/postcss/stringify.js
+var require_stringify = __commonJS({
+  "src/postcss/stringify.js"(exports, module) {
+    "use strict";
+    var Stringifier = require_stringifier();
+    function stringify(node, builder) {
+      let str = new Stringifier(builder);
+      str.stringify(node);
+    }
+    __name(stringify, "stringify");
+    module.exports = stringify;
+    stringify.default = stringify;
+  }
+});
+
+// src/postcss/symbols.js
+var require_symbols = __commonJS({
+  "src/postcss/symbols.js"(exports, module) {
+    "use strict";
+    module.exports.isClean = Symbol("isClean");
+    module.exports.my = Symbol("my");
+  }
+});
+
+// src/postcss/node.js
+var require_node = __commonJS({
+  "src/postcss/node.js"(exports, module) {
+    var CssSyntaxError = require_css_syntax_error();
+    var Stringifier = require_stringifier();
+    var stringify = require_stringify();
+    var { isClean, my } = require_symbols();
+    function cloneNode(obj, parent) {
+      let cloned = new obj.constructor();
+      for (let i in obj) {
+        if (!Object.prototype.hasOwnProperty.call(obj, i)) {
+          continue;
+        }
+        if (i === "proxyCache") continue;
+        let value = obj[i];
+        let type = typeof value;
+        if (i === "parent" && type === "object") {
+          if (parent) cloned[i] = parent;
+        } else if (i === "source") {
+          cloned[i] = value;
+        } else if (Array.isArray(value)) {
+          cloned[i] = value.map((j) => cloneNode(j, cloned));
+        } else {
+          if (type === "object" && value !== null) value = cloneNode(value);
+          cloned[i] = value;
+        }
+      }
+      return cloned;
+    }
+    __name(cloneNode, "cloneNode");
+    function sourceOffset(inputCSS, position) {
+      if (position && typeof position.offset !== "undefined") {
+        return position.offset;
+      }
+      let column = 1;
+      let line = 1;
+      let offset = 0;
+      for (let i = 0; i < inputCSS.length; i++) {
+        if (line === position.line && column === position.column) {
+          offset = i;
+          break;
+        }
+        if (inputCSS[i] === "\n") {
+          column = 1;
+          line += 1;
+        } else {
+          column += 1;
+        }
+      }
+      return offset;
+    }
+    __name(sourceOffset, "sourceOffset");
+    var Node = class {
+      static {
+        __name(this, "Node");
+      }
+      constructor(defaults = {}) {
+        this.raws = {};
+        this[isClean] = false;
+        this[my] = true;
+        for (let name in defaults) {
+          if (name === "nodes") {
+            this.nodes = [];
+            for (let node of defaults[name]) {
+              if (typeof node.clone === "function") {
+                this.append(node.clone());
+              } else {
+                this.append(node);
+              }
+            }
+          } else {
+            this[name] = defaults[name];
+          }
+        }
+      }
+      addToError(error) {
+        error.postcssNode = this;
+        if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
+          let s = this.source;
+          error.stack = error.stack.replace(
+            /\n\s{4}at /,
+            `$&${s.input.from}:${s.start.line}:${s.start.column}$&`
+          );
+        }
+        return error;
+      }
+      after(add) {
+        this.parent.insertAfter(this, add);
+        return this;
+      }
+      assign(overrides = {}) {
+        for (let name in overrides) {
+          this[name] = overrides[name];
+        }
+        return this;
+      }
+      before(add) {
+        this.parent.insertBefore(this, add);
+        return this;
+      }
+      cleanRaws(keepBetween) {
+        delete this.raws.before;
+        delete this.raws.after;
+        if (!keepBetween) delete this.raws.between;
+      }
+      clone(overrides = {}) {
+        let cloned = cloneNode(this);
+        for (let name in overrides) {
+          cloned[name] = overrides[name];
+        }
+        return cloned;
+      }
+      cloneAfter(overrides = {}) {
+        let cloned = this.clone(overrides);
+        this.parent.insertAfter(this, cloned);
+        return cloned;
+      }
+      cloneBefore(overrides = {}) {
+        let cloned = this.clone(overrides);
+        this.parent.insertBefore(this, cloned);
+        return cloned;
+      }
+      error(message, opts = {}) {
+        if (this.source) {
+          let { end, start } = this.rangeBy(opts);
+          return this.source.input.error(
+            message,
+            { column: start.column, line: start.line },
+            { column: end.column, line: end.line },
+            opts
+          );
+        }
+        return new CssSyntaxError(message);
+      }
+      getProxyProcessor() {
+        return {
+          get(node, prop) {
+            if (prop === "proxyOf") {
+              return node;
+            } else if (prop === "root") {
+              return () => node.root().toProxy();
+            } else {
+              return node[prop];
+            }
+          },
+          set(node, prop, value) {
+            if (node[prop] === value) return true;
+            node[prop] = value;
+            if (prop === "prop" || prop === "value" || prop === "name" || prop === "params" || prop === "important" || /* c8 ignore next */
+            prop === "text") {
+              node.markDirty();
+            }
+            return true;
+          }
+        };
+      }
+      /* c8 ignore next 3 */
+      markClean() {
+        this[isClean] = true;
+      }
+      markDirty() {
+        if (this[isClean]) {
+          this[isClean] = false;
+          let next = this;
+          while (next = next.parent) {
+            next[isClean] = false;
+          }
+        }
+      }
+      next() {
+        if (!this.parent) return void 0;
+        let index = this.parent.index(this);
+        return this.parent.nodes[index + 1];
+      }
+      positionBy(opts) {
+        let pos = this.source.start;
+        if (opts.index) {
+          pos = this.positionInside(opts.index);
+        } else if (opts.word) {
+          let stringRepresentation = this.source.input.css.slice(
+            sourceOffset(this.source.input.css, this.source.start),
+            sourceOffset(this.source.input.css, this.source.end)
+          );
+          let index = stringRepresentation.indexOf(opts.word);
+          if (index !== -1) pos = this.positionInside(index);
+        }
+        return pos;
+      }
+      positionInside(index) {
+        let column = this.source.start.column;
+        let line = this.source.start.line;
+        let offset = sourceOffset(this.source.input.css, this.source.start);
+        let end = offset + index;
+        for (let i = offset; i < end; i++) {
+          if (this.source.input.css[i] === "\n") {
+            column = 1;
+            line += 1;
+          } else {
+            column += 1;
+          }
+        }
+        return { column, line };
+      }
+      prev() {
+        if (!this.parent) return void 0;
+        let index = this.parent.index(this);
+        return this.parent.nodes[index - 1];
+      }
+      rangeBy(opts) {
+        let start = {
+          column: this.source.start.column,
+          line: this.source.start.line
+        };
+        let end = this.source.end ? {
+          column: this.source.end.column + 1,
+          line: this.source.end.line
+        } : {
+          column: start.column + 1,
+          line: start.line
+        };
+        if (opts.word) {
+          let stringRepresentation = this.source.input.css.slice(
+            sourceOffset(this.source.input.css, this.source.start),
+            sourceOffset(this.source.input.css, this.source.end)
+          );
+          let index = stringRepresentation.indexOf(opts.word);
+          if (index !== -1) {
+            start = this.positionInside(index);
+            end = this.positionInside(
+              index + opts.word.length
+            );
+          }
+        } else {
+          if (opts.start) {
+            start = {
+              column: opts.start.column,
+              line: opts.start.line
+            };
+          } else if (opts.index) {
+            start = this.positionInside(opts.index);
+          }
+          if (opts.end) {
+            end = {
+              column: opts.end.column,
+              line: opts.end.line
+            };
+          } else if (typeof opts.endIndex === "number") {
+            end = this.positionInside(opts.endIndex);
+          } else if (opts.index) {
+            end = this.positionInside(opts.index + 1);
+          }
+        }
+        if (end.line < start.line || end.line === start.line && end.column <= start.column) {
+          end = { column: start.column + 1, line: start.line };
+        }
+        return { end, start };
+      }
+      raw(prop, defaultType) {
+        let str = new Stringifier();
+        return str.raw(this, prop, defaultType);
+      }
+      remove() {
+        if (this.parent) {
+          this.parent.removeChild(this);
+        }
+        this.parent = void 0;
+        return this;
+      }
+      replaceWith(...nodes) {
+        if (this.parent) {
+          let bookmark = this;
+          let foundSelf = false;
+          for (let node of nodes) {
+            if (node === this) {
+              foundSelf = true;
+            } else if (foundSelf) {
+              this.parent.insertAfter(bookmark, node);
+              bookmark = node;
+            } else {
+              this.parent.insertBefore(bookmark, node);
+            }
+          }
+          if (!foundSelf) {
+            this.remove();
+          }
+        }
+        return this;
+      }
+      root() {
+        let result = this;
+        while (result.parent && result.parent.type !== "document") {
+          result = result.parent;
+        }
+        return result;
+      }
+      toJSON(_, inputs) {
+        let fixed = {};
+        let emitInputs = inputs == null;
+        inputs = inputs || /* @__PURE__ */ new Map();
+        let inputsNextIndex = 0;
+        for (let name in this) {
+          if (!Object.prototype.hasOwnProperty.call(this, name)) {
+            continue;
+          }
+          if (name === "parent" || name === "proxyCache") continue;
+          let value = this[name];
+          if (Array.isArray(value)) {
+            fixed[name] = value.map((i) => {
+              if (typeof i === "object" && i.toJSON) {
+                return i.toJSON(null, inputs);
+              } else {
+                return i;
+              }
+            });
+          } else if (typeof value === "object" && value.toJSON) {
+            fixed[name] = value.toJSON(null, inputs);
+          } else if (name === "source") {
+            let inputId = inputs.get(value.input);
+            if (inputId == null) {
+              inputId = inputsNextIndex;
+              inputs.set(value.input, inputsNextIndex);
+              inputsNextIndex++;
+            }
+            fixed[name] = {
+              end: value.end,
+              inputId,
+              start: value.start
+            };
+          } else {
+            fixed[name] = value;
+          }
+        }
+        if (emitInputs) {
+          fixed.inputs = [...inputs.keys()].map((input) => input.toJSON());
+        }
+        return fixed;
+      }
+      toProxy() {
+        if (!this.proxyCache) {
+          this.proxyCache = new Proxy(this, this.getProxyProcessor());
+        }
+        return this.proxyCache;
+      }
+      toString(stringifier = stringify) {
+        if (stringifier.stringify) stringifier = stringifier.stringify;
+        let result = "";
+        stringifier(this, (i) => {
+          result += i;
+        });
+        return result;
+      }
+      warn(result, text, opts) {
+        let data = { node: this };
+        for (let i in opts) data[i] = opts[i];
+        return result.warn(text, data);
+      }
+      get proxyOf() {
+        return this;
+      }
+    };
+    module.exports = Node;
+    Node.default = Node;
+  }
+});
+export default require_node();
 //# sourceMappingURL=node.js.map

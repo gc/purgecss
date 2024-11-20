@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../src/internal-safelist.ts"],
   "sourcesContent": ["export const CSS_SAFELIST = [\"*\", \":root\", \":after\", \":before\"];\n"],
-  "mappings": "AAAO,IAAMA,EAAe,CAAC,IAAK,QAAS,SAAU,SAAS",
-  "names": ["CSS_SAFELIST"]
+  "mappings": ";AAAO,IAAM,eAAe,CAAC,KAAK,SAAS,UAAU,SAAS;",
+  "names": []
 }

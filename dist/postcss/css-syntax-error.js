@@ -1,9 +1,464 @@
-var X=Object.defineProperty;var o=(l,e)=>X(l,"name",{value:e,configurable:!0});var O=(l,e)=>()=>(e||l((e={exports:{}}).exports,e),e.exports);var y=O((le,_)=>{var B=process||{},U=B.argv||[],L=B.env||{},J=!(L.NO_COLOR||U.includes("--no-color"))&&(!!L.FORCE_COLOR||U.includes("--color")||B.platform==="win32"||(B.stdout||{}).isTTY&&L.TERM!=="dumb"||!!L.CI),V=o((l,e,a=l)=>r=>{let c=""+r,n=c.indexOf(e,l.length);return~n?l+Z(c,e,a,n)+e:l+c+e},"formatter"),Z=o((l,e,a,r)=>{let c="",n=0;do c+=l.substring(n,r)+a,n=r+e.length,r=l.indexOf(e,n);while(~r);return c+l.substring(n)},"replaceClose"),H=o((l=J)=>{let e=l?V:()=>String;return{isColorSupported:l,reset:e("\x1B[0m","\x1B[0m"),bold:e("\x1B[1m","\x1B[22m","\x1B[22m\x1B[1m"),dim:e("\x1B[2m","\x1B[22m","\x1B[22m\x1B[2m"),italic:e("\x1B[3m","\x1B[23m"),underline:e("\x1B[4m","\x1B[24m"),inverse:e("\x1B[7m","\x1B[27m"),hidden:e("\x1B[8m","\x1B[28m"),strikethrough:e("\x1B[9m","\x1B[29m"),black:e("\x1B[30m","\x1B[39m"),red:e("\x1B[31m","\x1B[39m"),green:e("\x1B[32m","\x1B[39m"),yellow:e("\x1B[33m","\x1B[39m"),blue:e("\x1B[34m","\x1B[39m"),magenta:e("\x1B[35m","\x1B[39m"),cyan:e("\x1B[36m","\x1B[39m"),white:e("\x1B[37m","\x1B[39m"),gray:e("\x1B[90m","\x1B[39m"),bgBlack:e("\x1B[40m","\x1B[49m"),bgRed:e("\x1B[41m","\x1B[49m"),bgGreen:e("\x1B[42m","\x1B[49m"),bgYellow:e("\x1B[43m","\x1B[49m"),bgBlue:e("\x1B[44m","\x1B[49m"),bgMagenta:e("\x1B[45m","\x1B[49m"),bgCyan:e("\x1B[46m","\x1B[49m"),bgWhite:e("\x1B[47m","\x1B[49m"),blackBright:e("\x1B[90m","\x1B[39m"),redBright:e("\x1B[91m","\x1B[39m"),greenBright:e("\x1B[92m","\x1B[39m"),yellowBright:e("\x1B[93m","\x1B[39m"),blueBright:e("\x1B[94m","\x1B[39m"),magentaBright:e("\x1B[95m","\x1B[39m"),cyanBright:e("\x1B[96m","\x1B[39m"),whiteBright:e("\x1B[97m","\x1B[39m"),bgBlackBright:e("\x1B[100m","\x1B[49m"),bgRedBright:e("\x1B[101m","\x1B[49m"),bgGreenBright:e("\x1B[102m","\x1B[49m"),bgYellowBright:e("\x1B[103m","\x1B[49m"),bgBlueBright:e("\x1B[104m","\x1B[49m"),bgMagentaBright:e("\x1B[105m","\x1B[49m"),bgCyanBright:e("\x1B[106m","\x1B[49m"),bgWhiteBright:e("\x1B[107m","\x1B[49m")}},"createColors");_.exports=H();_.exports.createColors=H});var D=O((ce,M)=>{"use strict";var T=/[\t\n\f\r "#'()/;[\\\]{}]/g,w=/[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g,$=/.[\r\n"'(/\\]/,P=/[\da-f]/i;M.exports=o(function(e,a={}){let r=e.css.valueOf(),c=a.ignoreErrors,n,d,g,t,S,i,m,x,h,p,u=r.length,s=0,f=[],E=[];function k(){return s}o(k,"position");function N(C){throw e.error("Unclosed "+C,s)}o(N,"unclosed");function q(){return E.length===0&&s>=u}o(q,"endOfFile");function j(C){if(E.length)return E.pop();if(s>=u)return;let R=C?C.ignoreUnclosed:!1;switch(n=r.charCodeAt(s),n){case 10:case 32:case 9:case 13:case 12:{t=s;do t+=1,n=r.charCodeAt(t);while(n===32||n===10||n===9||n===13||n===12);i=["space",r.slice(s,t)],s=t-1;break}case 91:case 93:case 123:case 125:case 58:case 59:case 41:{let I=String.fromCharCode(n);i=[I,I,s];break}case 40:{if(p=f.length?f.pop()[1]:"",h=r.charCodeAt(s+1),p==="url"&&h!==39&&h!==34&&h!==32&&h!==10&&h!==9&&h!==12&&h!==13){t=s;do{if(m=!1,t=r.indexOf(")",t+1),t===-1)if(c||R){t=s;break}else N("bracket");for(x=t;r.charCodeAt(x-1)===92;)x-=1,m=!m}while(m);i=["brackets",r.slice(s,t+1),s,t],s=t}else t=r.indexOf(")",s+1),d=r.slice(s,t+1),t===-1||$.test(d)?i=["(","(",s]:(i=["brackets",d,s,t],s=t);break}case 39:case 34:{S=n===39?"'":'"',t=s;do{if(m=!1,t=r.indexOf(S,t+1),t===-1)if(c||R){t=s+1;break}else N("string");for(x=t;r.charCodeAt(x-1)===92;)x-=1,m=!m}while(m);i=["string",r.slice(s,t+1),s,t],s=t;break}case 64:{T.lastIndex=s+1,T.test(r),T.lastIndex===0?t=r.length-1:t=T.lastIndex-2,i=["at-word",r.slice(s,t+1),s,t],s=t;break}case 92:{for(t=s,g=!0;r.charCodeAt(t+1)===92;)t+=1,g=!g;if(n=r.charCodeAt(t+1),g&&n!==47&&n!==32&&n!==10&&n!==9&&n!==13&&n!==12&&(t+=1,P.test(r.charAt(t)))){for(;P.test(r.charAt(t+1));)t+=1;r.charCodeAt(t+1)===32&&(t+=1)}i=["word",r.slice(s,t+1),s,t],s=t;break}default:{n===47&&r.charCodeAt(s+1)===42?(t=r.indexOf("*/",s+2)+1,t===0&&(c||R?t=r.length:N("comment")),i=["comment",r.slice(s,t+1),s,t],s=t):(w.lastIndex=s+1,w.test(r),w.lastIndex===0?t=r.length-1:t=w.lastIndex-2,i=["word",r.slice(s,t+1),s,t],f.push(i),s=t);break}}return s++,i}o(j,"nextToken");function z(C){E.push(C)}return o(z,"back"),{back:z,endOfFile:q,nextToken:j,position:k}},"tokenizer")});var G=O((he,W)=>{"use strict";var b=y(),ee=D(),Q;function te(l){Q=l}o(te,"registerInput");var re={";":b.yellow,":":b.yellow,"(":b.cyan,")":b.cyan,"[":b.yellow,"]":b.yellow,"{":b.yellow,"}":b.yellow,"at-word":b.cyan,brackets:b.cyan,call:b.cyan,class:b.yellow,comment:b.gray,hash:b.magenta,string:b.green};function se([l,e],a){if(l==="word"){if(e[0]===".")return"class";if(e[0]==="#")return"hash"}if(!a.endOfFile()){let r=a.nextToken();if(a.back(r),r[0]==="brackets"||r[0]==="(")return"call"}return l}o(se,"getTokenType");function F(l){let e=ee(new Q(l),{ignoreErrors:!0}),a="";for(;!e.endOfFile();){let r=e.nextToken(),c=re[se(r,e)];c?a+=r[1].split(/\r?\n/).map(n=>c(n)).join(`
-`):a+=r[1]}return a}o(F,"terminalHighlight");F.registerInput=te;W.exports=F});var ne=O((me,v)=>{var K=y(),Y=G(),A=class l extends Error{static{o(this,"CssSyntaxError")}constructor(e,a,r,c,n,d){super(e),this.name="CssSyntaxError",this.reason=e,n&&(this.file=n),c&&(this.source=c),d&&(this.plugin=d),typeof a<"u"&&typeof r<"u"&&(typeof a=="number"?(this.line=a,this.column=r):(this.line=a.line,this.column=a.column,this.endLine=r.line,this.endColumn=r.column)),this.setMessage(),Error.captureStackTrace&&Error.captureStackTrace(this,l)}setMessage(){this.message=this.plugin?this.plugin+": ":"",this.message+=this.file?this.file:"<css input>",typeof this.line<"u"&&(this.message+=":"+this.line+":"+this.column),this.message+=": "+this.reason}showSourceCode(e){if(!this.source)return"";let a=this.source;e==null&&(e=K.isColorSupported);let r=o(i=>i,"aside"),c=o(i=>i,"mark"),n=o(i=>i,"highlight");if(e){let{bold:i,gray:m,red:x}=K.createColors(!0);c=o(h=>i(x(h)),"mark"),r=o(h=>m(h),"aside"),Y&&(n=o(h=>Y(h),"highlight"))}let d=a.split(/\r?\n/),g=Math.max(this.line-3,0),t=Math.min(this.line+2,d.length),S=String(t).length;return d.slice(g,t).map((i,m)=>{let x=g+1+m,h=" "+(" "+x).slice(-S)+" | ";if(x===this.line){if(i.length>160){let u=20,s=Math.max(0,this.column-u),f=Math.max(this.column+u,this.endColumn+u),E=i.slice(s,f),k=r(h.replace(/\d/g," "))+i.slice(0,Math.min(this.column-1,u-1)).replace(/[^\t]/g," ");return c(">")+r(h)+n(E)+`
- `+k+c("^")}let p=r(h.replace(/\d/g," "))+i.slice(0,this.column-1).replace(/[^\t]/g," ");return c(">")+r(h)+n(i)+`
- `+p+c("^")}return" "+r(h)+n(i)}).join(`
-`)}toString(){let e=this.showSourceCode();return e&&(e=`
+var __defProp = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
 
-`+e+`
-`),this.name+": "+this.message+e}};v.exports=A;A.default=A});export default ne();
+// node_modules/.pnpm/picocolors@1.1.1/node_modules/picocolors/picocolors.js
+var require_picocolors = __commonJS({
+  "node_modules/.pnpm/picocolors@1.1.1/node_modules/picocolors/picocolors.js"(exports, module) {
+    var p = process || {};
+    var argv = p.argv || [];
+    var env = p.env || {};
+    var isColorSupported = !(!!env.NO_COLOR || argv.includes("--no-color")) && (!!env.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env.TERM !== "dumb" || !!env.CI);
+    var formatter = /* @__PURE__ */ __name((open, close, replace = open) => (input) => {
+      let string = "" + input, index = string.indexOf(close, open.length);
+      return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
+    }, "formatter");
+    var replaceClose = /* @__PURE__ */ __name((string, close, replace, index) => {
+      let result = "", cursor = 0;
+      do {
+        result += string.substring(cursor, index) + replace;
+        cursor = index + close.length;
+        index = string.indexOf(close, cursor);
+      } while (~index);
+      return result + string.substring(cursor);
+    }, "replaceClose");
+    var createColors = /* @__PURE__ */ __name((enabled = isColorSupported) => {
+      let f = enabled ? formatter : () => String;
+      return {
+        isColorSupported: enabled,
+        reset: f("\x1B[0m", "\x1B[0m"),
+        bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
+        dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
+        italic: f("\x1B[3m", "\x1B[23m"),
+        underline: f("\x1B[4m", "\x1B[24m"),
+        inverse: f("\x1B[7m", "\x1B[27m"),
+        hidden: f("\x1B[8m", "\x1B[28m"),
+        strikethrough: f("\x1B[9m", "\x1B[29m"),
+        black: f("\x1B[30m", "\x1B[39m"),
+        red: f("\x1B[31m", "\x1B[39m"),
+        green: f("\x1B[32m", "\x1B[39m"),
+        yellow: f("\x1B[33m", "\x1B[39m"),
+        blue: f("\x1B[34m", "\x1B[39m"),
+        magenta: f("\x1B[35m", "\x1B[39m"),
+        cyan: f("\x1B[36m", "\x1B[39m"),
+        white: f("\x1B[37m", "\x1B[39m"),
+        gray: f("\x1B[90m", "\x1B[39m"),
+        bgBlack: f("\x1B[40m", "\x1B[49m"),
+        bgRed: f("\x1B[41m", "\x1B[49m"),
+        bgGreen: f("\x1B[42m", "\x1B[49m"),
+        bgYellow: f("\x1B[43m", "\x1B[49m"),
+        bgBlue: f("\x1B[44m", "\x1B[49m"),
+        bgMagenta: f("\x1B[45m", "\x1B[49m"),
+        bgCyan: f("\x1B[46m", "\x1B[49m"),
+        bgWhite: f("\x1B[47m", "\x1B[49m"),
+        blackBright: f("\x1B[90m", "\x1B[39m"),
+        redBright: f("\x1B[91m", "\x1B[39m"),
+        greenBright: f("\x1B[92m", "\x1B[39m"),
+        yellowBright: f("\x1B[93m", "\x1B[39m"),
+        blueBright: f("\x1B[94m", "\x1B[39m"),
+        magentaBright: f("\x1B[95m", "\x1B[39m"),
+        cyanBright: f("\x1B[96m", "\x1B[39m"),
+        whiteBright: f("\x1B[97m", "\x1B[39m"),
+        bgBlackBright: f("\x1B[100m", "\x1B[49m"),
+        bgRedBright: f("\x1B[101m", "\x1B[49m"),
+        bgGreenBright: f("\x1B[102m", "\x1B[49m"),
+        bgYellowBright: f("\x1B[103m", "\x1B[49m"),
+        bgBlueBright: f("\x1B[104m", "\x1B[49m"),
+        bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
+        bgCyanBright: f("\x1B[106m", "\x1B[49m"),
+        bgWhiteBright: f("\x1B[107m", "\x1B[49m")
+      };
+    }, "createColors");
+    module.exports = createColors();
+    module.exports.createColors = createColors;
+  }
+});
+
+// src/postcss/tokenize.js
+var require_tokenize = __commonJS({
+  "src/postcss/tokenize.js"(exports, module) {
+    "use strict";
+    var SINGLE_QUOTE = "'".charCodeAt(0);
+    var DOUBLE_QUOTE = '"'.charCodeAt(0);
+    var BACKSLASH = "\\".charCodeAt(0);
+    var SLASH = "/".charCodeAt(0);
+    var NEWLINE = "\n".charCodeAt(0);
+    var SPACE = " ".charCodeAt(0);
+    var FEED = "\f".charCodeAt(0);
+    var TAB = "	".charCodeAt(0);
+    var CR = "\r".charCodeAt(0);
+    var OPEN_SQUARE = "[".charCodeAt(0);
+    var CLOSE_SQUARE = "]".charCodeAt(0);
+    var OPEN_PARENTHESES = "(".charCodeAt(0);
+    var CLOSE_PARENTHESES = ")".charCodeAt(0);
+    var OPEN_CURLY = "{".charCodeAt(0);
+    var CLOSE_CURLY = "}".charCodeAt(0);
+    var SEMICOLON = ";".charCodeAt(0);
+    var ASTERISK = "*".charCodeAt(0);
+    var COLON = ":".charCodeAt(0);
+    var AT = "@".charCodeAt(0);
+    var RE_AT_END = /[\t\n\f\r "#'()/;[\\\]{}]/g;
+    var RE_WORD_END = /[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g;
+    var RE_BAD_BRACKET = /.[\r\n"'(/\\]/;
+    var RE_HEX_ESCAPE = /[\da-f]/i;
+    module.exports = /* @__PURE__ */ __name(function tokenizer(input, options = {}) {
+      let css = input.css.valueOf();
+      let ignore = options.ignoreErrors;
+      let code, content, escape, next, quote;
+      let currentToken, escaped, escapePos, n, prev;
+      let length = css.length;
+      let pos = 0;
+      let buffer = [];
+      let returned = [];
+      function position() {
+        return pos;
+      }
+      __name(position, "position");
+      function unclosed(what) {
+        throw input.error("Unclosed " + what, pos);
+      }
+      __name(unclosed, "unclosed");
+      function endOfFile() {
+        return returned.length === 0 && pos >= length;
+      }
+      __name(endOfFile, "endOfFile");
+      function nextToken(opts) {
+        if (returned.length) return returned.pop();
+        if (pos >= length) return;
+        let ignoreUnclosed = opts ? opts.ignoreUnclosed : false;
+        code = css.charCodeAt(pos);
+        switch (code) {
+          case NEWLINE:
+          case SPACE:
+          case TAB:
+          case CR:
+          case FEED: {
+            next = pos;
+            do {
+              next += 1;
+              code = css.charCodeAt(next);
+            } while (code === SPACE || code === NEWLINE || code === TAB || code === CR || code === FEED);
+            currentToken = ["space", css.slice(pos, next)];
+            pos = next - 1;
+            break;
+          }
+          case OPEN_SQUARE:
+          case CLOSE_SQUARE:
+          case OPEN_CURLY:
+          case CLOSE_CURLY:
+          case COLON:
+          case SEMICOLON:
+          case CLOSE_PARENTHESES: {
+            let controlChar = String.fromCharCode(code);
+            currentToken = [controlChar, controlChar, pos];
+            break;
+          }
+          case OPEN_PARENTHESES: {
+            prev = buffer.length ? buffer.pop()[1] : "";
+            n = css.charCodeAt(pos + 1);
+            if (prev === "url" && n !== SINGLE_QUOTE && n !== DOUBLE_QUOTE && n !== SPACE && n !== NEWLINE && n !== TAB && n !== FEED && n !== CR) {
+              next = pos;
+              do {
+                escaped = false;
+                next = css.indexOf(")", next + 1);
+                if (next === -1) {
+                  if (ignore || ignoreUnclosed) {
+                    next = pos;
+                    break;
+                  } else {
+                    unclosed("bracket");
+                  }
+                }
+                escapePos = next;
+                while (css.charCodeAt(escapePos - 1) === BACKSLASH) {
+                  escapePos -= 1;
+                  escaped = !escaped;
+                }
+              } while (escaped);
+              currentToken = ["brackets", css.slice(pos, next + 1), pos, next];
+              pos = next;
+            } else {
+              next = css.indexOf(")", pos + 1);
+              content = css.slice(pos, next + 1);
+              if (next === -1 || RE_BAD_BRACKET.test(content)) {
+                currentToken = ["(", "(", pos];
+              } else {
+                currentToken = ["brackets", content, pos, next];
+                pos = next;
+              }
+            }
+            break;
+          }
+          case SINGLE_QUOTE:
+          case DOUBLE_QUOTE: {
+            quote = code === SINGLE_QUOTE ? "'" : '"';
+            next = pos;
+            do {
+              escaped = false;
+              next = css.indexOf(quote, next + 1);
+              if (next === -1) {
+                if (ignore || ignoreUnclosed) {
+                  next = pos + 1;
+                  break;
+                } else {
+                  unclosed("string");
+                }
+              }
+              escapePos = next;
+              while (css.charCodeAt(escapePos - 1) === BACKSLASH) {
+                escapePos -= 1;
+                escaped = !escaped;
+              }
+            } while (escaped);
+            currentToken = ["string", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          case AT: {
+            RE_AT_END.lastIndex = pos + 1;
+            RE_AT_END.test(css);
+            if (RE_AT_END.lastIndex === 0) {
+              next = css.length - 1;
+            } else {
+              next = RE_AT_END.lastIndex - 2;
+            }
+            currentToken = ["at-word", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          case BACKSLASH: {
+            next = pos;
+            escape = true;
+            while (css.charCodeAt(next + 1) === BACKSLASH) {
+              next += 1;
+              escape = !escape;
+            }
+            code = css.charCodeAt(next + 1);
+            if (escape && code !== SLASH && code !== SPACE && code !== NEWLINE && code !== TAB && code !== CR && code !== FEED) {
+              next += 1;
+              if (RE_HEX_ESCAPE.test(css.charAt(next))) {
+                while (RE_HEX_ESCAPE.test(css.charAt(next + 1))) {
+                  next += 1;
+                }
+                if (css.charCodeAt(next + 1) === SPACE) {
+                  next += 1;
+                }
+              }
+            }
+            currentToken = ["word", css.slice(pos, next + 1), pos, next];
+            pos = next;
+            break;
+          }
+          default: {
+            if (code === SLASH && css.charCodeAt(pos + 1) === ASTERISK) {
+              next = css.indexOf("*/", pos + 2) + 1;
+              if (next === 0) {
+                if (ignore || ignoreUnclosed) {
+                  next = css.length;
+                } else {
+                  unclosed("comment");
+                }
+              }
+              currentToken = ["comment", css.slice(pos, next + 1), pos, next];
+              pos = next;
+            } else {
+              RE_WORD_END.lastIndex = pos + 1;
+              RE_WORD_END.test(css);
+              if (RE_WORD_END.lastIndex === 0) {
+                next = css.length - 1;
+              } else {
+                next = RE_WORD_END.lastIndex - 2;
+              }
+              currentToken = ["word", css.slice(pos, next + 1), pos, next];
+              buffer.push(currentToken);
+              pos = next;
+            }
+            break;
+          }
+        }
+        pos++;
+        return currentToken;
+      }
+      __name(nextToken, "nextToken");
+      function back(token) {
+        returned.push(token);
+      }
+      __name(back, "back");
+      return {
+        back,
+        endOfFile,
+        nextToken,
+        position
+      };
+    }, "tokenizer");
+  }
+});
+
+// src/postcss/terminal-highlight.js
+var require_terminal_highlight = __commonJS({
+  "src/postcss/terminal-highlight.js"(exports, module) {
+    "use strict";
+    var pico = require_picocolors();
+    var tokenizer = require_tokenize();
+    var Input;
+    function registerInput(dependant) {
+      Input = dependant;
+    }
+    __name(registerInput, "registerInput");
+    var HIGHLIGHT_THEME = {
+      ";": pico.yellow,
+      ":": pico.yellow,
+      "(": pico.cyan,
+      ")": pico.cyan,
+      "[": pico.yellow,
+      "]": pico.yellow,
+      "{": pico.yellow,
+      "}": pico.yellow,
+      "at-word": pico.cyan,
+      "brackets": pico.cyan,
+      "call": pico.cyan,
+      "class": pico.yellow,
+      "comment": pico.gray,
+      "hash": pico.magenta,
+      "string": pico.green
+    };
+    function getTokenType([type, value], processor) {
+      if (type === "word") {
+        if (value[0] === ".") {
+          return "class";
+        }
+        if (value[0] === "#") {
+          return "hash";
+        }
+      }
+      if (!processor.endOfFile()) {
+        let next = processor.nextToken();
+        processor.back(next);
+        if (next[0] === "brackets" || next[0] === "(") return "call";
+      }
+      return type;
+    }
+    __name(getTokenType, "getTokenType");
+    function terminalHighlight(css) {
+      let processor = tokenizer(new Input(css), { ignoreErrors: true });
+      let result = "";
+      while (!processor.endOfFile()) {
+        let token = processor.nextToken();
+        let color = HIGHLIGHT_THEME[getTokenType(token, processor)];
+        if (color) {
+          result += token[1].split(/\r?\n/).map((i) => color(i)).join("\n");
+        } else {
+          result += token[1];
+        }
+      }
+      return result;
+    }
+    __name(terminalHighlight, "terminalHighlight");
+    terminalHighlight.registerInput = registerInput;
+    module.exports = terminalHighlight;
+  }
+});
+
+// src/postcss/css-syntax-error.js
+var require_css_syntax_error = __commonJS({
+  "src/postcss/css-syntax-error.js"(exports, module) {
+    var pico = require_picocolors();
+    var terminalHighlight = require_terminal_highlight();
+    var CssSyntaxError = class _CssSyntaxError extends Error {
+      static {
+        __name(this, "CssSyntaxError");
+      }
+      constructor(message, line, column, source, file, plugin) {
+        super(message);
+        this.name = "CssSyntaxError";
+        this.reason = message;
+        if (file) {
+          this.file = file;
+        }
+        if (source) {
+          this.source = source;
+        }
+        if (plugin) {
+          this.plugin = plugin;
+        }
+        if (typeof line !== "undefined" && typeof column !== "undefined") {
+          if (typeof line === "number") {
+            this.line = line;
+            this.column = column;
+          } else {
+            this.line = line.line;
+            this.column = line.column;
+            this.endLine = column.line;
+            this.endColumn = column.column;
+          }
+        }
+        this.setMessage();
+        if (Error.captureStackTrace) {
+          Error.captureStackTrace(this, _CssSyntaxError);
+        }
+      }
+      setMessage() {
+        this.message = this.plugin ? this.plugin + ": " : "";
+        this.message += this.file ? this.file : "<css input>";
+        if (typeof this.line !== "undefined") {
+          this.message += ":" + this.line + ":" + this.column;
+        }
+        this.message += ": " + this.reason;
+      }
+      showSourceCode(color) {
+        if (!this.source) return "";
+        let css = this.source;
+        if (color == null) color = pico.isColorSupported;
+        let aside = /* @__PURE__ */ __name((text) => text, "aside");
+        let mark = /* @__PURE__ */ __name((text) => text, "mark");
+        let highlight = /* @__PURE__ */ __name((text) => text, "highlight");
+        if (color) {
+          let { bold, gray, red } = pico.createColors(true);
+          mark = /* @__PURE__ */ __name((text) => bold(red(text)), "mark");
+          aside = /* @__PURE__ */ __name((text) => gray(text), "aside");
+          if (terminalHighlight) {
+            highlight = /* @__PURE__ */ __name((text) => terminalHighlight(text), "highlight");
+          }
+        }
+        let lines = css.split(/\r?\n/);
+        let start = Math.max(this.line - 3, 0);
+        let end = Math.min(this.line + 2, lines.length);
+        let maxWidth = String(end).length;
+        return lines.slice(start, end).map((line, index) => {
+          let number = start + 1 + index;
+          let gutter = " " + (" " + number).slice(-maxWidth) + " | ";
+          if (number === this.line) {
+            if (line.length > 160) {
+              let padding = 20;
+              let subLineStart = Math.max(0, this.column - padding);
+              let subLineEnd = Math.max(
+                this.column + padding,
+                this.endColumn + padding
+              );
+              let subLine = line.slice(subLineStart, subLineEnd);
+              let spacing2 = aside(gutter.replace(/\d/g, " ")) + line.slice(0, Math.min(this.column - 1, padding - 1)).replace(/[^\t]/g, " ");
+              return mark(">") + aside(gutter) + highlight(subLine) + "\n " + spacing2 + mark("^");
+            }
+            let spacing = aside(gutter.replace(/\d/g, " ")) + line.slice(0, this.column - 1).replace(/[^\t]/g, " ");
+            return mark(">") + aside(gutter) + highlight(line) + "\n " + spacing + mark("^");
+          }
+          return " " + aside(gutter) + highlight(line);
+        }).join("\n");
+      }
+      toString() {
+        let code = this.showSourceCode();
+        if (code) {
+          code = "\n\n" + code + "\n";
+        }
+        return this.name + ": " + this.message + code;
+      }
+    };
+    module.exports = CssSyntaxError;
+    CssSyntaxError.default = CssSyntaxError;
+  }
+});
+export default require_css_syntax_error();
 //# sourceMappingURL=css-syntax-error.js.map

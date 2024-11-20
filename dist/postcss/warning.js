@@ -1,2 +1,46 @@
-var l=Object.defineProperty;var r=(s,t)=>l(s,"name",{value:t,configurable:!0});var u=(s,t)=>()=>(t||s((t={exports:{}}).exports,t),t.exports);var d=u((c,h)=>{var n=class{static{r(this,"Warning")}constructor(t,i={}){if(this.type="warning",this.text=t,i.node&&i.node.source){let e=i.node.rangeBy(i);this.line=e.start.line,this.column=e.start.column,this.endLine=e.end.line,this.endColumn=e.end.column}for(let e in i)this[e]=i[e]}toString(){return this.node?this.node.error(this.text,{index:this.index,plugin:this.plugin,word:this.word}).message:this.plugin?this.plugin+": "+this.text:this.text}};h.exports=n;n.default=n});export default d();
+var __defProp = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
+
+// src/postcss/warning.js
+var require_warning = __commonJS({
+  "src/postcss/warning.js"(exports, module) {
+    var Warning = class {
+      static {
+        __name(this, "Warning");
+      }
+      constructor(text, opts = {}) {
+        this.type = "warning";
+        this.text = text;
+        if (opts.node && opts.node.source) {
+          let range = opts.node.rangeBy(opts);
+          this.line = range.start.line;
+          this.column = range.start.column;
+          this.endLine = range.end.line;
+          this.endColumn = range.end.column;
+        }
+        for (let opt in opts) this[opt] = opts[opt];
+      }
+      toString() {
+        if (this.node) {
+          return this.node.error(this.text, {
+            index: this.index,
+            plugin: this.plugin,
+            word: this.word
+          }).message;
+        }
+        if (this.plugin) {
+          return this.plugin + ": " + this.text;
+        }
+        return this.text;
+      }
+    };
+    module.exports = Warning;
+    Warning.default = Warning;
+  }
+});
+export default require_warning();
 //# sourceMappingURL=warning.js.map

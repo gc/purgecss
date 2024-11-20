@@ -1,2 +1,88 @@
-var a=Object.defineProperty;var u=(e,t)=>a(e,"name",{value:t,configurable:!0});var h=(e,t)=>()=>(t||e((t={exports:{}}).exports,t),t.exports);var g=h((p,l)=>{"use strict";var n=class{static{u(this,"Warning")}constructor(t,s={}){if(this.type="warning",this.text=t,s.node&&s.node.source){let i=s.node.rangeBy(s);this.line=i.start.line,this.column=i.start.column,this.endLine=i.end.line,this.endColumn=i.end.column}for(let i in s)this[i]=s[i]}toString(){return this.node?this.node.error(this.text,{index:this.index,plugin:this.plugin,word:this.word}).message:this.plugin?this.plugin+": "+this.text:this.text}};l.exports=n;n.default=n});var d=h((w,o)=>{var c=g(),r=class{static{u(this,"Result")}constructor(t,s,i){this.processor=t,this.messages=[],this.root=s,this.opts=i,this.css=void 0,this.map=void 0}toString(){return this.css}warn(t,s={}){s.plugin||this.lastPlugin&&this.lastPlugin.postcssPlugin&&(s.plugin=this.lastPlugin.postcssPlugin);let i=new c(t,s);return this.messages.push(i),i}warnings(){return this.messages.filter(t=>t.type==="warning")}get content(){return this.css}};o.exports=r;r.default=r});export default d();
+var __defProp = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
+
+// src/postcss/warning.js
+var require_warning = __commonJS({
+  "src/postcss/warning.js"(exports, module) {
+    "use strict";
+    var Warning = class {
+      static {
+        __name(this, "Warning");
+      }
+      constructor(text, opts = {}) {
+        this.type = "warning";
+        this.text = text;
+        if (opts.node && opts.node.source) {
+          let range = opts.node.rangeBy(opts);
+          this.line = range.start.line;
+          this.column = range.start.column;
+          this.endLine = range.end.line;
+          this.endColumn = range.end.column;
+        }
+        for (let opt in opts) this[opt] = opts[opt];
+      }
+      toString() {
+        if (this.node) {
+          return this.node.error(this.text, {
+            index: this.index,
+            plugin: this.plugin,
+            word: this.word
+          }).message;
+        }
+        if (this.plugin) {
+          return this.plugin + ": " + this.text;
+        }
+        return this.text;
+      }
+    };
+    module.exports = Warning;
+    Warning.default = Warning;
+  }
+});
+
+// src/postcss/result.js
+var require_result = __commonJS({
+  "src/postcss/result.js"(exports, module) {
+    var Warning = require_warning();
+    var Result = class {
+      static {
+        __name(this, "Result");
+      }
+      constructor(processor, root, opts) {
+        this.processor = processor;
+        this.messages = [];
+        this.root = root;
+        this.opts = opts;
+        this.css = void 0;
+        this.map = void 0;
+      }
+      toString() {
+        return this.css;
+      }
+      warn(text, opts = {}) {
+        if (!opts.plugin) {
+          if (this.lastPlugin && this.lastPlugin.postcssPlugin) {
+            opts.plugin = this.lastPlugin.postcssPlugin;
+          }
+        }
+        let warning = new Warning(text, opts);
+        this.messages.push(warning);
+        return warning;
+      }
+      warnings() {
+        return this.messages.filter((i) => i.type === "warning");
+      }
+      get content() {
+        return this.css;
+      }
+    };
+    module.exports = Result;
+    Result.default = Result;
+  }
+});
+export default require_result();
 //# sourceMappingURL=result.js.map

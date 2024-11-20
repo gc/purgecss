@@ -1,2 +1,104 @@
-var u=Object.defineProperty;var n=(r,s)=>u(r,"name",{value:s,configurable:!0});var i=class{constructor(s){this.nodes=[];this.isUsed=!1;this.value=s}static{n(this,"VariableNode")}},c=class{constructor(){this.nodes=new Map;this.usedVariables=new Set;this.safelist=[]}static{n(this,"VariablesStructure")}addVariable(s){let{prop:e}=s;if(this.nodes.has(e)){let o=new i(s),t=this.nodes.get(e)||[];this.nodes.set(e,[...t,o])}else{let o=new i(s);this.nodes.set(e,[o])}}addVariableUsage(s,e){let{prop:o}=s,t=this.nodes.get(o);for(let a of e){let d=a[1];if(this.nodes.has(d)){let l=this.nodes.get(d);t?.forEach(p=>{l?.forEach(h=>p.nodes.push(h))})}}}addVariableUsageInProperties(s){for(let e of s){let o=e[1];this.usedVariables.add(o)}}setAsUsed(s){let e=this.nodes.get(s);if(e){let o=[...e];for(;o.length!==0;){let t=o.pop();t&&!t.isUsed&&(t.isUsed=!0,o.push(...t.nodes))}}}removeUnused(){for(let s of this.usedVariables){let e=this.nodes.get(s);if(e)for(let o of e){let t=o.value.value.matchAll(/var\((.+?)[,)]/g);for(let a of t)this.usedVariables.has(a[1])||this.usedVariables.add(a[1])}}for(let s of this.usedVariables)this.setAsUsed(s);for(let[s,e]of this.nodes)for(let o of e)!o.isUsed&&!this.isVariablesSafelisted(s)&&o.value.remove()}isVariablesSafelisted(s){return this.safelist.some(e=>typeof e=="string"?e===s:e.test(s))}};export{i as VariableNode,c as VariablesStructure};
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+
+// src/VariablesStructure.ts
+var VariableNode = class {
+  constructor(declaration) {
+    this.nodes = [];
+    this.isUsed = false;
+    this.value = declaration;
+  }
+  static {
+    __name(this, "VariableNode");
+  }
+};
+var VariablesStructure = class {
+  constructor() {
+    this.nodes = /* @__PURE__ */ new Map();
+    this.usedVariables = /* @__PURE__ */ new Set();
+    this.safelist = [];
+  }
+  static {
+    __name(this, "VariablesStructure");
+  }
+  addVariable(declaration) {
+    const { prop } = declaration;
+    if (!this.nodes.has(prop)) {
+      const node = new VariableNode(declaration);
+      this.nodes.set(prop, [node]);
+    } else {
+      const node = new VariableNode(declaration);
+      const variableNodes = this.nodes.get(prop) || [];
+      this.nodes.set(prop, [...variableNodes, node]);
+    }
+  }
+  addVariableUsage(declaration, matchedVariables) {
+    const { prop } = declaration;
+    const nodes = this.nodes.get(prop);
+    for (const variableMatch of matchedVariables) {
+      const variableName = variableMatch[1];
+      if (this.nodes.has(variableName)) {
+        const usedVariableNodes = this.nodes.get(variableName);
+        nodes?.forEach((node) => {
+          usedVariableNodes?.forEach(
+            (usedVariableNode) => node.nodes.push(usedVariableNode)
+          );
+        });
+      }
+    }
+  }
+  addVariableUsageInProperties(matchedVariables) {
+    for (const variableMatch of matchedVariables) {
+      const variableName = variableMatch[1];
+      this.usedVariables.add(variableName);
+    }
+  }
+  setAsUsed(variableName) {
+    const nodes = this.nodes.get(variableName);
+    if (nodes) {
+      const queue = [...nodes];
+      while (queue.length !== 0) {
+        const currentNode = queue.pop();
+        if (currentNode && !currentNode.isUsed) {
+          currentNode.isUsed = true;
+          queue.push(...currentNode.nodes);
+        }
+      }
+    }
+  }
+  removeUnused() {
+    for (const used of this.usedVariables) {
+      const usedNodes = this.nodes.get(used);
+      if (usedNodes) {
+        for (const usedNode of usedNodes) {
+          const usedVariablesMatchesInDeclaration = usedNode.value.value.matchAll(/var\((.+?)[,)]/g);
+          for (const usage of usedVariablesMatchesInDeclaration) {
+            if (!this.usedVariables.has(usage[1])) {
+              this.usedVariables.add(usage[1]);
+            }
+          }
+        }
+      }
+    }
+    for (const used of this.usedVariables) {
+      this.setAsUsed(used);
+    }
+    for (const [name, declarations] of this.nodes) {
+      for (const declaration of declarations) {
+        if (!declaration.isUsed && !this.isVariablesSafelisted(name)) {
+          declaration.value.remove();
+        }
+      }
+    }
+  }
+  isVariablesSafelisted(variable) {
+    return this.safelist.some((safelistItem) => {
+      return typeof safelistItem === "string" ? safelistItem === variable : safelistItem.test(variable);
+    });
+  }
+};
+export {
+  VariableNode,
+  VariablesStructure
+};
 //# sourceMappingURL=VariablesStructure.js.map

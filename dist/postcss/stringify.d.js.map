@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../../src/postcss/stringify.d.ts"],
   "sourcesContent": ["import { Stringifier } from './postcss.js'\n\ninterface Stringify extends Stringifier {\n  default: Stringify\n}\n\ndeclare const stringify: Stringify\n\nexport = stringify\n"],
-  "mappings": "8DAAA,IAAAA,EAAAC,EAAA,CAAAC,EAAAC,IAAA,CAQAA,EAAA,QAAS",
-  "names": ["require_stringify_d", "__commonJSMin", "exports", "module"]
+  "mappings": ";;;;;;AAAA;AAAA;AAQA,qBAAS;AAAA;AAAA;",
+  "names": []
 }

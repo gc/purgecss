@@ -1,2 +1,6 @@
-var o=["*",":root",":after",":before"];export{o as CSS_SAFELIST};
+// src/internal-safelist.ts
+var CSS_SAFELIST = ["*", ":root", ":after", ":before"];
+export {
+  CSS_SAFELIST
+};
 //# sourceMappingURL=internal-safelist.js.map

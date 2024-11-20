@@ -1,2 +1,87 @@
-var o=Object.defineProperty;var i=(r,s)=>o(r,"name",{value:s,configurable:!0});function t(r,s){s&&s.forEach(r.add,r)}i(t,"mergeSets");var n=class r{constructor(s){this.undetermined=new Set;this.attrNames=new Set;this.attrValues=new Set;this.classes=new Set;this.ids=new Set;this.tags=new Set;this.merge(s)}static{i(this,"ExtractorResultSets")}merge(s){return Array.isArray(s)?t(this.undetermined,s):s instanceof r?(t(this.undetermined,s.undetermined),t(this.attrNames,s.attrNames),t(this.attrValues,s.attrValues),t(this.classes,s.classes),t(this.ids,s.ids),t(this.tags,s.tags)):(t(this.undetermined,s.undetermined),s.attributes&&(t(this.attrNames,s.attributes.names),t(this.attrValues,s.attributes.values)),t(this.classes,s.classes),t(this.ids,s.ids),t(this.tags,s.tags)),this}hasAttrName(s){return this.attrNames.has(s)||this.undetermined.has(s)}someAttrValue(s){for(let e of this.attrValues)if(s(e))return!0;for(let e of this.undetermined)if(s(e))return!0;return!1}hasAttrPrefix(s){return this.someAttrValue(e=>e.startsWith(s))}hasAttrSuffix(s){return this.someAttrValue(e=>e.endsWith(s))}hasAttrSubstr(s){return s.trim().split(" ").every(a=>this.someAttrValue(u=>u.includes(a)))}hasAttrValue(s){return this.attrValues.has(s)||this.undetermined.has(s)}hasClass(s){return this.classes.has(s)||this.undetermined.has(s)}hasId(s){return this.ids.has(s)||this.undetermined.has(s)}hasTag(s){return this.tags.has(s)||this.undetermined.has(s)}},d=n;export{d as default};
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+
+// src/ExtractorResultSets.ts
+function mergeSets(into, from) {
+  if (from) {
+    from.forEach(into.add, into);
+  }
+}
+__name(mergeSets, "mergeSets");
+var ExtractorResultSets = class _ExtractorResultSets {
+  constructor(er) {
+    this.undetermined = /* @__PURE__ */ new Set();
+    this.attrNames = /* @__PURE__ */ new Set();
+    this.attrValues = /* @__PURE__ */ new Set();
+    this.classes = /* @__PURE__ */ new Set();
+    this.ids = /* @__PURE__ */ new Set();
+    this.tags = /* @__PURE__ */ new Set();
+    this.merge(er);
+  }
+  static {
+    __name(this, "ExtractorResultSets");
+  }
+  merge(that) {
+    if (Array.isArray(that)) {
+      mergeSets(this.undetermined, that);
+    } else if (that instanceof _ExtractorResultSets) {
+      mergeSets(this.undetermined, that.undetermined);
+      mergeSets(this.attrNames, that.attrNames);
+      mergeSets(this.attrValues, that.attrValues);
+      mergeSets(this.classes, that.classes);
+      mergeSets(this.ids, that.ids);
+      mergeSets(this.tags, that.tags);
+    } else {
+      mergeSets(this.undetermined, that.undetermined);
+      if (that.attributes) {
+        mergeSets(this.attrNames, that.attributes.names);
+        mergeSets(this.attrValues, that.attributes.values);
+      }
+      mergeSets(this.classes, that.classes);
+      mergeSets(this.ids, that.ids);
+      mergeSets(this.tags, that.tags);
+    }
+    return this;
+  }
+  hasAttrName(name) {
+    return this.attrNames.has(name) || this.undetermined.has(name);
+  }
+  someAttrValue(predicate) {
+    for (const val of this.attrValues) {
+      if (predicate(val)) return true;
+    }
+    for (const val of this.undetermined) {
+      if (predicate(val)) return true;
+    }
+    return false;
+  }
+  hasAttrPrefix(prefix) {
+    return this.someAttrValue((value) => value.startsWith(prefix));
+  }
+  hasAttrSuffix(suffix) {
+    return this.someAttrValue((value) => value.endsWith(suffix));
+  }
+  hasAttrSubstr(substr) {
+    const wordSubstr = substr.trim().split(" ");
+    return wordSubstr.every(
+      (word) => this.someAttrValue((value) => value.includes(word))
+    );
+  }
+  hasAttrValue(value) {
+    return this.attrValues.has(value) || this.undetermined.has(value);
+  }
+  hasClass(name) {
+    return this.classes.has(name) || this.undetermined.has(name);
+  }
+  hasId(id) {
+    return this.ids.has(id) || this.undetermined.has(id);
+  }
+  hasTag(tag) {
+    return this.tags.has(tag) || this.undetermined.has(tag);
+  }
+};
+var ExtractorResultSets_default = ExtractorResultSets;
+export {
+  ExtractorResultSets_default as default
+};
 //# sourceMappingURL=ExtractorResultSets.js.map

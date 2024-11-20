@@ -2,6 +2,6 @@
   "version": 3,
   "sources": ["../src/options.ts"],
   "sourcesContent": ["import type { ExtractorResult, Options } from \"./types/\";\n\n/**\n * @public\n */\nexport const defaultOptions: Options = {\n  css: [],\n  content: [],\n  defaultExtractor: (content: string): ExtractorResult =>\n    content.match(/[A-Za-z0-9_-]+/g) || [],\n  extractors: [],\n  fontFace: false,\n  keyframes: false,\n  rejected: false,\n  rejectedCss: false,\n  sourceMap: false,\n  stdin: false,\n  stdout: false,\n  variables: false,\n  safelist: {\n    standard: [],\n    deep: [],\n    greedy: [],\n    variables: [],\n    keyframes: [],\n  },\n  blocklist: [],\n  skippedContentGlobs: [],\n  dynamicAttributes: [],\n};\n"],
-  "mappings": "+EAKO,IAAMA,EAA0B,CACrC,IAAK,CAAC,EACN,QAAS,CAAC,EACV,iBAAkBC,EAACC,GACjBA,EAAQ,MAAM,iBAAiB,GAAK,CAAC,EADrB,oBAElB,WAAY,CAAC,EACb,SAAU,GACV,UAAW,GACX,SAAU,GACV,YAAa,GACb,UAAW,GACX,MAAO,GACP,OAAQ,GACR,UAAW,GACX,SAAU,CACR,SAAU,CAAC,EACX,KAAM,CAAC,EACP,OAAQ,CAAC,EACT,UAAW,CAAC,EACZ,UAAW,CAAC,CACd,EACA,UAAW,CAAC,EACZ,oBAAqB,CAAC,EACtB,kBAAmB,CAAC,CACtB",
-  "names": ["defaultOptions", "__name", "content"]
+  "mappings": ";;;;AAKO,IAAM,iBAA0B;AAAA,EACrC,KAAK,CAAC;AAAA,EACN,SAAS,CAAC;AAAA,EACV,kBAAkB,wBAAC,YACjB,QAAQ,MAAM,iBAAiB,KAAK,CAAC,GADrB;AAAA,EAElB,YAAY,CAAC;AAAA,EACb,UAAU;AAAA,EACV,WAAW;AAAA,EACX,UAAU;AAAA,EACV,aAAa;AAAA,EACb,WAAW;AAAA,EACX,OAAO;AAAA,EACP,QAAQ;AAAA,EACR,WAAW;AAAA,EACX,UAAU;AAAA,IACR,UAAU,CAAC;AAAA,IACX,MAAM,CAAC;AAAA,IACP,QAAQ,CAAC;AAAA,IACT,WAAW,CAAC;AAAA,IACZ,WAAW,CAAC;AAAA,EACd;AAAA,EACA,WAAW,CAAC;AAAA,EACZ,qBAAqB,CAAC;AAAA,EACtB,mBAAmB,CAAC;AACtB;",
+  "names": []
 }
