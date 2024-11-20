@@ -1,23 +1,23 @@
-'use strict'
 
-let AtRule = require('./at-rule')
-let Comment = require('./comment')
-let Container = require('./container')
-let CssSyntaxError = require('./css-syntax-error')
-let Declaration = require('./declaration')
-let Document = require('./document')
-let fromJSON = require('./fromJSON')
-let Input = require('./input')
-let LazyResult = require('./lazy-result')
-let list = require('./list')
-let Node = require('./node')
-let parse = require('./parse')
-let Processor = require('./processor')
-let Result = require('./result.js')
-let Root = require('./root')
-let Rule = require('./rule')
-let stringify = require('./stringify')
-let Warning = require('./warning')
+
+const AtRule = require('./at-rule')
+const Comment = require('./comment')
+const Container = require('./container')
+const CssSyntaxError = require('./css-syntax-error')
+const Declaration = require('./declaration')
+const Document = require('./document')
+const fromJSON = require('./fromJSON')
+const Input = require('./input')
+const LazyResult = require('./lazy-result')
+const list = require('./list')
+const Node = require('./node')
+const parse = require('./parse')
+const Processor = require('./processor')
+const Result = require('./result.js')
+const Root = require('./root')
+const Rule = require('./rule')
+const stringify = require('./stringify')
+const Warning = require('./warning')
 
 function postcss(...plugins) {
   if (plugins.length === 1 && Array.isArray(plugins[0])) {
@@ -38,17 +38,8 @@ postcss.plugin = function plugin(name, initializer) {
           ': postcss.plugin was deprecated. Migration guide:\n' +
           'https://evilmartians.com/chronicles/postcss-8-plugin-migration'
       )
-      if (process.env.LANG && process.env.LANG.startsWith('cn')) {
-        /* c8 ignore next 7 */
-        // eslint-disable-next-line no-console
-        console.warn(
-          name +
-            ': 里面 postcss.plugin 被弃用. 迁移指南:\n' +
-            'https://www.w3ctech.com/topic/2226'
-        )
-      }
     }
-    let transformer = initializer(...args)
+    const transformer = initializer(...args)
     transformer.postcssPlugin = name
     transformer.postcssVersion = new Processor().version
     return transformer
@@ -62,9 +53,7 @@ postcss.plugin = function plugin(name, initializer) {
     }
   })
 
-  creator.process = function (css, processOpts, pluginOpts) {
-    return postcss([creator(pluginOpts)]).process(css, processOpts)
-  }
+  creator.process = (css, processOpts, pluginOpts) => postcss([creator(pluginOpts)]).process(css, processOpts)
 
   return creator
 }
