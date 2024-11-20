@@ -2,13 +2,12 @@
 
 import { nanoid } from 'nanoid/non-secure';
 import { isAbsolute, resolve } from 'path';
-import { SourceMapConsumer, SourceMapGenerator } from 'source-map-js';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { CssSyntaxError } from "./css-syntax-error";
 
 const fromOffsetCache = Symbol('fromOffsetCache')
 
-const sourceMapAvailable = Boolean(SourceMapConsumer && SourceMapGenerator)
+const sourceMapAvailable = Boolean(false);
 const pathAvailable = Boolean(resolve && isAbsolute)
 
 export class Input {

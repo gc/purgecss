@@ -6,7 +6,6 @@
  * @packageDocumentation
  */
 
-import * as glob from "glob";
 import postcss from "./postcss/postcss";
 import selectorParser from "postcss-selector-parser";
 import {
@@ -566,12 +565,7 @@ class PurgeCSS {
     const processedOptions: Array<string | RawCSS> = [];
     for (const option of cssOptions) {
       if (typeof option === "string") {
-        processedOptions.push(
-          ...glob.sync(option, {
-            nodir: true,
-            ignore: this.options.skippedContentGlobs,
-          }),
-        );
+        throw new Error("PurgeCSS: string options are not supported");
       } else {
         processedOptions.push(option);
       }

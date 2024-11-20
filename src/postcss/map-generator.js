@@ -1,10 +1,9 @@
 import { dirname, relative, resolve, sep } from 'path';
-import { SourceMapConsumer, SourceMapGenerator } from 'source-map-js';
 import { pathToFileURL } from 'url';
 
 import { Input } from './input';
 
-const sourceMapAvailable = Boolean(SourceMapConsumer && SourceMapGenerator)
+const sourceMapAvailable = Boolean(false);
 const pathAvailable = Boolean(dirname && resolve && relative && sep)
 
 export class MapGenerator {

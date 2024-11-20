@@ -13,11 +13,8 @@
     "build": "node esbuild.mjs"
   },
   "dependencies": {
-    "glob": "^11.0.0",
     "nanoid": "^5.0.8",
-    "picocolors": "^1.1.1",
-    "postcss-selector-parser": "^6.1.2",
-    "source-map-js": "^1.2.1"
+    "postcss-selector-parser": "^6.1.2"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",

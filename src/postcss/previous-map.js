@@ -1,6 +1,4 @@
-import { existsSync, readFileSync } from 'fs';
 import { dirname, join } from 'path';
-import { SourceMapConsumer, SourceMapGenerator } from 'source-map-js';
 
 function fromBase64(str) {
   if (Buffer) {
@@ -81,11 +79,12 @@ export class PreviousMap {
   }
 
   loadFile(path) {
-    this.root = dirname(path)
-    if (existsSync(path)) {
-      this.mapFile = path
-      return readFileSync(path, 'utf-8').toString().trim()
-    }
+    // this.root = dirname(path)
+    // if (existsSync(path)) {
+    //   this.mapFile = path
+    //   return readFileSync(path, 'utf-8').toString().trim()
+    // }
+    throw new Error("Shouldnt be used");
   }
 
   loadMap(file, prev) {
@@ -105,10 +104,6 @@ export class PreviousMap {
           }
           return map
         }
-      } else if (prev instanceof SourceMapConsumer) {
-        return SourceMapGenerator.fromSourceMap(prev).toString()
-      } else if (prev instanceof SourceMapGenerator) {
-        return prev.toString()
       } else if (this.isMap(prev)) {
         return JSON.stringify(prev)
       } else {
