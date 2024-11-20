@@ -1,12 +1,12 @@
-'use strict'
 
-let Container = require('./container')
-let Input = require('./input')
-let Parser = require('./parser')
 
-function parse(css, opts) {
-  let input = new Input(css, opts)
-  let parser = new Parser(input)
+import { Container } from "./container";
+import { Input } from './input';
+import { Parser } from './parser';
+
+export function parse(css, opts) {
+  const input = new Input(css, opts)
+  const parser = new Parser(input)
   try {
     parser.parse()
   } catch (e) {
@@ -35,8 +35,5 @@ function parse(css, opts) {
 
   return parser.root
 }
-
-module.exports = parse
-parse.default = parse
 
 Container.registerParse(parse)

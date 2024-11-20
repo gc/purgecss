@@ -7,7 +7,7 @@
  */
 
 import * as glob from "glob";
-import * as postcss from "./postcss/postcss";
+import postcss from "./postcss/postcss";
 import selectorParser from "postcss-selector-parser";
 import {
   IGNORE_ANNOTATION_CURRENT,
@@ -85,7 +85,7 @@ async function extractSelectors(
  * @param type - type of css comment
  * @returns true if the node is a PurgeCSS ignore comment
  */
-function isIgnoreAnnotation(node: postcss.Comment, type: IgnoreType): boolean {
+function isIgnoreAnnotation(node: any, type: IgnoreType): boolean {
   switch (type) {
     case "next":
       return node.text.includes(IGNORE_ANNOTATION_NEXT);
@@ -102,7 +102,7 @@ function isIgnoreAnnotation(node: postcss.Comment, type: IgnoreType): boolean {
  * @param node - node of postcss AST
  * @returns true if the rule is empty
  */
-function isRuleEmpty(node?: postcss.Container): boolean {
+function isRuleEmpty(node?: any): boolean {
   if (
     (isPostCSSRule(node) && !node.selector) ||
     (node?.nodes && !node.nodes.length) ||
@@ -120,7 +120,7 @@ function isRuleEmpty(node?: postcss.Container): boolean {
  *
  * @param rule - rule of postcss AST
  */
-function hasIgnoreAnnotation(rule: postcss.Rule): boolean {
+function hasIgnoreAnnotation(rule: any): boolean {
   let found = false;
   rule.walkComments((node) => {
     if (
@@ -290,15 +290,17 @@ function isPseudoClassAtRootLevel(selector: selectorParser.Node): boolean {
   return result;
 }
 
-function isPostCSSAtRule(node?: postcss.Node): node is postcss.AtRule {
+function isPostCSSAtRule(node?: any): node is any {
   return node?.type === "atrule";
 }
 
-function isPostCSSRule(node?: postcss.Node): node is postcss.Rule {
+function isPostCSSRule(node?: any): node is any {
   return node?.type === "rule";
 }
 
-function isPostCSSComment(node?: postcss.Node): node is postcss.Comment {
+function isPostCSSComment(
+		node?: any,
+	): node is any {
   return node?.type === "comment";
 }
 
@@ -326,12 +328,12 @@ class PurgeCSS {
   private usedAnimations: Set<string> = new Set();
   private usedFontFaces: Set<string> = new Set();
   public selectorsRemoved: Set<string> = new Set();
-  public removedNodes: postcss.Node[] = [];
+  public removedNodes: any[] = [];
   public variablesStructure: VariablesStructure = new VariablesStructure();
 
   public options: Options = defaultOptions;
 
-  private collectDeclarationsData(declaration: postcss.Declaration): void {
+  private collectDeclarationsData(declaration:  any): void {
     const { prop, value } = declaration;
 
     // collect css properties data
@@ -415,7 +417,7 @@ class PurgeCSS {
    * Evaluate at-rule and register it for future reference
    * @param node - node of postcss AST
    */
-  private evaluateAtRule(node: postcss.AtRule): void {
+  private evaluateAtRule(node:any): void {
     // keyframes
     if (this.options.keyframes && node.name.endsWith("keyframes")) {
       this.atRules.keyframes.push(node);
@@ -441,7 +443,7 @@ class PurgeCSS {
    * @param selectors - selectors used in content files
    */
   private evaluateRule(
-    node: postcss.Node,
+    node: any,
     selectors: ExtractorResultSets,
   ): void {
     // exit if is in ignoring state activated by an ignore comment
@@ -602,7 +604,7 @@ class PurgeCSS {
             ? this.options.sourceMap.to
             : undefined,
       });
-      const result: ResultPurge = {
+      const result: any = {
         css: postCSSResult.toString(),
         file: typeof option === "string" ? option : option.name,
       };

@@ -13,7 +13,6 @@ export const defaultOptions: Options = {
   keyframes: false,
   rejected: false,
   rejectedCss: false,
-  sourceMap: false,
   stdin: false,
   stdout: false,
   variables: false,

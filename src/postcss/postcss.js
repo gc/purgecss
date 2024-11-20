@@ -1,23 +1,20 @@
-
-
-const AtRule = require('./at-rule')
-const Comment = require('./comment')
-const Container = require('./container')
-const CssSyntaxError = require('./css-syntax-error')
-const Declaration = require('./declaration')
-const Document = require('./document')
-const fromJSON = require('./fromJSON')
-const Input = require('./input')
-const LazyResult = require('./lazy-result')
-const list = require('./list')
-const Node = require('./node')
-const parse = require('./parse')
-const Processor = require('./processor')
-const Result = require('./result.js')
-const Root = require('./root')
-const Rule = require('./rule')
-const stringify = require('./stringify')
-const Warning = require('./warning')
+import { AtRule } from './at-rule';
+import { Comment } from './comment';
+import { Declaration } from './declaration';
+import { Root } from './root';
+import { Rule } from './rule';
+import { parse } from "./parse";
+import { list } from "./list";
+import { Input } from './input';
+import { stringify } from "./stringify";
+import { CssSyntaxError } from "./css-syntax-error";
+import { Container } from "./container";
+import { Document } from "./document";
+import { Node } from "./node";
+import { fromJSON } from "./fromJSON";
+import { Processor } from "./processor";
+import { Warning } from "./warning";
+import { Result } from "./result";
 
 function postcss(...plugins) {
   if (plugins.length === 1 && Array.isArray(plugins[0])) {
@@ -84,7 +81,4 @@ postcss.Rule = Rule
 postcss.Root = Root
 postcss.Node = Node
 
-LazyResult.registerPostcss(postcss)
-
-module.exports = postcss
-postcss.default = postcss
+export default postcss;

@@ -1,11 +1,11 @@
-'use strict'
 
-let AtRule = require('./at-rule')
-let Comment = require('./comment')
-let Declaration = require('./declaration')
-let Root = require('./root')
-let Rule = require('./rule')
-let tokenizer = require('./tokenize')
+
+import { AtRule } from './at-rule';
+import { Comment } from './comment';
+import { Declaration } from './declaration';
+import { Root } from './root';
+import { Rule } from './rule';
+import { tokenizer } from "./tokenize";
 
 const SAFE_COMMENT_NEIGHBOR = {
   empty: true,
@@ -14,13 +14,13 @@ const SAFE_COMMENT_NEIGHBOR = {
 
 function findLastWithPosition(tokens) {
   for (let i = tokens.length - 1; i >= 0; i--) {
-    let token = tokens[i]
-    let pos = token[3] || token[2]
+    const token = tokens[i]
+    const pos = token[3] || token[2]
     if (pos) return pos
   }
 }
 
-class Parser {
+export class Parser {
   constructor(input) {
     this.input = input
 
@@ -34,7 +34,7 @@ class Parser {
   }
 
   atrule(token) {
-    let node = new AtRule()
+    const node = new AtRule()
     node.name = token[1].slice(1)
     if (node.name === '') {
       this.unnamedAtrule(node, token)
@@ -46,8 +46,8 @@ class Parser {
     let shift
     let last = false
     let open = false
-    let params = []
-    let brackets = []
+    const params = []
+    const brackets = []
 
     while (!this.tokenizer.endOfFile()) {
       token = this.tokenizer.nextToken()
@@ -120,7 +120,7 @@ class Parser {
   }
 
   checkMissedSemicolon(tokens) {
-    let colon = this.colon(tokens)
+    const colon = this.colon(tokens)
     if (colon === false) return
 
     let founded = 0
@@ -144,7 +144,7 @@ class Parser {
   colon(tokens) {
     let brackets = 0
     let prev, token, type
-    for (let [i, element] of tokens.entries()) {
+    for (const [i, element] of tokens.entries()) {
       token = element
       type = token[0]
 
@@ -170,18 +170,18 @@ class Parser {
   }
 
   comment(token) {
-    let node = new Comment()
+    const node = new Comment()
     this.init(node, token[2])
     node.source.end = this.getPosition(token[3] || token[2])
     node.source.end.offset++
 
-    let text = token[1].slice(2, -2)
+    const text = token[1].slice(2, -2)
     if (/^\s*$/.test(text)) {
       node.text = ''
       node.raws.left = text
       node.raws.right = ''
     } else {
-      let match = text.match(/^(\s*)([^]*\S)(\s*)$/)
+      const match = text.match(/^(\s*)([^]*\S)(\s*)$/)
       node.text = match[2]
       node.raws.left = match[1]
       node.raws.right = match[3]
@@ -193,10 +193,10 @@ class Parser {
   }
 
   decl(tokens, customProperty) {
-    let node = new Declaration()
+    const node = new Declaration()
     this.init(node, tokens[0][2])
 
-    let last = tokens[tokens.length - 1]
+    const last = tokens[tokens.length - 1]
     if (last[0] === ';') {
       this.semicolon = true
       tokens.pop()
@@ -215,7 +215,7 @@ class Parser {
 
     node.prop = ''
     while (tokens.length) {
-      let type = tokens[0][0]
+      const type = tokens[0][0]
       if (type === ':' || type === 'space' || type === 'comment') {
         break
       }
@@ -263,10 +263,10 @@ class Parser {
         if (string !== ' !important') node.raws.important = string
         break
       } else if (token[1].toLowerCase() === 'important') {
-        let cache = tokens.slice(0)
+        const cache = tokens.slice(0)
         let str = ''
         for (let j = i; j > 0; j--) {
-          let type = cache[j][0]
+          const type = cache[j][0]
           if (str.trim().startsWith('!') && type !== 'space') {
             break
           }
@@ -284,7 +284,7 @@ class Parser {
       }
     }
 
-    let hasWord = tokens.some(i => i[0] !== 'space' && i[0] !== 'comment')
+    const hasWord = tokens.some(i => i[0] !== 'space' && i[0] !== 'comment')
 
     if (hasWord) {
       node.raws.between += firstSpaces.map(i => i[1]).join('')
@@ -306,7 +306,7 @@ class Parser {
   }
 
   emptyRule(token) {
-    let node = new Rule()
+    const node = new Rule()
     this.init(node, token[2])
     node.selector = ''
     node.raws.between = ''
@@ -343,7 +343,7 @@ class Parser {
   freeSemicolon(token) {
     this.spaces += token[1]
     if (this.current.nodes) {
-      let prev = this.current.nodes[this.current.nodes.length - 1]
+      const prev = this.current.nodes[this.current.nodes.length - 1]
       if (prev && prev.type === 'rule' && !prev.raws.ownSemicolon) {
         prev.raws.ownSemicolon = this.spaces
         this.spaces = ''
@@ -354,7 +354,7 @@ class Parser {
   // Helpers
 
   getPosition(offset) {
-    let pos = this.input.fromOffset(offset)
+    const pos = this.input.fromOffset(offset)
     return {
       column: pos.col,
       line: pos.line,
@@ -378,10 +378,10 @@ class Parser {
     let type = null
     let colon = false
     let bracket = null
-    let brackets = []
-    let customProperty = start[1].startsWith('--')
+    const brackets = []
+    const customProperty = start[1].startsWith('--')
 
-    let tokens = []
+    const tokens = []
     let token = start
     while (token) {
       type = token[0]
@@ -480,7 +480,7 @@ class Parser {
 
   raw(node, prop, tokens, customProperty) {
     let token, type
-    let length = tokens.length
+    const length = tokens.length
     let value = ''
     let clean = true
     let next, prev
@@ -507,7 +507,7 @@ class Parser {
       }
     }
     if (!clean) {
-      let raw = tokens.reduce((all, i) => all + i[1], '')
+      const raw = tokens.reduce((all, i) => all + i[1], '')
       node.raws[prop] = { raw, value }
     }
     node[prop] = value
@@ -516,7 +516,7 @@ class Parser {
   rule(tokens) {
     tokens.pop()
 
-    let node = new Rule()
+    const node = new Rule()
     this.init(node, tokens[0][2])
 
     node.raws.between = this.spacesAndCommentsFromEnd(tokens)
@@ -569,7 +569,7 @@ class Parser {
   }
 
   unclosedBlock() {
-    let pos = this.current.source.start
+    const pos = this.current.source.start
     throw this.input.error('Unclosed block', pos.line, pos.column)
   }
 
@@ -605,5 +605,3 @@ class Parser {
     )
   }
 }
-
-module.exports = Parser

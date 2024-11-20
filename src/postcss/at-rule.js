@@ -1,8 +1,8 @@
-'use strict'
 
-let Container = require('./container')
 
-class AtRule extends Container {
+import { Container } from './container';
+
+export class AtRule extends Container {
   constructor(defaults) {
     super(defaults)
     this.type = 'atrule'
@@ -18,8 +18,5 @@ class AtRule extends Container {
     return super.prepend(...children)
   }
 }
-
-module.exports = AtRule
-AtRule.default = AtRule
 
 Container.registerAtRule(AtRule)

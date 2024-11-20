@@ -1,17 +1,15 @@
-'use strict'
-
-let list = {
+export const list = {
   comma(string) {
     return list.split(string, [','], true)
   },
 
   space(string) {
-    let spaces = [' ', '\n', '\t']
+    const spaces = [' ', '\n', '\t']
     return list.split(string, spaces)
   },
 
   split(string, separators, last) {
-    let array = []
+    const array = []
     let current = ''
     let split = false
 
@@ -20,7 +18,7 @@ let list = {
     let prevQuote = ''
     let escape = false
 
-    for (let letter of string) {
+    for (const letter of string) {
       if (escape) {
         escape = false
       } else if (letter === '\\') {
@@ -53,6 +51,3 @@ let list = {
     return array
   }
 }
-
-module.exports = list
-list.default = list

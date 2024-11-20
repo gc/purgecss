@@ -1,12 +1,10 @@
-'use strict'
+import { MapGenerator } from './map-generator';
+import { warnOnce } from './warn-once';
+import { parse } from './parse';
+import { Result } from './result';
+import { stringify } from "./stringify";
 
-let MapGenerator = require('./map-generator')
-let parse = require('./parse')
-const Result = require('./result')
-let stringify = require('./stringify')
-let warnOnce = require('./warn-once')
-
-class NoWorkResult {
+export class NoWorkResult {
   constructor(processor, css, opts) {
     css = css.toString()
     this.stringified = false
@@ -17,20 +15,20 @@ class NoWorkResult {
     this._map = undefined
     let root
 
-    let str = stringify
+    const str = stringify
     this.result = new Result(this._processor, root, this._opts)
     this.result.css = css
 
-    let self = this
+    const self = this
     Object.defineProperty(this.result, 'root', {
       get() {
         return self.root
       }
     })
 
-    let map = new MapGenerator(str, root, this._opts, css)
+    const map = new MapGenerator(str, root, this._opts, css)
     if (map.isMap()) {
-      let [generatedCSS, generatedMap] = map.generate()
+      const [generatedCSS, generatedMap] = map.generate()
       if (generatedCSS) {
         this.result.css = generatedCSS
       }
@@ -113,7 +111,7 @@ class NoWorkResult {
     }
 
     let root
-    let parser = parse
+    const parser = parse
 
     try {
       root = parser(this._css, this._opts)
@@ -133,6 +131,3 @@ class NoWorkResult {
     return 'NoWorkResult'
   }
 }
-
-module.exports = NoWorkResult
-NoWorkResult.default = NoWorkResult

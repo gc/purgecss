@@ -1,21 +1,19 @@
-'use strict'
-
-let CssSyntaxError = require('./css-syntax-error')
-let Stringifier = require('./stringifier')
-let stringify = require('./stringify')
-let { isClean, my } = require('./symbols')
+import { CssSyntaxError } from "./css-syntax-error";
+import { Stringifier } from "./stringifier";
+import { stringify } from "./stringify";
+import { isClean, my } from "./symbols";
 
 function cloneNode(obj, parent) {
-  let cloned = new obj.constructor()
+  const cloned = new obj.constructor()
 
-  for (let i in obj) {
+  for (const i in obj) {
     if (!Object.prototype.hasOwnProperty.call(obj, i)) {
       /* c8 ignore next 2 */
       continue
     }
     if (i === 'proxyCache') continue
     let value = obj[i]
-    let type = typeof value
+    const type = typeof value
 
     if (i === 'parent' && type === 'object') {
       if (parent) cloned[i] = parent
@@ -62,16 +60,16 @@ function sourceOffset(inputCSS, position) {
   return offset
 }
 
-class Node {
+export class Node {
   constructor(defaults = {}) {
     this.raws = {}
     this[isClean] = false
     this[my] = true
 
-    for (let name in defaults) {
+    for (const name in defaults) {
       if (name === 'nodes') {
         this.nodes = []
-        for (let node of defaults[name]) {
+        for (const node of defaults[name]) {
           if (typeof node.clone === 'function') {
             this.append(node.clone())
           } else {
@@ -87,7 +85,7 @@ class Node {
   addToError(error) {
     error.postcssNode = this
     if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
-      let s = this.source
+      const s = this.source
       error.stack = error.stack.replace(
         /\n\s{4}at /,
         `$&${s.input.from}:${s.start.line}:${s.start.column}$&`
@@ -102,7 +100,7 @@ class Node {
   }
 
   assign(overrides = {}) {
-    for (let name in overrides) {
+    for (const name in overrides) {
       this[name] = overrides[name]
     }
     return this
@@ -120,28 +118,28 @@ class Node {
   }
 
   clone(overrides = {}) {
-    let cloned = cloneNode(this)
-    for (let name in overrides) {
+    const cloned = cloneNode(this)
+    for (const name in overrides) {
       cloned[name] = overrides[name]
     }
     return cloned
   }
 
   cloneAfter(overrides = {}) {
-    let cloned = this.clone(overrides)
+    const cloned = this.clone(overrides)
     this.parent.insertAfter(this, cloned)
     return cloned
   }
 
   cloneBefore(overrides = {}) {
-    let cloned = this.clone(overrides)
+    const cloned = this.clone(overrides)
     this.parent.insertBefore(this, cloned)
     return cloned
   }
 
   error(message, opts = {}) {
     if (this.source) {
-      let { end, start } = this.rangeBy(opts)
+      const { end, start } = this.rangeBy(opts)
       return this.source.input.error(
         message,
         { column: start.column, line: start.line },
@@ -200,7 +198,7 @@ class Node {
 
   next() {
     if (!this.parent) return undefined
-    let index = this.parent.index(this)
+    const index = this.parent.index(this)
     return this.parent.nodes[index + 1]
   }
 
@@ -209,11 +207,11 @@ class Node {
     if (opts.index) {
       pos = this.positionInside(opts.index)
     } else if (opts.word) {
-      let stringRepresentation = this.source.input.css.slice(
+      const stringRepresentation = this.source.input.css.slice(
         sourceOffset(this.source.input.css, this.source.start),
         sourceOffset(this.source.input.css, this.source.end)
       )
-      let index = stringRepresentation.indexOf(opts.word)
+      const index = stringRepresentation.indexOf(opts.word)
       if (index !== -1) pos = this.positionInside(index)
     }
     return pos
@@ -222,8 +220,8 @@ class Node {
   positionInside(index) {
     let column = this.source.start.column
     let line = this.source.start.line
-    let offset = sourceOffset(this.source.input.css, this.source.start)
-    let end = offset + index
+    const offset = sourceOffset(this.source.input.css, this.source.start)
+    const end = offset + index
 
     for (let i = offset; i < end; i++) {
       if (this.source.input.css[i] === '\n') {
@@ -239,7 +237,7 @@ class Node {
 
   prev() {
     if (!this.parent) return undefined
-    let index = this.parent.index(this)
+    const index = this.parent.index(this)
     return this.parent.nodes[index - 1]
   }
 
@@ -259,11 +257,11 @@ class Node {
         }
 
     if (opts.word) {
-      let stringRepresentation = this.source.input.css.slice(
+      const stringRepresentation = this.source.input.css.slice(
         sourceOffset(this.source.input.css, this.source.start),
         sourceOffset(this.source.input.css, this.source.end)
       )
-      let index = stringRepresentation.indexOf(opts.word)
+      const index = stringRepresentation.indexOf(opts.word)
       if (index !== -1) {
         start = this.positionInside(index)
         end = this.positionInside(
@@ -303,7 +301,7 @@ class Node {
   }
 
   raw(prop, defaultType) {
-    let str = new Stringifier()
+    const str = new Stringifier()
     return str.raw(this, prop, defaultType)
   }
 
@@ -319,7 +317,7 @@ class Node {
     if (this.parent) {
       let bookmark = this
       let foundSelf = false
-      for (let node of nodes) {
+      for (const node of nodes) {
         if (node === this) {
           foundSelf = true
         } else if (foundSelf) {
@@ -347,18 +345,18 @@ class Node {
   }
 
   toJSON(_, inputs) {
-    let fixed = {}
-    let emitInputs = inputs == null
+    const fixed = {}
+    const emitInputs = inputs == null
     inputs = inputs || new Map()
     let inputsNextIndex = 0
 
-    for (let name in this) {
+    for (const name in this) {
       if (!Object.prototype.hasOwnProperty.call(this, name)) {
         /* c8 ignore next 2 */
         continue
       }
       if (name === 'parent' || name === 'proxyCache') continue
-      let value = this[name]
+      const value = this[name]
 
       if (Array.isArray(value)) {
         fixed[name] = value.map(i => {
@@ -411,8 +409,8 @@ class Node {
   }
 
   warn(result, text, opts) {
-    let data = { node: this }
-    for (let i in opts) data[i] = opts[i]
+    const data = { node: this }
+    for (const i in opts) data[i] = opts[i]
     return result.warn(text, data)
   }
 
@@ -420,6 +418,3 @@ class Node {
     return this
   }
 }
-
-module.exports = Node
-Node.default = Node

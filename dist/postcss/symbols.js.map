@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/postcss/symbols.js"],
-  "sourcesContent": ["'use strict'\n\nmodule.exports.isClean = Symbol('isClean')\n\nmodule.exports.my = Symbol('my')\n"],
-  "mappings": ";;;;;;AAAA;AAAA;AAEA,WAAO,QAAQ,UAAU,OAAO,SAAS;AAEzC,WAAO,QAAQ,KAAK,OAAO,IAAI;AAAA;AAAA;",
-  "names": []
-}

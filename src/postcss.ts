@@ -7,7 +7,6 @@
  * @packageDocumentation
  */
 
-import type * as postcss from "./postcss/postcss";
 import {
   PurgeCSS,
   defaultOptions,
@@ -30,8 +29,8 @@ const PLUGIN_NAME = "postcss-purgecss";
  */
 async function purgeCSS(
   opts: UserDefinedOptions,
-  root: postcss.Root,
-  { result }: postcss.Helpers,
+  root: any,
+  { result }: any,
 ): Promise<void> {
   const purgeCSS = new PurgeCSS();
 
@@ -102,7 +101,7 @@ async function purgeCSS(
  *
  * @public
  */
-const purgeCSSPlugin: postcss.PluginCreator<UserDefinedOptions> = (
+const purgeCSSPlugin: any = (
   opts,
 ) => {
   if (typeof opts === "undefined")

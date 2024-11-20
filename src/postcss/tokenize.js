@@ -1,5 +1,3 @@
-'use strict'
-
 const SINGLE_QUOTE = "'".charCodeAt(0)
 const DOUBLE_QUOTE = '"'.charCodeAt(0)
 const BACKSLASH = '\\'.charCodeAt(0)
@@ -25,17 +23,17 @@ const RE_WORD_END = /[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g
 const RE_BAD_BRACKET = /.[\r\n"'(/\\]/
 const RE_HEX_ESCAPE = /[\da-f]/i
 
-module.exports = function tokenizer(input, options = {}) {
-  let css = input.css.valueOf()
-  let ignore = options.ignoreErrors
+export function tokenizer(input, options = {}) {
+  const css = input.css.valueOf()
+  const ignore = options.ignoreErrors
 
   let code, content, escape, next, quote
   let currentToken, escaped, escapePos, n, prev
 
-  let length = css.length
+  const length = css.length
   let pos = 0
-  let buffer = []
-  let returned = []
+  const buffer = []
+  const returned = []
 
   function position() {
     return pos
@@ -53,7 +51,7 @@ module.exports = function tokenizer(input, options = {}) {
     if (returned.length) return returned.pop()
     if (pos >= length) return
 
-    let ignoreUnclosed = opts ? opts.ignoreUnclosed : false
+    const ignoreUnclosed = opts ? opts.ignoreUnclosed : false
 
     code = css.charCodeAt(pos)
 
@@ -87,7 +85,7 @@ module.exports = function tokenizer(input, options = {}) {
       case COLON:
       case SEMICOLON:
       case CLOSE_PARENTHESES: {
-        let controlChar = String.fromCharCode(code)
+        const controlChar = String.fromCharCode(code)
         currentToken = [controlChar, controlChar, pos]
         break
       }

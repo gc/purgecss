@@ -1,8 +1,7 @@
-'use strict'
 
-let pico = require('picocolors')
 
-let tokenizer = require('./tokenize')
+import pico from 'picocolors';
+import { tokenizer } from "./tokenize";
 
 let Input
 
@@ -39,7 +38,7 @@ function getTokenType([type, value], processor) {
   }
 
   if (!processor.endOfFile()) {
-    let next = processor.nextToken()
+    const next = processor.nextToken()
     processor.back(next)
     if (next[0] === 'brackets' || next[0] === '(') return 'call'
   }
@@ -47,12 +46,12 @@ function getTokenType([type, value], processor) {
   return type
 }
 
-function terminalHighlight(css) {
-  let processor = tokenizer(new Input(css), { ignoreErrors: true })
+export function terminalHighlight(css) {
+  const processor = tokenizer(new Input(css), { ignoreErrors: true })
   let result = ''
   while (!processor.endOfFile()) {
-    let token = processor.nextToken()
-    let color = HIGHLIGHT_THEME[getTokenType(token, processor)]
+    const token = processor.nextToken()
+    const color = HIGHLIGHT_THEME[getTokenType(token, processor)]
     if (color) {
       result += token[1]
         .split(/\r?\n/)
@@ -66,5 +65,3 @@ function terminalHighlight(css) {
 }
 
 terminalHighlight.registerInput = registerInput
-
-module.exports = terminalHighlight

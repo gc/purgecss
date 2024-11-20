@@ -1,8 +1,6 @@
-'use strict'
+import { Node } from "./node.js";
 
-let Node = require('./node')
-
-class Declaration extends Node {
+export class Declaration extends Node {
   constructor(defaults) {
     if (
       defaults &&
@@ -19,6 +17,3 @@ class Declaration extends Node {
     return this.prop.startsWith('--') || this.prop[0] === '$'
   }
 }
-
-module.exports = Declaration
-Declaration.default = Declaration

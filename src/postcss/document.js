@@ -1,10 +1,10 @@
-'use strict'
 
-let Container = require('./container')
+
+import { Container } from "./container";
 
 let LazyResult, Processor
 
-class Document extends Container {
+export class Document extends Container {
   constructor(defaults) {
     // type needs to be passed to super, otherwise child roots won't be normalized correctly
     super({ type: 'document', ...defaults })
@@ -15,7 +15,7 @@ class Document extends Container {
   }
 
   toResult(opts = {}) {
-    let lazy = new LazyResult(new Processor(), this, opts)
+    const lazy = new LazyResult(new Processor(), this, opts)
 
     return lazy.stringify()
   }
@@ -28,6 +28,3 @@ Document.registerLazyResult = dependant => {
 Document.registerProcessor = dependant => {
   Processor = dependant
 }
-
-module.exports = Document
-Document.default = Document

@@ -11,5 +11,6 @@ await esbuild.build({
 	metafile: true,
 	outdir: "dist",
 	entryPoints: ["src/**/*.ts", "src/**/*.js"],
-	external: []
+	external: [],
+	outExtension: { ".js": ".mjs" },
 });

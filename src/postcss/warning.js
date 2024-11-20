@@ -1,19 +1,17 @@
-'use strict'
-
-class Warning {
+export class Warning {
   constructor(text, opts = {}) {
     this.type = 'warning'
     this.text = text
 
     if (opts.node && opts.node.source) {
-      let range = opts.node.rangeBy(opts)
+      const range = opts.node.rangeBy(opts)
       this.line = range.start.line
       this.column = range.start.column
       this.endLine = range.end.line
       this.endColumn = range.end.column
     }
 
-    for (let opt in opts) this[opt] = opts[opt]
+    for (const opt in opts) this[opt] = opts[opt]
   }
 
   toString() {
@@ -32,6 +30,3 @@ class Warning {
     return this.text
   }
 }
-
-module.exports = Warning
-Warning.default = Warning

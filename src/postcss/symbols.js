@@ -1,5 +1,5 @@
-'use strict'
 
-module.exports.isClean = Symbol('isClean')
 
-module.exports.my = Symbol('my')
+export const isClean = Symbol('isClean')
+
+export const my = Symbol('my')

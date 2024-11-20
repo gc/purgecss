@@ -1,8 +1,8 @@
-'use strict'
 
-let Warning = require('./warning')
 
-class Result {
+import { Warning } from './warning';
+
+export class Result {
   constructor(processor, root, opts) {
     this.processor = processor
     this.messages = []
@@ -23,7 +23,7 @@ class Result {
       }
     }
 
-    let warning = new Warning(text, opts)
+    const warning = new Warning(text, opts)
     this.messages.push(warning)
 
     return warning
@@ -37,6 +37,3 @@ class Result {
     return this.css
   }
 }
-
-module.exports = Result
-Result.default = Result

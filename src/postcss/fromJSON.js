@@ -1,13 +1,13 @@
 
 
-const AtRule = require('./at-rule')
-const Comment = require('./comment')
-const Declaration = require('./declaration')
-const Input = require('./input')
-const Root = require('./root')
-const Rule = require('./rule')
+import { AtRule } from './at-rule';
+import { Comment } from './comment';
+import { Declaration } from './declaration';
+import { Root } from './root';
+import { Rule } from './rule';
+import { Input } from './input';
 
-function fromJSON(json, inputs) {
+export function fromJSON(json, inputs) {
   if (Array.isArray(json)) return json.map(n => fromJSON(n))
 
   const { inputs: ownInputs, ...defaults } = json
@@ -47,6 +47,3 @@ function fromJSON(json, inputs) {
     throw new Error('Unknown node type: ' + json.type)
   }
 }
-
-module.exports = fromJSON
-fromJSON.default = fromJSON

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/postcss/warning.js"],
+  "sourcesContent": ["export class Warning {\n  constructor(text, opts = {}) {\n    this.type = 'warning'\n    this.text = text\n\n    if (opts.node && opts.node.source) {\n      const range = opts.node.rangeBy(opts)\n      this.line = range.start.line\n      this.column = range.start.column\n      this.endLine = range.end.line\n      this.endColumn = range.end.column\n    }\n\n    for (const opt in opts) this[opt] = opts[opt]\n  }\n\n  toString() {\n    if (this.node) {\n      return this.node.error(this.text, {\n        index: this.index,\n        plugin: this.plugin,\n        word: this.word\n      }).message\n    }\n\n    if (this.plugin) {\n      return this.plugin + ': ' + this.text\n    }\n\n    return this.text\n  }\n}"],
+  "mappings": ";;;;AAAO,IAAM,UAAN,MAAc;AAAA,EAArB,OAAqB;AAAA;AAAA;AAAA,EACnB,YAAY,MAAM,OAAO,CAAC,GAAG;AAC3B,SAAK,OAAO;AACZ,SAAK,OAAO;AAEZ,QAAI,KAAK,QAAQ,KAAK,KAAK,QAAQ;AACjC,YAAM,QAAQ,KAAK,KAAK,QAAQ,IAAI;AACpC,WAAK,OAAO,MAAM,MAAM;AACxB,WAAK,SAAS,MAAM,MAAM;AAC1B,WAAK,UAAU,MAAM,IAAI;AACzB,WAAK,YAAY,MAAM,IAAI;AAAA,IAC7B;AAEA,eAAW,OAAO,KAAM,MAAK,GAAG,IAAI,KAAK,GAAG;AAAA,EAC9C;AAAA,EAEA,WAAW;AACT,QAAI,KAAK,MAAM;AACb,aAAO,KAAK,KAAK,MAAM,KAAK,MAAM;AAAA,QAChC,OAAO,KAAK;AAAA,QACZ,QAAQ,KAAK;AAAA,QACb,MAAM,KAAK;AAAA,MACb,CAAC,EAAE;AAAA,IACL;AAEA,QAAI,KAAK,QAAQ;AACf,aAAO,KAAK,SAAS,OAAO,KAAK;AAAA,IACnC;AAEA,WAAO,KAAK;AAAA,EACd;AACF;",
+  "names": []
+}

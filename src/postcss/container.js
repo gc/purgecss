@@ -1,9 +1,9 @@
-'use strict'
 
-let Comment = require('./comment')
-let Declaration = require('./declaration')
-let Node = require('./node')
-let { isClean, my } = require('./symbols')
+
+import { Comment } from './comment';
+import { Declaration } from './declaration';
+import { isClean, my } from "./symbols";
+import { Node } from "./node";
 
 let AtRule, parse, Root, Rule
 
@@ -18,17 +18,17 @@ function cleanSource(nodes) {
 function markTreeDirty(node) {
   node[isClean] = false
   if (node.proxyOf.nodes) {
-    for (let i of node.proxyOf.nodes) {
+    for (const i of node.proxyOf.nodes) {
       markTreeDirty(i)
     }
   }
 }
 
-class Container extends Node {
+export class Container extends Node {
   append(...children) {
-    for (let child of children) {
-      let nodes = this.normalize(child, this.last)
-      for (let node of nodes) this.proxyOf.nodes.push(node)
+    for (const child of children) {
+      const nodes = this.normalize(child, this.last)
+      for (const node of nodes) this.proxyOf.nodes.push(node)
     }
 
     this.markDirty()
@@ -39,13 +39,13 @@ class Container extends Node {
   cleanRaws(keepBetween) {
     super.cleanRaws(keepBetween)
     if (this.nodes) {
-      for (let node of this.nodes) node.cleanRaws(keepBetween)
+      for (const node of this.nodes) node.cleanRaws(keepBetween)
     }
   }
 
   each(callback) {
     if (!this.proxyOf.nodes) return undefined
-    let iterator = this.getIterator()
+    const iterator = this.getIterator()
 
     let index, result
     while (this.indexes[iterator] < this.proxyOf.nodes.length) {
@@ -69,7 +69,7 @@ class Container extends Node {
     if (!this.indexes) this.indexes = {}
 
     this.lastEach += 1
-    let iterator = this.lastEach
+    const iterator = this.lastEach
     this.indexes[iterator] = 0
 
     return iterator
@@ -133,12 +133,12 @@ class Container extends Node {
 
   insertAfter(exist, add) {
     let existIndex = this.index(exist)
-    let nodes = this.normalize(add, this.proxyOf.nodes[existIndex]).reverse()
+    const nodes = this.normalize(add, this.proxyOf.nodes[existIndex]).reverse()
     existIndex = this.index(exist)
-    for (let node of nodes) this.proxyOf.nodes.splice(existIndex + 1, 0, node)
+    for (const node of nodes) this.proxyOf.nodes.splice(existIndex + 1, 0, node)
 
     let index
-    for (let id in this.indexes) {
+    for (const id in this.indexes) {
       index = this.indexes[id]
       if (existIndex < index) {
         this.indexes[id] = index + nodes.length
@@ -152,17 +152,17 @@ class Container extends Node {
 
   insertBefore(exist, add) {
     let existIndex = this.index(exist)
-    let type = existIndex === 0 ? 'prepend' : false
-    let nodes = this.normalize(
+    const type = existIndex === 0 ? 'prepend' : false
+    const nodes = this.normalize(
       add,
       this.proxyOf.nodes[existIndex],
       type
     ).reverse()
     existIndex = this.index(exist)
-    for (let node of nodes) this.proxyOf.nodes.splice(existIndex, 0, node)
+    for (const node of nodes) this.proxyOf.nodes.splice(existIndex, 0, node)
 
     let index
-    for (let id in this.indexes) {
+    for (const id in this.indexes) {
       index = this.indexes[id]
       if (existIndex <= index) {
         this.indexes[id] = index + nodes.length
@@ -181,12 +181,12 @@ class Container extends Node {
       nodes = []
     } else if (Array.isArray(nodes)) {
       nodes = nodes.slice(0)
-      for (let i of nodes) {
+      for (const i of nodes) {
         if (i.parent) i.parent.removeChild(i, 'ignore')
       }
     } else if (nodes.type === 'root' && this.type !== 'document') {
       nodes = nodes.nodes.slice(0)
-      for (let i of nodes) {
+      for (const i of nodes) {
         if (i.parent) i.parent.removeChild(i, 'ignore')
       }
     } else if (nodes.type) {
@@ -208,7 +208,7 @@ class Container extends Node {
       throw new Error('Unknown node type in node creation')
     }
 
-    let processed = nodes.map(i => {
+    const processed = nodes.map(i => {
       /* c8 ignore next */
       if (!i[my]) Container.rebuild(i)
       i = i.proxyOf
@@ -230,10 +230,10 @@ class Container extends Node {
 
   prepend(...children) {
     children = children.reverse()
-    for (let child of children) {
-      let nodes = this.normalize(child, this.first, 'prepend').reverse()
-      for (let node of nodes) this.proxyOf.nodes.unshift(node)
-      for (let id in this.indexes) {
+    for (const child of children) {
+      const nodes = this.normalize(child, this.first, 'prepend').reverse()
+      for (const node of nodes) this.proxyOf.nodes.unshift(node)
+      for (const id in this.indexes) {
         this.indexes[id] = this.indexes[id] + nodes.length
       }
     }
@@ -250,7 +250,7 @@ class Container extends Node {
   }
 
   removeAll() {
-    for (let node of this.proxyOf.nodes) node.parent = undefined
+    for (const node of this.proxyOf.nodes) node.parent = undefined
     this.proxyOf.nodes = []
 
     this.markDirty()
@@ -264,7 +264,7 @@ class Container extends Node {
     this.proxyOf.nodes.splice(child, 1)
 
     let index
-    for (let id in this.indexes) {
+    for (const id in this.indexes) {
       index = this.indexes[id]
       if (index >= child) {
         this.indexes[id] = index - 1
@@ -419,8 +419,6 @@ Container.registerRoot = dependant => {
   Root = dependant
 }
 
-module.exports = Container
-Container.default = Container
 
 /* c8 ignore start */
 Container.rebuild = node => {

@@ -1,4 +1,3 @@
-import type * as postcss from "./postcss/postcss";
 import type { StringRegExpArray } from "./types";
 
 /**
@@ -6,10 +5,10 @@ import type { StringRegExpArray } from "./types";
  */
 export class VariableNode {
   public nodes: VariableNode[] = [];
-  public value: postcss.Declaration;
+  public value: any;
   public isUsed = false;
 
-  constructor(declaration: postcss.Declaration) {
+  constructor(declaration: any) {
     this.value = declaration;
   }
 }
@@ -22,7 +21,7 @@ export class VariablesStructure {
   public usedVariables: Set<string> = new Set();
   public safelist: StringRegExpArray = [];
 
-  addVariable(declaration: postcss.Declaration): void {
+  addVariable(declaration: any): void {
     const { prop } = declaration;
     if (!this.nodes.has(prop)) {
       const node = new VariableNode(declaration);
@@ -35,7 +34,7 @@ export class VariablesStructure {
   }
 
   addVariableUsage(
-    declaration: postcss.Declaration,
+    declaration: any,
     matchedVariables: IterableIterator<RegExpMatchArray>,
   ): void {
     const { prop } = declaration;

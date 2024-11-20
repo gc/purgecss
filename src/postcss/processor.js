@@ -1,11 +1,10 @@
-'use strict'
 
-let Document = require('./document')
-let LazyResult = require('./lazy-result')
-let NoWorkResult = require('./no-work-result')
-let Root = require('./root')
 
-class Processor {
+import { Document } from "./document";
+import { Root } from './root';
+import { NoWorkResult } from './no-work-result';
+
+export class Processor {
   constructor(plugins = []) {
     this.version = '8.4.49'
     this.plugins = this.normalize(plugins)
@@ -50,7 +49,7 @@ class Processor {
     ) {
       return new NoWorkResult(this, css, opts)
     } else {
-      return new LazyResult(this, css, opts)
+      return new Promise(this, css, opts)
     }
   }
 
@@ -59,9 +58,6 @@ class Processor {
     return this
   }
 }
-
-module.exports = Processor
-Processor.default = Processor
 
 Root.registerProcessor(Processor)
 Document.registerProcessor(Processor)

@@ -1,6 +1,7 @@
 {
   "name": "purgecss",
   "version": "6.0.0",
+  "type": "module",
   "description": "Remove unused css selectors",
   "author": "Ffloriel",
   "license": "MIT",
@@ -8,7 +9,8 @@
   "module": "./lib/purgecss.esm.js",
   "types": "./lib/purgecss.d.ts",
   "scripts": {
-    "build": "node esbuild.mjs && tsc -p src --declaration --emitDeclarationOnly"
+    "x": " && tsc -p src --declaration --emitDeclarationOnly",
+    "build": "node esbuild.mjs"
   },
   "dependencies": {
     "glob": "^11.0.0",

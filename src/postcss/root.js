@@ -1,10 +1,10 @@
-'use strict'
 
-let Container = require('./container')
+
+import { Container } from "./container";
 
 let LazyResult, Processor
 
-class Root extends Container {
+export class Root extends Container {
   constructor(defaults) {
     super(defaults)
     this.type = 'root'
@@ -12,7 +12,7 @@ class Root extends Container {
   }
 
   normalize(child, sample, type) {
-    let nodes = super.normalize(child)
+    const nodes = super.normalize(child)
 
     if (sample) {
       if (type === 'prepend') {
@@ -22,7 +22,7 @@ class Root extends Container {
           delete sample.raws.before
         }
       } else if (this.first !== sample) {
-        for (let node of nodes) {
+        for (const node of nodes) {
           node.raws.before = sample.raws.before
         }
       }
@@ -32,7 +32,7 @@ class Root extends Container {
   }
 
   removeChild(child, ignore) {
-    let index = this.index(child)
+    const index = this.index(child)
 
     if (!ignore && index === 0 && this.nodes.length > 1) {
       this.nodes[1].raws.before = this.nodes[index].raws.before
@@ -42,7 +42,7 @@ class Root extends Container {
   }
 
   toResult(opts = {}) {
-    let lazy = new LazyResult(new Processor(), this, opts)
+    const lazy = new LazyResult(new Processor(), this, opts)
     return lazy.stringify()
   }
 }
@@ -54,8 +54,5 @@ Root.registerLazyResult = dependant => {
 Root.registerProcessor = dependant => {
   Processor = dependant
 }
-
-module.exports = Root
-Root.default = Root
 
 Container.registerRoot(Root)

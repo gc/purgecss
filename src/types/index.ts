@@ -1,9 +1,8 @@
-import type * as postcss from "../postcss/postcss";
 
 /**
  * @public
  */
-export type PostCSSRoot = postcss.Root;
+export type PostCSSRoot = any;
 
 /**
  * @internal
@@ -11,10 +10,10 @@ export type PostCSSRoot = postcss.Root;
 export interface AtRules {
   fontFace: Array<{
     name: string;
-    node: postcss.AtRule;
+    // node: postcss.AtRule;
   }>;
 
-  keyframes: postcss.AtRule[];
+  // keyframes: postcss.AtRule[];
 }
 
 /**
@@ -136,7 +135,7 @@ export interface UserDefinedOptions {
   /** {@inheritDoc purgecss#Options.rejectedCss} */
   rejectedCss?: boolean;
   /** {@inheritDoc purgecss#Options.sourceMap } */
-  sourceMap?: boolean | (postcss.SourceMapOptions & { to?: string });
+  // sourceMap?: boolean | (postcss.SourceMapOptions & { to?: string });
   /** {@inheritDoc purgecss#Options.stdin} */
   stdin?: boolean;
   /** {@inheritDoc purgecss#Options.stdout} */
@@ -229,7 +228,7 @@ export interface Options {
   rejected: boolean;
   rejectedCss: boolean;
   /** {@inheritDoc postcss#SourceMapOptions} */
-  sourceMap: boolean | (postcss.SourceMapOptions & { to?: string });
+  // sourceMap: boolean | (postcss.SourceMapOptions & { to?: string });
   stdin: boolean;
   stdout: boolean;
   variables: boolean;

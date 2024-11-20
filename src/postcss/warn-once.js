@@ -1,9 +1,6 @@
-/* eslint-disable no-console */
-'use strict'
+const printed = {}
 
-let printed = {}
-
-module.exports = function warnOnce(message) {
+export  function warnOnce(message) {
   if (printed[message]) return
   printed[message] = true
 

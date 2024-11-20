@@ -1,9 +1,7 @@
-'use strict'
+import { Container } from "./container";
+import { list } from './list';
 
-let Container = require('./container')
-let list = require('./list')
-
-class Rule extends Container {
+export class Rule extends Container {
   constructor(defaults) {
     super(defaults)
     this.type = 'rule'
@@ -15,13 +13,10 @@ class Rule extends Container {
   }
 
   set selectors(values) {
-    let match = this.selector ? this.selector.match(/,\s*/) : null
-    let sep = match ? match[0] : ',' + this.raw('between', 'beforeOpen')
+    const match = this.selector ? this.selector.match(/,\s*/) : null
+    const sep = match ? match[0] : ',' + this.raw('between', 'beforeOpen')
     this.selector = values.join(sep)
   }
 }
-
-module.exports = Rule
-Rule.default = Rule
 
 Container.registerRule(Rule)

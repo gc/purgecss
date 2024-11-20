@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/postcss/fromJSON.d.ts"],
-  "sourcesContent": ["import { JSONHydrator } from './postcss.js'\n\ninterface FromJSON extends JSONHydrator {\n  default: FromJSON\n}\n\ndeclare const fromJSON: FromJSON\n\nexport = fromJSON\n"],
-  "mappings": ";;;;;;AAAA;AAAA;AAQA,qBAAS;AAAA;AAAA;",
-  "names": []
-}

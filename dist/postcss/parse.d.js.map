@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/postcss/parse.d.ts"],
-  "sourcesContent": ["import { Parser } from './postcss.js'\n\ninterface Parse extends Parser {\n  default: Parse\n}\n\ndeclare const parse: Parse\n\nexport = parse\n"],
-  "mappings": ";;;;;;AAAA;AAAA;AAQA,qBAAS;AAAA;AAAA;",
-  "names": []
-}

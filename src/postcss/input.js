@@ -1,19 +1,17 @@
 
 
-const { nanoid } = require('nanoid/non-secure')
-const { isAbsolute, resolve } = require('path')
-const { SourceMapConsumer, SourceMapGenerator } = require('source-map-js')
-const { fileURLToPath, pathToFileURL } = require('url')
-
-const CssSyntaxError = require('./css-syntax-error')
-const terminalHighlight = require('./terminal-highlight')
+import { nanoid } from 'nanoid/non-secure';
+import { isAbsolute, resolve } from 'path';
+import { SourceMapConsumer, SourceMapGenerator } from 'source-map-js';
+import { fileURLToPath, pathToFileURL } from 'url';
+import { CssSyntaxError } from "./css-syntax-error";
 
 const fromOffsetCache = Symbol('fromOffsetCache')
 
 const sourceMapAvailable = Boolean(SourceMapConsumer && SourceMapGenerator)
 const pathAvailable = Boolean(resolve && isAbsolute)
 
-class Input {
+export class Input {
   constructor(css, opts = {}) {
     if (
       css === null ||
@@ -237,11 +235,4 @@ class Input {
   get from() {
     return this.file || this.id
   }
-}
-
-module.exports = Input
-Input.default = Input
-
-if (terminalHighlight && terminalHighlight.registerInput) {
-  terminalHighlight.registerInput(Input)
 }
