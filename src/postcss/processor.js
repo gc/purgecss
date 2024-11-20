@@ -1,5 +1,3 @@
-
-
 import { Document } from "./document";
 import { Root } from './root';
 import { NoWorkResult } from './no-work-result';
@@ -49,7 +47,7 @@ export class Processor {
     ) {
       return new NoWorkResult(this, css, opts)
     } else {
-      return new Promise(this, css, opts)
+       return Promise.resolve({css});
     }
   }
 

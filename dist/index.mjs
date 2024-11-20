@@ -2834,7 +2834,7 @@ var Processor3 = class {
     if (!this.plugins.length && !opts.parser && !opts.stringifier && !opts.syntax) {
       return new NoWorkResult(this, css, opts);
     } else {
-      return new Promise(this, css, opts);
+      return Promise.resolve({ css });
     }
   }
   use(plugin2) {
