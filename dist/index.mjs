@@ -3029,14 +3029,14 @@ var NoWorkResult = class {
 
 // src/postcss/lazy-result.js
 init_root();
-var Container2 = (init_container(), __toCommonJS(container_exports));
+var { Container: Container2 } = (init_container(), __toCommonJS(container_exports));
 var { Document: Document2 } = (init_document(), __toCommonJS(document_exports));
-var MapGenerator2 = (init_map_generator(), __toCommonJS(map_generator_exports));
-var parse3 = (init_parse(), __toCommonJS(parse_exports));
-var Result2 = (init_result(), __toCommonJS(result_exports));
-var stringify2 = (init_stringify(), __toCommonJS(stringify_exports));
+var { MapGenerator: MapGenerator2 } = (init_map_generator(), __toCommonJS(map_generator_exports));
+var { parse: parse3 } = (init_parse(), __toCommonJS(parse_exports));
+var { Result: Result2 } = (init_result(), __toCommonJS(result_exports));
+var { stringify: stringify2 } = (init_stringify(), __toCommonJS(stringify_exports));
 var { isClean: isClean2, my: my2 } = (init_symbols(), __toCommonJS(symbols_exports));
-var warnOnce2 = (init_warn_once(), __toCommonJS(warn_once_exports));
+var { warnOnce: warnOnce2 } = (init_warn_once(), __toCommonJS(warn_once_exports));
 var TYPE_TO_CLASS_NAME = {
   atrule: "AtRule",
   comment: "Comment",

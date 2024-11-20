@@ -1,12 +1,12 @@
-const Container = require('./container')
+const {Container} = require('./container')
 const {Document} = require('./document')
-const MapGenerator = require('./map-generator')
-const parse = require('./parse')
-const Result = require('./result')
+const {MapGenerator} = require('./map-generator')
+const {parse} = require('./parse')
+const {Result} = require('./result')
 import { Root } from './root'
-const stringify = require('./stringify')
+const {stringify} = require('./stringify')
 const { isClean, my } = require('./symbols')
-const warnOnce = require('./warn-once')
+const {warnOnce} = require('./warn-once')
 
 const TYPE_TO_CLASS_NAME = {
   atrule: 'AtRule',
