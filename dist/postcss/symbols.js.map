@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/postcss/symbols.js"],
+  "sourcesContent": ["'use strict'\n\nmodule.exports.isClean = Symbol('isClean')\n\nmodule.exports.my = Symbol('my')\n"],
+  "mappings": "8DAAA,IAAAA,EAAAC,EAAA,CAAAC,EAAAC,IAAA,CAEAA,EAAO,QAAQ,QAAU,OAAO,SAAS,EAEzCA,EAAO,QAAQ,GAAK,OAAO,IAAI",
+  "names": ["require_symbols", "__commonJSMin", "exports", "module"]
+}

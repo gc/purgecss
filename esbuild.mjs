@@ -10,5 +10,5 @@ await esbuild.build({
 	target: "esnext",
 	metafile: true,
 	outdir: "dist",
-	entryPoints: ["src/**/*.ts"],
+	entryPoints: ["src/**/*.ts", "src/**/*.js"],
 });
