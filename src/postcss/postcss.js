@@ -30,15 +30,6 @@ postcss.plugin = function plugin(name, initializer) {
   let warningPrinted = false
   function creator(...args) {
     // eslint-disable-next-line no-console
-    if (console && console.warn && !warningPrinted) {
-      warningPrinted = true
-      // eslint-disable-next-line no-console
-      console.warn(
-        name +
-          ': postcss.plugin was deprecated. Migration guide:\n' +
-          'https://evilmartians.com/chronicles/postcss-8-plugin-migration'
-      )
-    }
     const transformer = initializer(...args)
     transformer.postcssPlugin = name
     transformer.postcssVersion = new Processor().version

@@ -3478,12 +3478,6 @@ __name(postcss2, "postcss");
 postcss2.plugin = /* @__PURE__ */ __name(function plugin(name, initializer) {
   let warningPrinted = false;
   function creator(...args) {
-    if (console && console.warn && !warningPrinted) {
-      warningPrinted = true;
-      console.warn(
-        name + ": postcss.plugin was deprecated. Migration guide:\nhttps://evilmartians.com/chronicles/postcss-8-plugin-migration"
-      );
-    }
     const transformer = initializer(...args);
     transformer.postcssPlugin = name;
     transformer.postcssVersion = new Processor3().version;

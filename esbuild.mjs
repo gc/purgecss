@@ -11,6 +11,7 @@ await esbuild.build({
 	metafile: true,
 	outdir: "dist",
 	entryPoints: ["src/**/*.ts", "src/**/*.js"],
-	external: ["postcss-selector-parser"],
+	external: [],
 	outExtension: { ".js": ".mjs" },
+	treeShaking: true
 });
