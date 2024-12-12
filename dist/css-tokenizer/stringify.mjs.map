@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/css-tokenizer/stringify.ts"],
+  "sourcesContent": ["import type { CSSToken } from './interfaces/token';\n\n/**\n * Concatenate the string representation of a list of tokens.\n * This is not a proper serializer that will handle escaping and whitespace.\n * It only produces valid CSS for a token list that is also valid.\n */\nexport function stringify(...tokens: Array<CSSToken>): string {\n\tlet buffer = '';\n\tfor (let i = 0; i < tokens.length; i++) {\n\t\tbuffer = buffer + tokens[i][1];\n\t}\n\n\treturn buffer;\n}\n"],
+  "mappings": ";;;;AAOO,SAAS,aAAa,QAAiC;AAC7D,MAAI,SAAS;AACb,WAAS,IAAI,GAAG,IAAI,OAAO,QAAQ,KAAK;AACvC,aAAS,SAAS,OAAO,CAAC,EAAE,CAAC;AAAA,EAC9B;AAEA,SAAO;AACR;AAPgB;",
+  "names": []
+}
