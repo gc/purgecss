@@ -1,21 +1,10 @@
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined") return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
 var __esm = (fn, res) => function __init() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __commonJS = (cb, mod) => function __require2() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
   for (var name in all)
@@ -29,14 +18,6 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/postcss/css-syntax-error.js
@@ -100,8 +81,8 @@ var init_css_syntax_error = __esm({
 });
 
 // src/postcss/stringifier.js
-function capitalize(str) {
-  return str[0].toUpperCase() + str.slice(1);
+function capitalize(str2) {
+  return str2[0].toUpperCase() + str2.slice(1);
 }
 var DEFAULT_RAW, Stringifier;
 var init_stringifier = __esm({
@@ -129,7 +110,7 @@ var init_stringifier = __esm({
       constructor(builder) {
         this.builder = builder;
       }
-      atrule(node, semicolon) {
+      atrule(node, semicolon2) {
         let name = "@" + node.name;
         const params = node.params ? this.rawValue(node, "params") : "";
         if (typeof node.raws.afterName !== "undefined") {
@@ -140,7 +121,7 @@ var init_stringifier = __esm({
         if (node.nodes) {
           this.block(node, name + params);
         } else {
-          const end = (node.raws.between || "") + (semicolon ? ";" : "");
+          const end = (node.raws.between || "") + (semicolon2 ? ";" : "");
           this.builder(name + params + end, node);
         }
       }
@@ -188,12 +169,12 @@ var init_stringifier = __esm({
           if (node.nodes[last].type !== "comment") break;
           last -= 1;
         }
-        const semicolon = this.raw(node, "semicolon");
+        const semicolon2 = this.raw(node, "semicolon");
         for (let i = 0; i < node.nodes.length; i++) {
           const child = node.nodes[i];
           const before = this.raw(child, "before");
           if (before) this.builder(before);
-          this.stringify(child, last !== i || semicolon);
+          this.stringify(child, last !== i || semicolon2);
         }
       }
       comment(node) {
@@ -201,14 +182,14 @@ var init_stringifier = __esm({
         const right = this.raw(node, "right", "commentRight");
         this.builder("/*" + left + node.text + right + "*/", node);
       }
-      decl(node, semicolon) {
+      decl(node, semicolon2) {
         const between = this.raw(node, "between", "colon");
-        let string = node.prop + between + this.rawValue(node, "value");
+        let string2 = node.prop + between + this.rawValue(node, "value");
         if (node.important) {
-          string += node.raws.important || " !important";
+          string2 += node.raws.important || " !important";
         }
-        if (semicolon) string += ";";
-        this.builder(string, node);
+        if (semicolon2) string2 += ";";
+        this.builder(string2, node);
       }
       document(node) {
         this.body(node);
@@ -230,31 +211,31 @@ var init_stringifier = __esm({
           }
         }
         if (!parent) return DEFAULT_RAW[detect];
-        const root = node.root();
-        if (!root.rawCache) root.rawCache = {};
-        if (typeof root.rawCache[detect] !== "undefined") {
-          return root.rawCache[detect];
+        const root2 = node.root();
+        if (!root2.rawCache) root2.rawCache = {};
+        if (typeof root2.rawCache[detect] !== "undefined") {
+          return root2.rawCache[detect];
         }
         if (detect === "before" || detect === "after") {
           return this.beforeAfter(node, detect);
         } else {
           const method = "raw" + capitalize(detect);
           if (this[method]) {
-            value = this[method](root, node);
+            value = this[method](root2, node);
           } else {
-            root.walk((i) => {
+            root2.walk((i) => {
               value = i.raws[own];
               if (typeof value !== "undefined") return false;
             });
           }
         }
         if (typeof value === "undefined") value = DEFAULT_RAW[detect];
-        root.rawCache[detect] = value;
+        root2.rawCache[detect] = value;
         return value;
       }
-      rawBeforeClose(root) {
+      rawBeforeClose(root2) {
         let value;
-        root.walk((i) => {
+        root2.walk((i) => {
           if (i.nodes && i.nodes.length > 0) {
             if (typeof i.raws.after !== "undefined") {
               value = i.raws.after;
@@ -268,9 +249,9 @@ var init_stringifier = __esm({
         if (value) value = value.replace(/\S/g, "");
         return value;
       }
-      rawBeforeComment(root, node) {
+      rawBeforeComment(root2, node) {
         let value;
-        root.walkComments((i) => {
+        root2.walkComments((i) => {
           if (typeof i.raws.before !== "undefined") {
             value = i.raws.before;
             if (value.includes("\n")) {
@@ -286,9 +267,9 @@ var init_stringifier = __esm({
         }
         return value;
       }
-      rawBeforeDecl(root, node) {
+      rawBeforeDecl(root2, node) {
         let value;
-        root.walkDecls((i) => {
+        root2.walkDecls((i) => {
           if (typeof i.raws.before !== "undefined") {
             value = i.raws.before;
             if (value.includes("\n")) {
@@ -304,9 +285,9 @@ var init_stringifier = __esm({
         }
         return value;
       }
-      rawBeforeOpen(root) {
+      rawBeforeOpen(root2) {
         let value;
-        root.walk((i) => {
+        root2.walk((i) => {
           if (i.type !== "decl") {
             value = i.raws.between;
             if (typeof value !== "undefined") return false;
@@ -314,10 +295,10 @@ var init_stringifier = __esm({
         });
         return value;
       }
-      rawBeforeRule(root) {
+      rawBeforeRule(root2) {
         let value;
-        root.walk((i) => {
-          if (i.nodes && (i.parent !== root || root.first !== i)) {
+        root2.walk((i) => {
+          if (i.nodes && (i.parent !== root2 || root2.first !== i)) {
             if (typeof i.raws.before !== "undefined") {
               value = i.raws.before;
               if (value.includes("\n")) {
@@ -330,9 +311,9 @@ var init_stringifier = __esm({
         if (value) value = value.replace(/\S/g, "");
         return value;
       }
-      rawColon(root) {
+      rawColon(root2) {
         let value;
-        root.walkDecls((i) => {
+        root2.walkDecls((i) => {
           if (typeof i.raws.between !== "undefined") {
             value = i.raws.between.replace(/[^\s:]/g, "");
             return false;
@@ -340,9 +321,9 @@ var init_stringifier = __esm({
         });
         return value;
       }
-      rawEmptyBody(root) {
+      rawEmptyBody(root2) {
         let value;
-        root.walk((i) => {
+        root2.walk((i) => {
           if (i.nodes && i.nodes.length === 0) {
             value = i.raws.after;
             if (typeof value !== "undefined") return false;
@@ -350,12 +331,12 @@ var init_stringifier = __esm({
         });
         return value;
       }
-      rawIndent(root) {
-        if (root.raws.indent) return root.raws.indent;
+      rawIndent(root2) {
+        if (root2.raws.indent) return root2.raws.indent;
         let value;
-        root.walk((i) => {
+        root2.walk((i) => {
           const p = i.parent;
-          if (p && p !== root && p.parent && p.parent === root) {
+          if (p && p !== root2 && p.parent && p.parent === root2) {
             if (typeof i.raws.before !== "undefined") {
               const parts = i.raws.before.split("\n");
               value = parts[parts.length - 1];
@@ -366,9 +347,9 @@ var init_stringifier = __esm({
         });
         return value;
       }
-      rawSemicolon(root) {
+      rawSemicolon(root2) {
         let value;
-        root.walk((i) => {
+        root2.walk((i) => {
           if (i.nodes && i.nodes.length && i.last.type === "decl") {
             value = i.raws.semicolon;
             if (typeof value !== "undefined") return false;
@@ -394,13 +375,13 @@ var init_stringifier = __esm({
           this.builder(node.raws.ownSemicolon, node, "end");
         }
       }
-      stringify(node, semicolon) {
+      stringify(node, semicolon2) {
         if (!this[node.type]) {
           throw new Error(
             "Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier."
           );
         }
-        this[node.type](node, semicolon);
+        this[node.type](node, semicolon2);
       }
     };
   }
@@ -412,8 +393,8 @@ __export(stringify_exports, {
   stringify: () => stringify
 });
 function stringify(node, builder) {
-  const str = new Stringifier(builder);
-  str.stringify(node);
+  const str2 = new Stringifier(builder);
+  str2.stringify(node);
 }
 var init_stringify = __esm({
   "src/postcss/stringify.js"() {
@@ -698,8 +679,8 @@ var init_node = __esm({
         return { end, start };
       }
       raw(prop, defaultType) {
-        const str = new Stringifier();
-        return str.raw(this, prop, defaultType);
+        const str2 = new Stringifier();
+        return str2.raw(this, prop, defaultType);
       }
       remove() {
         if (this.parent) {
@@ -973,10 +954,10 @@ var init_container = __esm({
         existIndex = this.index(exist);
         for (const node of nodes) this.proxyOf.nodes.splice(existIndex + 1, 0, node);
         let index;
-        for (const id in this.indexes) {
-          index = this.indexes[id];
+        for (const id2 in this.indexes) {
+          index = this.indexes[id2];
           if (existIndex < index) {
-            this.indexes[id] = index + nodes.length;
+            this.indexes[id2] = index + nodes.length;
           }
         }
         this.markDirty();
@@ -993,10 +974,10 @@ var init_container = __esm({
         existIndex = this.index(exist);
         for (const node of nodes) this.proxyOf.nodes.splice(existIndex, 0, node);
         let index;
-        for (const id in this.indexes) {
-          index = this.indexes[id];
+        for (const id2 in this.indexes) {
+          index = this.indexes[id2];
           if (existIndex <= index) {
-            this.indexes[id] = index + nodes.length;
+            this.indexes[id2] = index + nodes.length;
           }
         }
         this.markDirty();
@@ -1056,8 +1037,8 @@ var init_container = __esm({
         for (const child of children) {
           const nodes = this.normalize(child, this.first, "prepend").reverse();
           for (const node of nodes) this.proxyOf.nodes.unshift(node);
-          for (const id in this.indexes) {
-            this.indexes[id] = this.indexes[id] + nodes.length;
+          for (const id2 in this.indexes) {
+            this.indexes[id2] = this.indexes[id2] + nodes.length;
           }
         }
         this.markDirty();
@@ -1079,10 +1060,10 @@ var init_container = __esm({
         this.proxyOf.nodes[child].parent = void 0;
         this.proxyOf.nodes.splice(child, 1);
         let index;
-        for (const id in this.indexes) {
-          index = this.indexes[id];
+        for (const id2 in this.indexes) {
+          index = this.indexes[id2];
           if (index >= child) {
-            this.indexes[id] = index - 1;
+            this.indexes[id2] = index - 1;
           }
         }
         this.markDirty();
@@ -1169,24 +1150,24 @@ var init_container = __esm({
           }
         });
       }
-      walkRules(selector, callback) {
+      walkRules(selector2, callback) {
         if (!callback) {
-          callback = selector;
+          callback = selector2;
           return this.walk((child, i) => {
             if (child.type === "rule") {
               return callback(child, i);
             }
           });
         }
-        if (selector instanceof RegExp) {
+        if (selector2 instanceof RegExp) {
           return this.walk((child, i) => {
-            if (child.type === "rule" && selector.test(child.selector)) {
+            if (child.type === "rule" && selector2.test(child.selector)) {
               return callback(child, i);
             }
           });
         }
         return this.walk((child, i) => {
-          if (child.type === "rule" && child.selector === selector) {
+          if (child.type === "rule" && child.selector === selector2) {
             return callback(child, i);
           }
         });
@@ -1321,14 +1302,14 @@ var init_list = __esm({
   "src/postcss/list.js"() {
     "use strict";
     list = {
-      comma(string) {
-        return list.split(string, [","], true);
+      comma(string2) {
+        return list.split(string2, [","], true);
       },
-      space(string) {
+      space(string2) {
         const spaces = [" ", "\n", "	"];
-        return list.split(string, spaces);
+        return list.split(string2, spaces);
       },
-      split(string, separators, last) {
+      split(string2, separators, last) {
         const array = [];
         let current = "";
         let split = false;
@@ -1336,7 +1317,7 @@ var init_list = __esm({
         let inQuote = false;
         let prevQuote = "";
         let escape = false;
-        for (const letter of string) {
+        for (const letter of string2) {
           if (escape) {
             escape = false;
           } else if (letter === "\\") {
@@ -1399,28 +1380,11 @@ var init_rule = __esm({
   }
 });
 
-// node_modules/.pnpm/nanoid@5.0.8/node_modules/nanoid/non-secure/index.js
-var urlAlphabet, nanoid;
-var init_non_secure = __esm({
-  "node_modules/.pnpm/nanoid@5.0.8/node_modules/nanoid/non-secure/index.js"() {
-    urlAlphabet = "useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
-    nanoid = /* @__PURE__ */ __name((size = 21) => {
-      let id = "";
-      let i = size;
-      while (i--) {
-        id += urlAlphabet[Math.random() * 64 | 0];
-      }
-      return id;
-    }, "nanoid");
-  }
-});
-
 // src/postcss/input.js
 var fromOffsetCache, Input;
 var init_input = __esm({
   "src/postcss/input.js"() {
     "use strict";
-    init_non_secure();
     init_css_syntax_error();
     fromOffsetCache = Symbol("fromOffsetCache");
     Input = class {
@@ -1437,9 +1401,6 @@ var init_input = __esm({
           this.css = this.css.slice(1);
         } else {
           this.hasBOM = false;
-        }
-        if (!this.file) {
-          this.id = "<input css " + nanoid(6) + ">";
         }
         if (this.map) this.map.file = this.from;
       }
@@ -1917,11 +1878,11 @@ var init_parser = __esm({
         }
       }
       checkMissedSemicolon(tokens) {
-        const colon = this.colon(tokens);
-        if (colon === false) return;
+        const colon2 = this.colon(tokens);
+        if (colon2 === false) return;
         let founded = 0;
         let token;
-        for (let j = colon - 1; j >= 0; j--) {
+        for (let j = colon2 - 1; j >= 0; j--) {
           token = tokens[j];
           if (token[0] !== "space") {
             founded += 1;
@@ -2033,23 +1994,23 @@ var init_parser = __esm({
           token = tokens[i];
           if (token[1].toLowerCase() === "!important") {
             node.important = true;
-            let string = this.stringFrom(tokens, i);
-            string = this.spacesFromEnd(tokens) + string;
-            if (string !== " !important") node.raws.important = string;
+            let string2 = this.stringFrom(tokens, i);
+            string2 = this.spacesFromEnd(tokens) + string2;
+            if (string2 !== " !important") node.raws.important = string2;
             break;
           } else if (token[1].toLowerCase() === "important") {
             const cache = tokens.slice(0);
-            let str = "";
+            let str2 = "";
             for (let j = i; j > 0; j--) {
               const type = cache[j][0];
-              if (str.trim().startsWith("!") && type !== "space") {
+              if (str2.trim().startsWith("!") && type !== "space") {
                 break;
               }
-              str = cache.pop()[1] + str;
+              str2 = cache.pop()[1] + str2;
             }
-            if (str.trim().startsWith("!")) {
+            if (str2.trim().startsWith("!")) {
               node.important = true;
-              node.raws.important = str;
+              node.raws.important = str2;
               tokens = cache;
             }
           }
@@ -2136,7 +2097,7 @@ var init_parser = __esm({
       other(start) {
         let end = false;
         let type = null;
-        let colon = false;
+        let colon2 = false;
         let bracket = null;
         const brackets = [];
         const customProperty = start[1].startsWith("--");
@@ -2148,12 +2109,12 @@ var init_parser = __esm({
           if (type === "(" || type === "[") {
             if (!bracket) bracket = token;
             brackets.push(type === "(" ? ")" : "]");
-          } else if (customProperty && colon && type === "{") {
+          } else if (customProperty && colon2 && type === "{") {
             if (!bracket) bracket = token;
             brackets.push("}");
           } else if (brackets.length === 0) {
             if (type === ";") {
-              if (colon) {
+              if (colon2) {
                 this.decl(tokens, customProperty);
                 return;
               } else {
@@ -2167,7 +2128,7 @@ var init_parser = __esm({
               end = true;
               break;
             } else if (type === ":") {
-              colon = true;
+              colon2 = true;
             }
           } else if (type === brackets[brackets.length - 1]) {
             brackets.pop();
@@ -2177,7 +2138,7 @@ var init_parser = __esm({
         }
         if (this.tokenizer.endOfFile()) end = true;
         if (brackets.length > 0) this.unclosedBracket(bracket);
-        if (end && colon) {
+        if (end && colon2) {
           if (!customProperty) {
             while (tokens.length) {
               token = tokens[tokens.length - 1][0];
@@ -2345,9 +2306,9 @@ __export(parse_exports, {
 });
 function parse2(css, opts) {
   const input = new Input(css, opts);
-  const parser = new Parser(input);
+  const parser2 = new Parser(input);
   try {
-    parser.parse();
+    parser2.parse();
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       if (e.name === "CssSyntaxError" && opts && opts.from) {
@@ -2362,7 +2323,7 @@ function parse2(css, opts) {
     }
     throw e;
   }
-  return parser.root;
+  return parser2.root;
 }
 var init_parse = __esm({
   "src/postcss/parse.js"() {
@@ -2423,10 +2384,10 @@ var init_map_generator = __esm({
       static {
         __name(this, "MapGenerator");
       }
-      constructor(stringify3, root, opts, cssString) {
+      constructor(stringify3, root2, opts, cssString) {
         this.stringify = stringify3;
         this.mapOpts = opts.map || {};
-        this.root = root;
+        this.root = root2;
         this.opts = opts;
         this.css = cssString;
         this.originalCSS = cssString;
@@ -2519,8 +2480,8 @@ var init_map_generator = __esm({
           source: ""
         };
         let last, lines;
-        this.stringify(this.root, (str, node, type) => {
-          this.css += str;
+        this.stringify(this.root, (str2, node, type) => {
+          this.css += str2;
           if (node && type !== "end") {
             mapping.generated.line = line;
             mapping.generated.column = column - 1;
@@ -2536,13 +2497,13 @@ var init_map_generator = __esm({
               this.map.addMapping(mapping);
             }
           }
-          lines = str.match(/\n/g);
+          lines = str2.match(/\n/g);
           if (lines) {
             line += lines.length;
-            last = str.lastIndexOf("\n");
-            column = str.length - last;
+            last = str2.lastIndexOf("\n");
+            column = str2.length - last;
           } else {
-            column += str.length;
+            column += str2.length;
           }
           if (node && type !== "start") {
             const p = node.parent || { raws: {} };
@@ -2650,11 +2611,11 @@ var init_map_generator = __esm({
           return this.toUrl(this.path(node.source.input.from));
         }
       }
-      toBase64(str) {
+      toBase64(str2) {
         if (Buffer) {
-          return Buffer.from(str).toString("base64");
+          return Buffer.from(str2).toString("base64");
         } else {
-          return window.btoa(unescape(encodeURIComponent(str)));
+          return window.btoa(unescape(encodeURIComponent(str2)));
         }
       }
       toFileUrl(path) {
@@ -2749,10 +2710,10 @@ var init_result = __esm({
       static {
         __name(this, "Result");
       }
-      constructor(processor, root, opts) {
+      constructor(processor, root2, opts) {
         this.processor = processor;
         this.messages = [];
-        this.root = root;
+        this.root = root2;
         this.opts = opts;
         this.css = void 0;
         this.map = void 0;
@@ -2777,3691 +2738,6 @@ var init_result = __esm({
         return this.css;
       }
     };
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/unesc.js
-var require_unesc = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/unesc.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = unesc;
-    function gobbleHex(str) {
-      var lower = str.toLowerCase();
-      var hex = "";
-      var spaceTerminated = false;
-      for (var i = 0; i < 6 && lower[i] !== void 0; i++) {
-        var code = lower.charCodeAt(i);
-        var valid = code >= 97 && code <= 102 || code >= 48 && code <= 57;
-        spaceTerminated = code === 32;
-        if (!valid) {
-          break;
-        }
-        hex += lower[i];
-      }
-      if (hex.length === 0) {
-        return void 0;
-      }
-      var codePoint = parseInt(hex, 16);
-      var isSurrogate = codePoint >= 55296 && codePoint <= 57343;
-      if (isSurrogate || codePoint === 0 || codePoint > 1114111) {
-        return ["\uFFFD", hex.length + (spaceTerminated ? 1 : 0)];
-      }
-      return [String.fromCodePoint(codePoint), hex.length + (spaceTerminated ? 1 : 0)];
-    }
-    __name(gobbleHex, "gobbleHex");
-    var CONTAINS_ESCAPE = /\\/;
-    function unesc(str) {
-      var needToProcess = CONTAINS_ESCAPE.test(str);
-      if (!needToProcess) {
-        return str;
-      }
-      var ret = "";
-      for (var i = 0; i < str.length; i++) {
-        if (str[i] === "\\") {
-          var gobbled = gobbleHex(str.slice(i + 1, i + 7));
-          if (gobbled !== void 0) {
-            ret += gobbled[0];
-            i += gobbled[1];
-            continue;
-          }
-          if (str[i + 1] === "\\") {
-            ret += "\\";
-            i++;
-            continue;
-          }
-          if (str.length === i + 1) {
-            ret += str[i];
-          }
-          continue;
-        }
-        ret += str[i];
-      }
-      return ret;
-    }
-    __name(unesc, "unesc");
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/getProp.js
-var require_getProp = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/getProp.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = getProp;
-    function getProp(obj) {
-      for (var _len = arguments.length, props = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        props[_key - 1] = arguments[_key];
-      }
-      while (props.length > 0) {
-        var prop = props.shift();
-        if (!obj[prop]) {
-          return void 0;
-        }
-        obj = obj[prop];
-      }
-      return obj;
-    }
-    __name(getProp, "getProp");
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/ensureObject.js
-var require_ensureObject = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/ensureObject.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = ensureObject;
-    function ensureObject(obj) {
-      for (var _len = arguments.length, props = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        props[_key - 1] = arguments[_key];
-      }
-      while (props.length > 0) {
-        var prop = props.shift();
-        if (!obj[prop]) {
-          obj[prop] = {};
-        }
-        obj = obj[prop];
-      }
-    }
-    __name(ensureObject, "ensureObject");
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/stripComments.js
-var require_stripComments = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/stripComments.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = stripComments;
-    function stripComments(str) {
-      var s = "";
-      var commentStart = str.indexOf("/*");
-      var lastEnd = 0;
-      while (commentStart >= 0) {
-        s = s + str.slice(lastEnd, commentStart);
-        var commentEnd = str.indexOf("*/", commentStart + 2);
-        if (commentEnd < 0) {
-          return s;
-        }
-        lastEnd = commentEnd + 2;
-        commentStart = str.indexOf("/*", lastEnd);
-      }
-      s = s + str.slice(lastEnd);
-      return s;
-    }
-    __name(stripComments, "stripComments");
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/index.js
-var require_util = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/util/index.js"(exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.unesc = exports.stripComments = exports.getProp = exports.ensureObject = void 0;
-    var _unesc = _interopRequireDefault(require_unesc());
-    exports.unesc = _unesc["default"];
-    var _getProp = _interopRequireDefault(require_getProp());
-    exports.getProp = _getProp["default"];
-    var _ensureObject = _interopRequireDefault(require_ensureObject());
-    exports.ensureObject = _ensureObject["default"];
-    var _stripComments = _interopRequireDefault(require_stripComments());
-    exports.stripComments = _stripComments["default"];
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/node.js
-var require_node = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/node.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _util = require_util();
-    function _defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    __name(_defineProperties, "_defineProperties");
-    function _createClass(Constructor, protoProps, staticProps) {
-      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) _defineProperties(Constructor, staticProps);
-      Object.defineProperty(Constructor, "prototype", { writable: false });
-      return Constructor;
-    }
-    __name(_createClass, "_createClass");
-    var cloneNode2 = /* @__PURE__ */ __name(function cloneNode3(obj, parent) {
-      if (typeof obj !== "object" || obj === null) {
-        return obj;
-      }
-      var cloned = new obj.constructor();
-      for (var i in obj) {
-        if (!obj.hasOwnProperty(i)) {
-          continue;
-        }
-        var value = obj[i];
-        var type = typeof value;
-        if (i === "parent" && type === "object") {
-          if (parent) {
-            cloned[i] = parent;
-          }
-        } else if (value instanceof Array) {
-          cloned[i] = value.map(function(j) {
-            return cloneNode3(j, cloned);
-          });
-        } else {
-          cloned[i] = cloneNode3(value, cloned);
-        }
-      }
-      return cloned;
-    }, "cloneNode");
-    var Node2 = /* @__PURE__ */ function() {
-      function Node3(opts) {
-        if (opts === void 0) {
-          opts = {};
-        }
-        Object.assign(this, opts);
-        this.spaces = this.spaces || {};
-        this.spaces.before = this.spaces.before || "";
-        this.spaces.after = this.spaces.after || "";
-      }
-      __name(Node3, "Node");
-      var _proto = Node3.prototype;
-      _proto.remove = /* @__PURE__ */ __name(function remove() {
-        if (this.parent) {
-          this.parent.removeChild(this);
-        }
-        this.parent = void 0;
-        return this;
-      }, "remove");
-      _proto.replaceWith = /* @__PURE__ */ __name(function replaceWith() {
-        if (this.parent) {
-          for (var index in arguments) {
-            this.parent.insertBefore(this, arguments[index]);
-          }
-          this.remove();
-        }
-        return this;
-      }, "replaceWith");
-      _proto.next = /* @__PURE__ */ __name(function next() {
-        return this.parent.at(this.parent.index(this) + 1);
-      }, "next");
-      _proto.prev = /* @__PURE__ */ __name(function prev() {
-        return this.parent.at(this.parent.index(this) - 1);
-      }, "prev");
-      _proto.clone = /* @__PURE__ */ __name(function clone(overrides) {
-        if (overrides === void 0) {
-          overrides = {};
-        }
-        var cloned = cloneNode2(this);
-        for (var name in overrides) {
-          cloned[name] = overrides[name];
-        }
-        return cloned;
-      }, "clone");
-      _proto.appendToPropertyAndEscape = /* @__PURE__ */ __name(function appendToPropertyAndEscape(name, value, valueEscaped) {
-        if (!this.raws) {
-          this.raws = {};
-        }
-        var originalValue = this[name];
-        var originalEscaped = this.raws[name];
-        this[name] = originalValue + value;
-        if (originalEscaped || valueEscaped !== value) {
-          this.raws[name] = (originalEscaped || originalValue) + valueEscaped;
-        } else {
-          delete this.raws[name];
-        }
-      }, "appendToPropertyAndEscape");
-      _proto.setPropertyAndEscape = /* @__PURE__ */ __name(function setPropertyAndEscape(name, value, valueEscaped) {
-        if (!this.raws) {
-          this.raws = {};
-        }
-        this[name] = value;
-        this.raws[name] = valueEscaped;
-      }, "setPropertyAndEscape");
-      _proto.setPropertyWithoutEscape = /* @__PURE__ */ __name(function setPropertyWithoutEscape(name, value) {
-        this[name] = value;
-        if (this.raws) {
-          delete this.raws[name];
-        }
-      }, "setPropertyWithoutEscape");
-      _proto.isAtPosition = /* @__PURE__ */ __name(function isAtPosition(line, column) {
-        if (this.source && this.source.start && this.source.end) {
-          if (this.source.start.line > line) {
-            return false;
-          }
-          if (this.source.end.line < line) {
-            return false;
-          }
-          if (this.source.start.line === line && this.source.start.column > column) {
-            return false;
-          }
-          if (this.source.end.line === line && this.source.end.column < column) {
-            return false;
-          }
-          return true;
-        }
-        return void 0;
-      }, "isAtPosition");
-      _proto.stringifyProperty = /* @__PURE__ */ __name(function stringifyProperty(name) {
-        return this.raws && this.raws[name] || this[name];
-      }, "stringifyProperty");
-      _proto.valueToString = /* @__PURE__ */ __name(function valueToString() {
-        return String(this.stringifyProperty("value"));
-      }, "valueToString");
-      _proto.toString = /* @__PURE__ */ __name(function toString() {
-        return [this.rawSpaceBefore, this.valueToString(), this.rawSpaceAfter].join("");
-      }, "toString");
-      _createClass(Node3, [{
-        key: "rawSpaceBefore",
-        get: /* @__PURE__ */ __name(function get() {
-          var rawSpace = this.raws && this.raws.spaces && this.raws.spaces.before;
-          if (rawSpace === void 0) {
-            rawSpace = this.spaces && this.spaces.before;
-          }
-          return rawSpace || "";
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(raw) {
-          (0, _util.ensureObject)(this, "raws", "spaces");
-          this.raws.spaces.before = raw;
-        }, "set")
-      }, {
-        key: "rawSpaceAfter",
-        get: /* @__PURE__ */ __name(function get() {
-          var rawSpace = this.raws && this.raws.spaces && this.raws.spaces.after;
-          if (rawSpace === void 0) {
-            rawSpace = this.spaces.after;
-          }
-          return rawSpace || "";
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(raw) {
-          (0, _util.ensureObject)(this, "raws", "spaces");
-          this.raws.spaces.after = raw;
-        }, "set")
-      }]);
-      return Node3;
-    }();
-    exports["default"] = Node2;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/types.js
-var require_types = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/types.js"(exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.UNIVERSAL = exports.TAG = exports.STRING = exports.SELECTOR = exports.ROOT = exports.PSEUDO = exports.NESTING = exports.ID = exports.COMMENT = exports.COMBINATOR = exports.CLASS = exports.ATTRIBUTE = void 0;
-    var TAG = "tag";
-    exports.TAG = TAG;
-    var STRING = "string";
-    exports.STRING = STRING;
-    var SELECTOR = "selector";
-    exports.SELECTOR = SELECTOR;
-    var ROOT = "root";
-    exports.ROOT = ROOT;
-    var PSEUDO = "pseudo";
-    exports.PSEUDO = PSEUDO;
-    var NESTING = "nesting";
-    exports.NESTING = NESTING;
-    var ID = "id";
-    exports.ID = ID;
-    var COMMENT = "comment";
-    exports.COMMENT = COMMENT;
-    var COMBINATOR = "combinator";
-    exports.COMBINATOR = COMBINATOR;
-    var CLASS = "class";
-    exports.CLASS = CLASS;
-    var ATTRIBUTE = "attribute";
-    exports.ATTRIBUTE = ATTRIBUTE;
-    var UNIVERSAL = "universal";
-    exports.UNIVERSAL = UNIVERSAL;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/container.js
-var require_container = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/container.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _node = _interopRequireDefault(require_node());
-    var types = _interopRequireWildcard(require_types());
-    function _getRequireWildcardCache(nodeInterop) {
-      if (typeof WeakMap !== "function") return null;
-      var cacheBabelInterop = /* @__PURE__ */ new WeakMap();
-      var cacheNodeInterop = /* @__PURE__ */ new WeakMap();
-      return (_getRequireWildcardCache = /* @__PURE__ */ __name(function _getRequireWildcardCache2(nodeInterop2) {
-        return nodeInterop2 ? cacheNodeInterop : cacheBabelInterop;
-      }, "_getRequireWildcardCache"))(nodeInterop);
-    }
-    __name(_getRequireWildcardCache, "_getRequireWildcardCache");
-    function _interopRequireWildcard(obj, nodeInterop) {
-      if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-      }
-      if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return { "default": obj };
-      }
-      var cache = _getRequireWildcardCache(nodeInterop);
-      if (cache && cache.has(obj)) {
-        return cache.get(obj);
-      }
-      var newObj = {};
-      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var key in obj) {
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-          if (desc && (desc.get || desc.set)) {
-            Object.defineProperty(newObj, key, desc);
-          } else {
-            newObj[key] = obj[key];
-          }
-        }
-      }
-      newObj["default"] = obj;
-      if (cache) {
-        cache.set(obj, newObj);
-      }
-      return newObj;
-    }
-    __name(_interopRequireWildcard, "_interopRequireWildcard");
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _createForOfIteratorHelperLoose(o, allowArrayLike) {
-      var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
-      if (it) return (it = it.call(o)).next.bind(it);
-      if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-        if (it) o = it;
-        var i = 0;
-        return function() {
-          if (i >= o.length) return { done: true };
-          return { done: false, value: o[i++] };
-        };
-      }
-      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }
-    __name(_createForOfIteratorHelperLoose, "_createForOfIteratorHelperLoose");
-    function _unsupportedIterableToArray(o, minLen) {
-      if (!o) return;
-      if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-      var n = Object.prototype.toString.call(o).slice(8, -1);
-      if (n === "Object" && o.constructor) n = o.constructor.name;
-      if (n === "Map" || n === "Set") return Array.from(o);
-      if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-    }
-    __name(_unsupportedIterableToArray, "_unsupportedIterableToArray");
-    function _arrayLikeToArray(arr, len) {
-      if (len == null || len > arr.length) len = arr.length;
-      for (var i = 0, arr2 = new Array(len); i < len; i++) {
-        arr2[i] = arr[i];
-      }
-      return arr2;
-    }
-    __name(_arrayLikeToArray, "_arrayLikeToArray");
-    function _defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    __name(_defineProperties, "_defineProperties");
-    function _createClass(Constructor, protoProps, staticProps) {
-      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) _defineProperties(Constructor, staticProps);
-      Object.defineProperty(Constructor, "prototype", { writable: false });
-      return Constructor;
-    }
-    __name(_createClass, "_createClass");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Container3 = /* @__PURE__ */ function(_Node) {
-      _inheritsLoose(Container4, _Node);
-      function Container4(opts) {
-        var _this;
-        _this = _Node.call(this, opts) || this;
-        if (!_this.nodes) {
-          _this.nodes = [];
-        }
-        return _this;
-      }
-      __name(Container4, "Container");
-      var _proto = Container4.prototype;
-      _proto.append = /* @__PURE__ */ __name(function append(selector) {
-        selector.parent = this;
-        this.nodes.push(selector);
-        return this;
-      }, "append");
-      _proto.prepend = /* @__PURE__ */ __name(function prepend(selector) {
-        selector.parent = this;
-        this.nodes.unshift(selector);
-        return this;
-      }, "prepend");
-      _proto.at = /* @__PURE__ */ __name(function at(index) {
-        return this.nodes[index];
-      }, "at");
-      _proto.index = /* @__PURE__ */ __name(function index(child) {
-        if (typeof child === "number") {
-          return child;
-        }
-        return this.nodes.indexOf(child);
-      }, "index");
-      _proto.removeChild = /* @__PURE__ */ __name(function removeChild(child) {
-        child = this.index(child);
-        this.at(child).parent = void 0;
-        this.nodes.splice(child, 1);
-        var index;
-        for (var id in this.indexes) {
-          index = this.indexes[id];
-          if (index >= child) {
-            this.indexes[id] = index - 1;
-          }
-        }
-        return this;
-      }, "removeChild");
-      _proto.removeAll = /* @__PURE__ */ __name(function removeAll() {
-        for (var _iterator = _createForOfIteratorHelperLoose(this.nodes), _step; !(_step = _iterator()).done; ) {
-          var node = _step.value;
-          node.parent = void 0;
-        }
-        this.nodes = [];
-        return this;
-      }, "removeAll");
-      _proto.empty = /* @__PURE__ */ __name(function empty() {
-        return this.removeAll();
-      }, "empty");
-      _proto.insertAfter = /* @__PURE__ */ __name(function insertAfter(oldNode, newNode) {
-        newNode.parent = this;
-        var oldIndex = this.index(oldNode);
-        this.nodes.splice(oldIndex + 1, 0, newNode);
-        newNode.parent = this;
-        var index;
-        for (var id in this.indexes) {
-          index = this.indexes[id];
-          if (oldIndex <= index) {
-            this.indexes[id] = index + 1;
-          }
-        }
-        return this;
-      }, "insertAfter");
-      _proto.insertBefore = /* @__PURE__ */ __name(function insertBefore(oldNode, newNode) {
-        newNode.parent = this;
-        var oldIndex = this.index(oldNode);
-        this.nodes.splice(oldIndex, 0, newNode);
-        newNode.parent = this;
-        var index;
-        for (var id in this.indexes) {
-          index = this.indexes[id];
-          if (index <= oldIndex) {
-            this.indexes[id] = index + 1;
-          }
-        }
-        return this;
-      }, "insertBefore");
-      _proto._findChildAtPosition = /* @__PURE__ */ __name(function _findChildAtPosition(line, col) {
-        var found = void 0;
-        this.each(function(node) {
-          if (node.atPosition) {
-            var foundChild = node.atPosition(line, col);
-            if (foundChild) {
-              found = foundChild;
-              return false;
-            }
-          } else if (node.isAtPosition(line, col)) {
-            found = node;
-            return false;
-          }
-        });
-        return found;
-      }, "_findChildAtPosition");
-      _proto.atPosition = /* @__PURE__ */ __name(function atPosition(line, col) {
-        if (this.isAtPosition(line, col)) {
-          return this._findChildAtPosition(line, col) || this;
-        } else {
-          return void 0;
-        }
-      }, "atPosition");
-      _proto._inferEndPosition = /* @__PURE__ */ __name(function _inferEndPosition() {
-        if (this.last && this.last.source && this.last.source.end) {
-          this.source = this.source || {};
-          this.source.end = this.source.end || {};
-          Object.assign(this.source.end, this.last.source.end);
-        }
-      }, "_inferEndPosition");
-      _proto.each = /* @__PURE__ */ __name(function each(callback) {
-        if (!this.lastEach) {
-          this.lastEach = 0;
-        }
-        if (!this.indexes) {
-          this.indexes = {};
-        }
-        this.lastEach++;
-        var id = this.lastEach;
-        this.indexes[id] = 0;
-        if (!this.length) {
-          return void 0;
-        }
-        var index, result;
-        while (this.indexes[id] < this.length) {
-          index = this.indexes[id];
-          result = callback(this.at(index), index);
-          if (result === false) {
-            break;
-          }
-          this.indexes[id] += 1;
-        }
-        delete this.indexes[id];
-        if (result === false) {
-          return false;
-        }
-      }, "each");
-      _proto.walk = /* @__PURE__ */ __name(function walk(callback) {
-        return this.each(function(node, i) {
-          var result = callback(node, i);
-          if (result !== false && node.length) {
-            result = node.walk(callback);
-          }
-          if (result === false) {
-            return false;
-          }
-        });
-      }, "walk");
-      _proto.walkAttributes = /* @__PURE__ */ __name(function walkAttributes(callback) {
-        var _this2 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.ATTRIBUTE) {
-            return callback.call(_this2, selector);
-          }
-        });
-      }, "walkAttributes");
-      _proto.walkClasses = /* @__PURE__ */ __name(function walkClasses(callback) {
-        var _this3 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.CLASS) {
-            return callback.call(_this3, selector);
-          }
-        });
-      }, "walkClasses");
-      _proto.walkCombinators = /* @__PURE__ */ __name(function walkCombinators(callback) {
-        var _this4 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.COMBINATOR) {
-            return callback.call(_this4, selector);
-          }
-        });
-      }, "walkCombinators");
-      _proto.walkComments = /* @__PURE__ */ __name(function walkComments(callback) {
-        var _this5 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.COMMENT) {
-            return callback.call(_this5, selector);
-          }
-        });
-      }, "walkComments");
-      _proto.walkIds = /* @__PURE__ */ __name(function walkIds(callback) {
-        var _this6 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.ID) {
-            return callback.call(_this6, selector);
-          }
-        });
-      }, "walkIds");
-      _proto.walkNesting = /* @__PURE__ */ __name(function walkNesting(callback) {
-        var _this7 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.NESTING) {
-            return callback.call(_this7, selector);
-          }
-        });
-      }, "walkNesting");
-      _proto.walkPseudos = /* @__PURE__ */ __name(function walkPseudos(callback) {
-        var _this8 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.PSEUDO) {
-            return callback.call(_this8, selector);
-          }
-        });
-      }, "walkPseudos");
-      _proto.walkTags = /* @__PURE__ */ __name(function walkTags(callback) {
-        var _this9 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.TAG) {
-            return callback.call(_this9, selector);
-          }
-        });
-      }, "walkTags");
-      _proto.walkUniversals = /* @__PURE__ */ __name(function walkUniversals(callback) {
-        var _this10 = this;
-        return this.walk(function(selector) {
-          if (selector.type === types.UNIVERSAL) {
-            return callback.call(_this10, selector);
-          }
-        });
-      }, "walkUniversals");
-      _proto.split = /* @__PURE__ */ __name(function split(callback) {
-        var _this11 = this;
-        var current = [];
-        return this.reduce(function(memo, node, index) {
-          var split2 = callback.call(_this11, node);
-          current.push(node);
-          if (split2) {
-            memo.push(current);
-            current = [];
-          } else if (index === _this11.length - 1) {
-            memo.push(current);
-          }
-          return memo;
-        }, []);
-      }, "split");
-      _proto.map = /* @__PURE__ */ __name(function map(callback) {
-        return this.nodes.map(callback);
-      }, "map");
-      _proto.reduce = /* @__PURE__ */ __name(function reduce(callback, memo) {
-        return this.nodes.reduce(callback, memo);
-      }, "reduce");
-      _proto.every = /* @__PURE__ */ __name(function every(callback) {
-        return this.nodes.every(callback);
-      }, "every");
-      _proto.some = /* @__PURE__ */ __name(function some(callback) {
-        return this.nodes.some(callback);
-      }, "some");
-      _proto.filter = /* @__PURE__ */ __name(function filter(callback) {
-        return this.nodes.filter(callback);
-      }, "filter");
-      _proto.sort = /* @__PURE__ */ __name(function sort(callback) {
-        return this.nodes.sort(callback);
-      }, "sort");
-      _proto.toString = /* @__PURE__ */ __name(function toString() {
-        return this.map(String).join("");
-      }, "toString");
-      _createClass(Container4, [{
-        key: "first",
-        get: /* @__PURE__ */ __name(function get() {
-          return this.at(0);
-        }, "get")
-      }, {
-        key: "last",
-        get: /* @__PURE__ */ __name(function get() {
-          return this.at(this.length - 1);
-        }, "get")
-      }, {
-        key: "length",
-        get: /* @__PURE__ */ __name(function get() {
-          return this.nodes.length;
-        }, "get")
-      }]);
-      return Container4;
-    }(_node["default"]);
-    exports["default"] = Container3;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/root.js
-var require_root = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/root.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _container = _interopRequireDefault(require_container());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    __name(_defineProperties, "_defineProperties");
-    function _createClass(Constructor, protoProps, staticProps) {
-      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) _defineProperties(Constructor, staticProps);
-      Object.defineProperty(Constructor, "prototype", { writable: false });
-      return Constructor;
-    }
-    __name(_createClass, "_createClass");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Root3 = /* @__PURE__ */ function(_Container) {
-      _inheritsLoose(Root4, _Container);
-      function Root4(opts) {
-        var _this;
-        _this = _Container.call(this, opts) || this;
-        _this.type = _types.ROOT;
-        return _this;
-      }
-      __name(Root4, "Root");
-      var _proto = Root4.prototype;
-      _proto.toString = /* @__PURE__ */ __name(function toString() {
-        var str = this.reduce(function(memo, selector) {
-          memo.push(String(selector));
-          return memo;
-        }, []).join(",");
-        return this.trailingComma ? str + "," : str;
-      }, "toString");
-      _proto.error = /* @__PURE__ */ __name(function error(message, options) {
-        if (this._error) {
-          return this._error(message, options);
-        } else {
-          return new Error(message);
-        }
-      }, "error");
-      _createClass(Root4, [{
-        key: "errorGenerator",
-        set: /* @__PURE__ */ __name(function set(handler) {
-          this._error = handler;
-        }, "set")
-      }]);
-      return Root4;
-    }(_container["default"]);
-    exports["default"] = Root3;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/selector.js
-var require_selector = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/selector.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _container = _interopRequireDefault(require_container());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Selector = /* @__PURE__ */ function(_Container) {
-      _inheritsLoose(Selector2, _Container);
-      function Selector2(opts) {
-        var _this;
-        _this = _Container.call(this, opts) || this;
-        _this.type = _types.SELECTOR;
-        return _this;
-      }
-      __name(Selector2, "Selector");
-      return Selector2;
-    }(_container["default"]);
-    exports["default"] = Selector;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/cssesc@3.0.0/node_modules/cssesc/cssesc.js
-var require_cssesc = __commonJS({
-  "node_modules/.pnpm/cssesc@3.0.0/node_modules/cssesc/cssesc.js"(exports, module) {
-    "use strict";
-    var object = {};
-    var hasOwnProperty = object.hasOwnProperty;
-    var merge = /* @__PURE__ */ __name(function merge2(options, defaults) {
-      if (!options) {
-        return defaults;
-      }
-      var result = {};
-      for (var key in defaults) {
-        result[key] = hasOwnProperty.call(options, key) ? options[key] : defaults[key];
-      }
-      return result;
-    }, "merge");
-    var regexAnySingleEscape = /[ -,\.\/:-@\[-\^`\{-~]/;
-    var regexSingleEscape = /[ -,\.\/:-@\[\]\^`\{-~]/;
-    var regexExcessiveSpaces = /(^|\\+)?(\\[A-F0-9]{1,6})\x20(?![a-fA-F0-9\x20])/g;
-    var cssesc = /* @__PURE__ */ __name(function cssesc2(string, options) {
-      options = merge(options, cssesc2.options);
-      if (options.quotes != "single" && options.quotes != "double") {
-        options.quotes = "single";
-      }
-      var quote = options.quotes == "double" ? '"' : "'";
-      var isIdentifier = options.isIdentifier;
-      var firstChar = string.charAt(0);
-      var output = "";
-      var counter = 0;
-      var length = string.length;
-      while (counter < length) {
-        var character = string.charAt(counter++);
-        var codePoint = character.charCodeAt();
-        var value = void 0;
-        if (codePoint < 32 || codePoint > 126) {
-          if (codePoint >= 55296 && codePoint <= 56319 && counter < length) {
-            var extra = string.charCodeAt(counter++);
-            if ((extra & 64512) == 56320) {
-              codePoint = ((codePoint & 1023) << 10) + (extra & 1023) + 65536;
-            } else {
-              counter--;
-            }
-          }
-          value = "\\" + codePoint.toString(16).toUpperCase() + " ";
-        } else {
-          if (options.escapeEverything) {
-            if (regexAnySingleEscape.test(character)) {
-              value = "\\" + character;
-            } else {
-              value = "\\" + codePoint.toString(16).toUpperCase() + " ";
-            }
-          } else if (/[\t\n\f\r\x0B]/.test(character)) {
-            value = "\\" + codePoint.toString(16).toUpperCase() + " ";
-          } else if (character == "\\" || !isIdentifier && (character == '"' && quote == character || character == "'" && quote == character) || isIdentifier && regexSingleEscape.test(character)) {
-            value = "\\" + character;
-          } else {
-            value = character;
-          }
-        }
-        output += value;
-      }
-      if (isIdentifier) {
-        if (/^-[-\d]/.test(output)) {
-          output = "\\-" + output.slice(1);
-        } else if (/\d/.test(firstChar)) {
-          output = "\\3" + firstChar + " " + output.slice(1);
-        }
-      }
-      output = output.replace(regexExcessiveSpaces, function($0, $1, $2) {
-        if ($1 && $1.length % 2) {
-          return $0;
-        }
-        return ($1 || "") + $2;
-      });
-      if (!isIdentifier && options.wrap) {
-        return quote + output + quote;
-      }
-      return output;
-    }, "cssesc");
-    cssesc.options = {
-      "escapeEverything": false,
-      "isIdentifier": false,
-      "quotes": "single",
-      "wrap": false
-    };
-    cssesc.version = "3.0.0";
-    module.exports = cssesc;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/className.js
-var require_className = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/className.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _cssesc = _interopRequireDefault(require_cssesc());
-    var _util = require_util();
-    var _node = _interopRequireDefault(require_node());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    __name(_defineProperties, "_defineProperties");
-    function _createClass(Constructor, protoProps, staticProps) {
-      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) _defineProperties(Constructor, staticProps);
-      Object.defineProperty(Constructor, "prototype", { writable: false });
-      return Constructor;
-    }
-    __name(_createClass, "_createClass");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var ClassName = /* @__PURE__ */ function(_Node) {
-      _inheritsLoose(ClassName2, _Node);
-      function ClassName2(opts) {
-        var _this;
-        _this = _Node.call(this, opts) || this;
-        _this.type = _types.CLASS;
-        _this._constructed = true;
-        return _this;
-      }
-      __name(ClassName2, "ClassName");
-      var _proto = ClassName2.prototype;
-      _proto.valueToString = /* @__PURE__ */ __name(function valueToString() {
-        return "." + _Node.prototype.valueToString.call(this);
-      }, "valueToString");
-      _createClass(ClassName2, [{
-        key: "value",
-        get: /* @__PURE__ */ __name(function get() {
-          return this._value;
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(v) {
-          if (this._constructed) {
-            var escaped = (0, _cssesc["default"])(v, {
-              isIdentifier: true
-            });
-            if (escaped !== v) {
-              (0, _util.ensureObject)(this, "raws");
-              this.raws.value = escaped;
-            } else if (this.raws) {
-              delete this.raws.value;
-            }
-          }
-          this._value = v;
-        }, "set")
-      }]);
-      return ClassName2;
-    }(_node["default"]);
-    exports["default"] = ClassName;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/comment.js
-var require_comment = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/comment.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _node = _interopRequireDefault(require_node());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Comment2 = /* @__PURE__ */ function(_Node) {
-      _inheritsLoose(Comment3, _Node);
-      function Comment3(opts) {
-        var _this;
-        _this = _Node.call(this, opts) || this;
-        _this.type = _types.COMMENT;
-        return _this;
-      }
-      __name(Comment3, "Comment");
-      return Comment3;
-    }(_node["default"]);
-    exports["default"] = Comment2;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/id.js
-var require_id = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/id.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _node = _interopRequireDefault(require_node());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var ID = /* @__PURE__ */ function(_Node) {
-      _inheritsLoose(ID2, _Node);
-      function ID2(opts) {
-        var _this;
-        _this = _Node.call(this, opts) || this;
-        _this.type = _types.ID;
-        return _this;
-      }
-      __name(ID2, "ID");
-      var _proto = ID2.prototype;
-      _proto.valueToString = /* @__PURE__ */ __name(function valueToString() {
-        return "#" + _Node.prototype.valueToString.call(this);
-      }, "valueToString");
-      return ID2;
-    }(_node["default"]);
-    exports["default"] = ID;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/namespace.js
-var require_namespace = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/namespace.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _cssesc = _interopRequireDefault(require_cssesc());
-    var _util = require_util();
-    var _node = _interopRequireDefault(require_node());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    __name(_defineProperties, "_defineProperties");
-    function _createClass(Constructor, protoProps, staticProps) {
-      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) _defineProperties(Constructor, staticProps);
-      Object.defineProperty(Constructor, "prototype", { writable: false });
-      return Constructor;
-    }
-    __name(_createClass, "_createClass");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Namespace = /* @__PURE__ */ function(_Node) {
-      _inheritsLoose(Namespace2, _Node);
-      function Namespace2() {
-        return _Node.apply(this, arguments) || this;
-      }
-      __name(Namespace2, "Namespace");
-      var _proto = Namespace2.prototype;
-      _proto.qualifiedName = /* @__PURE__ */ __name(function qualifiedName(value) {
-        if (this.namespace) {
-          return this.namespaceString + "|" + value;
-        } else {
-          return value;
-        }
-      }, "qualifiedName");
-      _proto.valueToString = /* @__PURE__ */ __name(function valueToString() {
-        return this.qualifiedName(_Node.prototype.valueToString.call(this));
-      }, "valueToString");
-      _createClass(Namespace2, [{
-        key: "namespace",
-        get: /* @__PURE__ */ __name(function get() {
-          return this._namespace;
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(namespace) {
-          if (namespace === true || namespace === "*" || namespace === "&") {
-            this._namespace = namespace;
-            if (this.raws) {
-              delete this.raws.namespace;
-            }
-            return;
-          }
-          var escaped = (0, _cssesc["default"])(namespace, {
-            isIdentifier: true
-          });
-          this._namespace = namespace;
-          if (escaped !== namespace) {
-            (0, _util.ensureObject)(this, "raws");
-            this.raws.namespace = escaped;
-          } else if (this.raws) {
-            delete this.raws.namespace;
-          }
-        }, "set")
-      }, {
-        key: "ns",
-        get: /* @__PURE__ */ __name(function get() {
-          return this._namespace;
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(namespace) {
-          this.namespace = namespace;
-        }, "set")
-      }, {
-        key: "namespaceString",
-        get: /* @__PURE__ */ __name(function get() {
-          if (this.namespace) {
-            var ns = this.stringifyProperty("namespace");
-            if (ns === true) {
-              return "";
-            } else {
-              return ns;
-            }
-          } else {
-            return "";
-          }
-        }, "get")
-      }]);
-      return Namespace2;
-    }(_node["default"]);
-    exports["default"] = Namespace;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/tag.js
-var require_tag = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/tag.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _namespace = _interopRequireDefault(require_namespace());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Tag = /* @__PURE__ */ function(_Namespace) {
-      _inheritsLoose(Tag2, _Namespace);
-      function Tag2(opts) {
-        var _this;
-        _this = _Namespace.call(this, opts) || this;
-        _this.type = _types.TAG;
-        return _this;
-      }
-      __name(Tag2, "Tag");
-      return Tag2;
-    }(_namespace["default"]);
-    exports["default"] = Tag;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/string.js
-var require_string = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/string.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _node = _interopRequireDefault(require_node());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var String2 = /* @__PURE__ */ function(_Node) {
-      _inheritsLoose(String3, _Node);
-      function String3(opts) {
-        var _this;
-        _this = _Node.call(this, opts) || this;
-        _this.type = _types.STRING;
-        return _this;
-      }
-      __name(String3, "String");
-      return String3;
-    }(_node["default"]);
-    exports["default"] = String2;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/pseudo.js
-var require_pseudo = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/pseudo.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _container = _interopRequireDefault(require_container());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Pseudo = /* @__PURE__ */ function(_Container) {
-      _inheritsLoose(Pseudo2, _Container);
-      function Pseudo2(opts) {
-        var _this;
-        _this = _Container.call(this, opts) || this;
-        _this.type = _types.PSEUDO;
-        return _this;
-      }
-      __name(Pseudo2, "Pseudo");
-      var _proto = Pseudo2.prototype;
-      _proto.toString = /* @__PURE__ */ __name(function toString() {
-        var params = this.length ? "(" + this.map(String).join(",") + ")" : "";
-        return [this.rawSpaceBefore, this.stringifyProperty("value"), params, this.rawSpaceAfter].join("");
-      }, "toString");
-      return Pseudo2;
-    }(_container["default"]);
-    exports["default"] = Pseudo;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/util-deprecate@1.0.2/node_modules/util-deprecate/node.js
-var require_node2 = __commonJS({
-  "node_modules/.pnpm/util-deprecate@1.0.2/node_modules/util-deprecate/node.js"(exports, module) {
-    module.exports = __require("util").deprecate;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/attribute.js
-var require_attribute = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/attribute.js"(exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    exports.unescapeValue = unescapeValue;
-    var _cssesc = _interopRequireDefault(require_cssesc());
-    var _unesc = _interopRequireDefault(require_unesc());
-    var _namespace = _interopRequireDefault(require_namespace());
-    var _types = require_types();
-    var _CSSESC_QUOTE_OPTIONS;
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    __name(_defineProperties, "_defineProperties");
-    function _createClass(Constructor, protoProps, staticProps) {
-      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) _defineProperties(Constructor, staticProps);
-      Object.defineProperty(Constructor, "prototype", { writable: false });
-      return Constructor;
-    }
-    __name(_createClass, "_createClass");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var deprecate = require_node2();
-    var WRAPPED_IN_QUOTES = /^('|")([^]*)\1$/;
-    var warnOfDeprecatedValueAssignment = deprecate(function() {
-    }, "Assigning an attribute a value containing characters that might need to be escaped is deprecated. Call attribute.setValue() instead.");
-    var warnOfDeprecatedQuotedAssignment = deprecate(function() {
-    }, "Assigning attr.quoted is deprecated and has no effect. Assign to attr.quoteMark instead.");
-    var warnOfDeprecatedConstructor = deprecate(function() {
-    }, "Constructing an Attribute selector with a value without specifying quoteMark is deprecated. Note: The value should be unescaped now.");
-    function unescapeValue(value) {
-      var deprecatedUsage = false;
-      var quoteMark = null;
-      var unescaped = value;
-      var m = unescaped.match(WRAPPED_IN_QUOTES);
-      if (m) {
-        quoteMark = m[1];
-        unescaped = m[2];
-      }
-      unescaped = (0, _unesc["default"])(unescaped);
-      if (unescaped !== value) {
-        deprecatedUsage = true;
-      }
-      return {
-        deprecatedUsage,
-        unescaped,
-        quoteMark
-      };
-    }
-    __name(unescapeValue, "unescapeValue");
-    function handleDeprecatedContructorOpts(opts) {
-      if (opts.quoteMark !== void 0) {
-        return opts;
-      }
-      if (opts.value === void 0) {
-        return opts;
-      }
-      warnOfDeprecatedConstructor();
-      var _unescapeValue = unescapeValue(opts.value), quoteMark = _unescapeValue.quoteMark, unescaped = _unescapeValue.unescaped;
-      if (!opts.raws) {
-        opts.raws = {};
-      }
-      if (opts.raws.value === void 0) {
-        opts.raws.value = opts.value;
-      }
-      opts.value = unescaped;
-      opts.quoteMark = quoteMark;
-      return opts;
-    }
-    __name(handleDeprecatedContructorOpts, "handleDeprecatedContructorOpts");
-    var Attribute = /* @__PURE__ */ function(_Namespace) {
-      _inheritsLoose(Attribute2, _Namespace);
-      function Attribute2(opts) {
-        var _this;
-        if (opts === void 0) {
-          opts = {};
-        }
-        _this = _Namespace.call(this, handleDeprecatedContructorOpts(opts)) || this;
-        _this.type = _types.ATTRIBUTE;
-        _this.raws = _this.raws || {};
-        Object.defineProperty(_this.raws, "unquoted", {
-          get: deprecate(function() {
-            return _this.value;
-          }, "attr.raws.unquoted is deprecated. Call attr.value instead."),
-          set: deprecate(function() {
-            return _this.value;
-          }, "Setting attr.raws.unquoted is deprecated and has no effect. attr.value is unescaped by default now.")
-        });
-        _this._constructed = true;
-        return _this;
-      }
-      __name(Attribute2, "Attribute");
-      var _proto = Attribute2.prototype;
-      _proto.getQuotedValue = /* @__PURE__ */ __name(function getQuotedValue(options) {
-        if (options === void 0) {
-          options = {};
-        }
-        var quoteMark = this._determineQuoteMark(options);
-        var cssescopts = CSSESC_QUOTE_OPTIONS[quoteMark];
-        var escaped = (0, _cssesc["default"])(this._value, cssescopts);
-        return escaped;
-      }, "getQuotedValue");
-      _proto._determineQuoteMark = /* @__PURE__ */ __name(function _determineQuoteMark(options) {
-        return options.smart ? this.smartQuoteMark(options) : this.preferredQuoteMark(options);
-      }, "_determineQuoteMark");
-      _proto.setValue = /* @__PURE__ */ __name(function setValue(value, options) {
-        if (options === void 0) {
-          options = {};
-        }
-        this._value = value;
-        this._quoteMark = this._determineQuoteMark(options);
-        this._syncRawValue();
-      }, "setValue");
-      _proto.smartQuoteMark = /* @__PURE__ */ __name(function smartQuoteMark(options) {
-        var v = this.value;
-        var numSingleQuotes = v.replace(/[^']/g, "").length;
-        var numDoubleQuotes = v.replace(/[^"]/g, "").length;
-        if (numSingleQuotes + numDoubleQuotes === 0) {
-          var escaped = (0, _cssesc["default"])(v, {
-            isIdentifier: true
-          });
-          if (escaped === v) {
-            return Attribute2.NO_QUOTE;
-          } else {
-            var pref = this.preferredQuoteMark(options);
-            if (pref === Attribute2.NO_QUOTE) {
-              var quote = this.quoteMark || options.quoteMark || Attribute2.DOUBLE_QUOTE;
-              var opts = CSSESC_QUOTE_OPTIONS[quote];
-              var quoteValue = (0, _cssesc["default"])(v, opts);
-              if (quoteValue.length < escaped.length) {
-                return quote;
-              }
-            }
-            return pref;
-          }
-        } else if (numDoubleQuotes === numSingleQuotes) {
-          return this.preferredQuoteMark(options);
-        } else if (numDoubleQuotes < numSingleQuotes) {
-          return Attribute2.DOUBLE_QUOTE;
-        } else {
-          return Attribute2.SINGLE_QUOTE;
-        }
-      }, "smartQuoteMark");
-      _proto.preferredQuoteMark = /* @__PURE__ */ __name(function preferredQuoteMark(options) {
-        var quoteMark = options.preferCurrentQuoteMark ? this.quoteMark : options.quoteMark;
-        if (quoteMark === void 0) {
-          quoteMark = options.preferCurrentQuoteMark ? options.quoteMark : this.quoteMark;
-        }
-        if (quoteMark === void 0) {
-          quoteMark = Attribute2.DOUBLE_QUOTE;
-        }
-        return quoteMark;
-      }, "preferredQuoteMark");
-      _proto._syncRawValue = /* @__PURE__ */ __name(function _syncRawValue() {
-        var rawValue = (0, _cssesc["default"])(this._value, CSSESC_QUOTE_OPTIONS[this.quoteMark]);
-        if (rawValue === this._value) {
-          if (this.raws) {
-            delete this.raws.value;
-          }
-        } else {
-          this.raws.value = rawValue;
-        }
-      }, "_syncRawValue");
-      _proto._handleEscapes = /* @__PURE__ */ __name(function _handleEscapes(prop, value) {
-        if (this._constructed) {
-          var escaped = (0, _cssesc["default"])(value, {
-            isIdentifier: true
-          });
-          if (escaped !== value) {
-            this.raws[prop] = escaped;
-          } else {
-            delete this.raws[prop];
-          }
-        }
-      }, "_handleEscapes");
-      _proto._spacesFor = /* @__PURE__ */ __name(function _spacesFor(name) {
-        var attrSpaces = {
-          before: "",
-          after: ""
-        };
-        var spaces = this.spaces[name] || {};
-        var rawSpaces = this.raws.spaces && this.raws.spaces[name] || {};
-        return Object.assign(attrSpaces, spaces, rawSpaces);
-      }, "_spacesFor");
-      _proto._stringFor = /* @__PURE__ */ __name(function _stringFor(name, spaceName, concat) {
-        if (spaceName === void 0) {
-          spaceName = name;
-        }
-        if (concat === void 0) {
-          concat = defaultAttrConcat;
-        }
-        var attrSpaces = this._spacesFor(spaceName);
-        return concat(this.stringifyProperty(name), attrSpaces);
-      }, "_stringFor");
-      _proto.offsetOf = /* @__PURE__ */ __name(function offsetOf(name) {
-        var count = 1;
-        var attributeSpaces = this._spacesFor("attribute");
-        count += attributeSpaces.before.length;
-        if (name === "namespace" || name === "ns") {
-          return this.namespace ? count : -1;
-        }
-        if (name === "attributeNS") {
-          return count;
-        }
-        count += this.namespaceString.length;
-        if (this.namespace) {
-          count += 1;
-        }
-        if (name === "attribute") {
-          return count;
-        }
-        count += this.stringifyProperty("attribute").length;
-        count += attributeSpaces.after.length;
-        var operatorSpaces = this._spacesFor("operator");
-        count += operatorSpaces.before.length;
-        var operator = this.stringifyProperty("operator");
-        if (name === "operator") {
-          return operator ? count : -1;
-        }
-        count += operator.length;
-        count += operatorSpaces.after.length;
-        var valueSpaces = this._spacesFor("value");
-        count += valueSpaces.before.length;
-        var value = this.stringifyProperty("value");
-        if (name === "value") {
-          return value ? count : -1;
-        }
-        count += value.length;
-        count += valueSpaces.after.length;
-        var insensitiveSpaces = this._spacesFor("insensitive");
-        count += insensitiveSpaces.before.length;
-        if (name === "insensitive") {
-          return this.insensitive ? count : -1;
-        }
-        return -1;
-      }, "offsetOf");
-      _proto.toString = /* @__PURE__ */ __name(function toString() {
-        var _this2 = this;
-        var selector = [this.rawSpaceBefore, "["];
-        selector.push(this._stringFor("qualifiedAttribute", "attribute"));
-        if (this.operator && (this.value || this.value === "")) {
-          selector.push(this._stringFor("operator"));
-          selector.push(this._stringFor("value"));
-          selector.push(this._stringFor("insensitiveFlag", "insensitive", function(attrValue, attrSpaces) {
-            if (attrValue.length > 0 && !_this2.quoted && attrSpaces.before.length === 0 && !(_this2.spaces.value && _this2.spaces.value.after)) {
-              attrSpaces.before = " ";
-            }
-            return defaultAttrConcat(attrValue, attrSpaces);
-          }));
-        }
-        selector.push("]");
-        selector.push(this.rawSpaceAfter);
-        return selector.join("");
-      }, "toString");
-      _createClass(Attribute2, [{
-        key: "quoted",
-        get: /* @__PURE__ */ __name(function get() {
-          var qm = this.quoteMark;
-          return qm === "'" || qm === '"';
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(value) {
-          warnOfDeprecatedQuotedAssignment();
-        }, "set")
-        /**
-         * returns a single (`'`) or double (`"`) quote character if the value is quoted.
-         * returns `null` if the value is not quoted.
-         * returns `undefined` if the quotation state is unknown (this can happen when
-         * the attribute is constructed without specifying a quote mark.)
-         */
-      }, {
-        key: "quoteMark",
-        get: /* @__PURE__ */ __name(function get() {
-          return this._quoteMark;
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(quoteMark) {
-          if (!this._constructed) {
-            this._quoteMark = quoteMark;
-            return;
-          }
-          if (this._quoteMark !== quoteMark) {
-            this._quoteMark = quoteMark;
-            this._syncRawValue();
-          }
-        }, "set")
-      }, {
-        key: "qualifiedAttribute",
-        get: /* @__PURE__ */ __name(function get() {
-          return this.qualifiedName(this.raws.attribute || this.attribute);
-        }, "get")
-      }, {
-        key: "insensitiveFlag",
-        get: /* @__PURE__ */ __name(function get() {
-          return this.insensitive ? "i" : "";
-        }, "get")
-      }, {
-        key: "value",
-        get: /* @__PURE__ */ __name(function get() {
-          return this._value;
-        }, "get"),
-        set: (
-          /**
-           * Before 3.0, the value had to be set to an escaped value including any wrapped
-           * quote marks. In 3.0, the semantics of `Attribute.value` changed so that the value
-           * is unescaped during parsing and any quote marks are removed.
-           *
-           * Because the ambiguity of this semantic change, if you set `attr.value = newValue`,
-           * a deprecation warning is raised when the new value contains any characters that would
-           * require escaping (including if it contains wrapped quotes).
-           *
-           * Instead, you should call `attr.setValue(newValue, opts)` and pass options that describe
-           * how the new value is quoted.
-           */
-          /* @__PURE__ */ __name(function set(v) {
-            if (this._constructed) {
-              var _unescapeValue2 = unescapeValue(v), deprecatedUsage = _unescapeValue2.deprecatedUsage, unescaped = _unescapeValue2.unescaped, quoteMark = _unescapeValue2.quoteMark;
-              if (deprecatedUsage) {
-                warnOfDeprecatedValueAssignment();
-              }
-              if (unescaped === this._value && quoteMark === this._quoteMark) {
-                return;
-              }
-              this._value = unescaped;
-              this._quoteMark = quoteMark;
-              this._syncRawValue();
-            } else {
-              this._value = v;
-            }
-          }, "set")
-        )
-      }, {
-        key: "insensitive",
-        get: /* @__PURE__ */ __name(function get() {
-          return this._insensitive;
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(insensitive) {
-          if (!insensitive) {
-            this._insensitive = false;
-            if (this.raws && (this.raws.insensitiveFlag === "I" || this.raws.insensitiveFlag === "i")) {
-              this.raws.insensitiveFlag = void 0;
-            }
-          }
-          this._insensitive = insensitive;
-        }, "set")
-      }, {
-        key: "attribute",
-        get: /* @__PURE__ */ __name(function get() {
-          return this._attribute;
-        }, "get"),
-        set: /* @__PURE__ */ __name(function set(name) {
-          this._handleEscapes("attribute", name);
-          this._attribute = name;
-        }, "set")
-      }]);
-      return Attribute2;
-    }(_namespace["default"]);
-    exports["default"] = Attribute;
-    Attribute.NO_QUOTE = null;
-    Attribute.SINGLE_QUOTE = "'";
-    Attribute.DOUBLE_QUOTE = '"';
-    var CSSESC_QUOTE_OPTIONS = (_CSSESC_QUOTE_OPTIONS = {
-      "'": {
-        quotes: "single",
-        wrap: true
-      },
-      '"': {
-        quotes: "double",
-        wrap: true
-      }
-    }, _CSSESC_QUOTE_OPTIONS[null] = {
-      isIdentifier: true
-    }, _CSSESC_QUOTE_OPTIONS);
-    function defaultAttrConcat(attrValue, attrSpaces) {
-      return "" + attrSpaces.before + attrValue + attrSpaces.after;
-    }
-    __name(defaultAttrConcat, "defaultAttrConcat");
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/universal.js
-var require_universal = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/universal.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _namespace = _interopRequireDefault(require_namespace());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Universal = /* @__PURE__ */ function(_Namespace) {
-      _inheritsLoose(Universal2, _Namespace);
-      function Universal2(opts) {
-        var _this;
-        _this = _Namespace.call(this, opts) || this;
-        _this.type = _types.UNIVERSAL;
-        _this.value = "*";
-        return _this;
-      }
-      __name(Universal2, "Universal");
-      return Universal2;
-    }(_namespace["default"]);
-    exports["default"] = Universal;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/combinator.js
-var require_combinator = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/combinator.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _node = _interopRequireDefault(require_node());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Combinator = /* @__PURE__ */ function(_Node) {
-      _inheritsLoose(Combinator2, _Node);
-      function Combinator2(opts) {
-        var _this;
-        _this = _Node.call(this, opts) || this;
-        _this.type = _types.COMBINATOR;
-        return _this;
-      }
-      __name(Combinator2, "Combinator");
-      return Combinator2;
-    }(_node["default"]);
-    exports["default"] = Combinator;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/nesting.js
-var require_nesting = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/nesting.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _node = _interopRequireDefault(require_node());
-    var _types = require_types();
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _inheritsLoose(subClass, superClass) {
-      subClass.prototype = Object.create(superClass.prototype);
-      subClass.prototype.constructor = subClass;
-      _setPrototypeOf(subClass, superClass);
-    }
-    __name(_inheritsLoose, "_inheritsLoose");
-    function _setPrototypeOf(o, p) {
-      _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-        o2.__proto__ = p2;
-        return o2;
-      }, "_setPrototypeOf");
-      return _setPrototypeOf(o, p);
-    }
-    __name(_setPrototypeOf, "_setPrototypeOf");
-    var Nesting = /* @__PURE__ */ function(_Node) {
-      _inheritsLoose(Nesting2, _Node);
-      function Nesting2(opts) {
-        var _this;
-        _this = _Node.call(this, opts) || this;
-        _this.type = _types.NESTING;
-        _this.value = "&";
-        return _this;
-      }
-      __name(Nesting2, "Nesting");
-      return Nesting2;
-    }(_node["default"]);
-    exports["default"] = Nesting;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/sortAscending.js
-var require_sortAscending = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/sortAscending.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = sortAscending;
-    function sortAscending(list2) {
-      return list2.sort(function(a, b) {
-        return a - b;
-      });
-    }
-    __name(sortAscending, "sortAscending");
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/tokenTypes.js
-var require_tokenTypes = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/tokenTypes.js"(exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.word = exports.tilde = exports.tab = exports.str = exports.space = exports.slash = exports.singleQuote = exports.semicolon = exports.plus = exports.pipe = exports.openSquare = exports.openParenthesis = exports.newline = exports.greaterThan = exports.feed = exports.equals = exports.doubleQuote = exports.dollar = exports.cr = exports.comment = exports.comma = exports.combinator = exports.colon = exports.closeSquare = exports.closeParenthesis = exports.caret = exports.bang = exports.backslash = exports.at = exports.asterisk = exports.ampersand = void 0;
-    var ampersand = 38;
-    exports.ampersand = ampersand;
-    var asterisk = 42;
-    exports.asterisk = asterisk;
-    var at = 64;
-    exports.at = at;
-    var comma = 44;
-    exports.comma = comma;
-    var colon = 58;
-    exports.colon = colon;
-    var semicolon = 59;
-    exports.semicolon = semicolon;
-    var openParenthesis = 40;
-    exports.openParenthesis = openParenthesis;
-    var closeParenthesis = 41;
-    exports.closeParenthesis = closeParenthesis;
-    var openSquare = 91;
-    exports.openSquare = openSquare;
-    var closeSquare = 93;
-    exports.closeSquare = closeSquare;
-    var dollar = 36;
-    exports.dollar = dollar;
-    var tilde = 126;
-    exports.tilde = tilde;
-    var caret = 94;
-    exports.caret = caret;
-    var plus = 43;
-    exports.plus = plus;
-    var equals = 61;
-    exports.equals = equals;
-    var pipe = 124;
-    exports.pipe = pipe;
-    var greaterThan = 62;
-    exports.greaterThan = greaterThan;
-    var space = 32;
-    exports.space = space;
-    var singleQuote = 39;
-    exports.singleQuote = singleQuote;
-    var doubleQuote = 34;
-    exports.doubleQuote = doubleQuote;
-    var slash = 47;
-    exports.slash = slash;
-    var bang = 33;
-    exports.bang = bang;
-    var backslash = 92;
-    exports.backslash = backslash;
-    var cr = 13;
-    exports.cr = cr;
-    var feed = 12;
-    exports.feed = feed;
-    var newline = 10;
-    exports.newline = newline;
-    var tab = 9;
-    exports.tab = tab;
-    var str = singleQuote;
-    exports.str = str;
-    var comment = -1;
-    exports.comment = comment;
-    var word = -2;
-    exports.word = word;
-    var combinator = -3;
-    exports.combinator = combinator;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/tokenize.js
-var require_tokenize = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/tokenize.js"(exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.FIELDS = void 0;
-    exports["default"] = tokenize;
-    var t = _interopRequireWildcard(require_tokenTypes());
-    var _unescapable;
-    var _wordDelimiters;
-    function _getRequireWildcardCache(nodeInterop) {
-      if (typeof WeakMap !== "function") return null;
-      var cacheBabelInterop = /* @__PURE__ */ new WeakMap();
-      var cacheNodeInterop = /* @__PURE__ */ new WeakMap();
-      return (_getRequireWildcardCache = /* @__PURE__ */ __name(function _getRequireWildcardCache2(nodeInterop2) {
-        return nodeInterop2 ? cacheNodeInterop : cacheBabelInterop;
-      }, "_getRequireWildcardCache"))(nodeInterop);
-    }
-    __name(_getRequireWildcardCache, "_getRequireWildcardCache");
-    function _interopRequireWildcard(obj, nodeInterop) {
-      if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-      }
-      if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return { "default": obj };
-      }
-      var cache = _getRequireWildcardCache(nodeInterop);
-      if (cache && cache.has(obj)) {
-        return cache.get(obj);
-      }
-      var newObj = {};
-      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var key in obj) {
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-          if (desc && (desc.get || desc.set)) {
-            Object.defineProperty(newObj, key, desc);
-          } else {
-            newObj[key] = obj[key];
-          }
-        }
-      }
-      newObj["default"] = obj;
-      if (cache) {
-        cache.set(obj, newObj);
-      }
-      return newObj;
-    }
-    __name(_interopRequireWildcard, "_interopRequireWildcard");
-    var unescapable = (_unescapable = {}, _unescapable[t.tab] = true, _unescapable[t.newline] = true, _unescapable[t.cr] = true, _unescapable[t.feed] = true, _unescapable);
-    var wordDelimiters = (_wordDelimiters = {}, _wordDelimiters[t.space] = true, _wordDelimiters[t.tab] = true, _wordDelimiters[t.newline] = true, _wordDelimiters[t.cr] = true, _wordDelimiters[t.feed] = true, _wordDelimiters[t.ampersand] = true, _wordDelimiters[t.asterisk] = true, _wordDelimiters[t.bang] = true, _wordDelimiters[t.comma] = true, _wordDelimiters[t.colon] = true, _wordDelimiters[t.semicolon] = true, _wordDelimiters[t.openParenthesis] = true, _wordDelimiters[t.closeParenthesis] = true, _wordDelimiters[t.openSquare] = true, _wordDelimiters[t.closeSquare] = true, _wordDelimiters[t.singleQuote] = true, _wordDelimiters[t.doubleQuote] = true, _wordDelimiters[t.plus] = true, _wordDelimiters[t.pipe] = true, _wordDelimiters[t.tilde] = true, _wordDelimiters[t.greaterThan] = true, _wordDelimiters[t.equals] = true, _wordDelimiters[t.dollar] = true, _wordDelimiters[t.caret] = true, _wordDelimiters[t.slash] = true, _wordDelimiters);
-    var hex = {};
-    var hexChars = "0123456789abcdefABCDEF";
-    for (i = 0; i < hexChars.length; i++) {
-      hex[hexChars.charCodeAt(i)] = true;
-    }
-    var i;
-    function consumeWord(css, start) {
-      var next = start;
-      var code;
-      do {
-        code = css.charCodeAt(next);
-        if (wordDelimiters[code]) {
-          return next - 1;
-        } else if (code === t.backslash) {
-          next = consumeEscape(css, next) + 1;
-        } else {
-          next++;
-        }
-      } while (next < css.length);
-      return next - 1;
-    }
-    __name(consumeWord, "consumeWord");
-    function consumeEscape(css, start) {
-      var next = start;
-      var code = css.charCodeAt(next + 1);
-      if (unescapable[code]) {
-      } else if (hex[code]) {
-        var hexDigits = 0;
-        do {
-          next++;
-          hexDigits++;
-          code = css.charCodeAt(next + 1);
-        } while (hex[code] && hexDigits < 6);
-        if (hexDigits < 6 && code === t.space) {
-          next++;
-        }
-      } else {
-        next++;
-      }
-      return next;
-    }
-    __name(consumeEscape, "consumeEscape");
-    var FIELDS = {
-      TYPE: 0,
-      START_LINE: 1,
-      START_COL: 2,
-      END_LINE: 3,
-      END_COL: 4,
-      START_POS: 5,
-      END_POS: 6
-    };
-    exports.FIELDS = FIELDS;
-    function tokenize(input) {
-      var tokens = [];
-      var css = input.css.valueOf();
-      var _css = css, length = _css.length;
-      var offset = -1;
-      var line = 1;
-      var start = 0;
-      var end = 0;
-      var code, content, endColumn, endLine, escaped, escapePos, last, lines, next, nextLine, nextOffset, quote, tokenType;
-      function unclosed(what, fix) {
-        if (input.safe) {
-          css += fix;
-          next = css.length - 1;
-        } else {
-          throw input.error("Unclosed " + what, line, start - offset, start);
-        }
-      }
-      __name(unclosed, "unclosed");
-      while (start < length) {
-        code = css.charCodeAt(start);
-        if (code === t.newline) {
-          offset = start;
-          line += 1;
-        }
-        switch (code) {
-          case t.space:
-          case t.tab:
-          case t.newline:
-          case t.cr:
-          case t.feed:
-            next = start;
-            do {
-              next += 1;
-              code = css.charCodeAt(next);
-              if (code === t.newline) {
-                offset = next;
-                line += 1;
-              }
-            } while (code === t.space || code === t.newline || code === t.tab || code === t.cr || code === t.feed);
-            tokenType = t.space;
-            endLine = line;
-            endColumn = next - offset - 1;
-            end = next;
-            break;
-          case t.plus:
-          case t.greaterThan:
-          case t.tilde:
-          case t.pipe:
-            next = start;
-            do {
-              next += 1;
-              code = css.charCodeAt(next);
-            } while (code === t.plus || code === t.greaterThan || code === t.tilde || code === t.pipe);
-            tokenType = t.combinator;
-            endLine = line;
-            endColumn = start - offset;
-            end = next;
-            break;
-          // Consume these characters as single tokens.
-          case t.asterisk:
-          case t.ampersand:
-          case t.bang:
-          case t.comma:
-          case t.equals:
-          case t.dollar:
-          case t.caret:
-          case t.openSquare:
-          case t.closeSquare:
-          case t.colon:
-          case t.semicolon:
-          case t.openParenthesis:
-          case t.closeParenthesis:
-            next = start;
-            tokenType = code;
-            endLine = line;
-            endColumn = start - offset;
-            end = next + 1;
-            break;
-          case t.singleQuote:
-          case t.doubleQuote:
-            quote = code === t.singleQuote ? "'" : '"';
-            next = start;
-            do {
-              escaped = false;
-              next = css.indexOf(quote, next + 1);
-              if (next === -1) {
-                unclosed("quote", quote);
-              }
-              escapePos = next;
-              while (css.charCodeAt(escapePos - 1) === t.backslash) {
-                escapePos -= 1;
-                escaped = !escaped;
-              }
-            } while (escaped);
-            tokenType = t.str;
-            endLine = line;
-            endColumn = start - offset;
-            end = next + 1;
-            break;
-          default:
-            if (code === t.slash && css.charCodeAt(start + 1) === t.asterisk) {
-              next = css.indexOf("*/", start + 2) + 1;
-              if (next === 0) {
-                unclosed("comment", "*/");
-              }
-              content = css.slice(start, next + 1);
-              lines = content.split("\n");
-              last = lines.length - 1;
-              if (last > 0) {
-                nextLine = line + last;
-                nextOffset = next - lines[last].length;
-              } else {
-                nextLine = line;
-                nextOffset = offset;
-              }
-              tokenType = t.comment;
-              line = nextLine;
-              endLine = nextLine;
-              endColumn = next - nextOffset;
-            } else if (code === t.slash) {
-              next = start;
-              tokenType = code;
-              endLine = line;
-              endColumn = start - offset;
-              end = next + 1;
-            } else {
-              next = consumeWord(css, start);
-              tokenType = t.word;
-              endLine = line;
-              endColumn = next - offset;
-            }
-            end = next + 1;
-            break;
-        }
-        tokens.push([
-          tokenType,
-          // [0] Token type
-          line,
-          // [1] Starting line
-          start - offset,
-          // [2] Starting column
-          endLine,
-          // [3] Ending line
-          endColumn,
-          // [4] Ending column
-          start,
-          // [5] Start position / Source index
-          end
-          // [6] End position
-        ]);
-        if (nextOffset) {
-          offset = nextOffset;
-          nextOffset = null;
-        }
-        start = end;
-      }
-      return tokens;
-    }
-    __name(tokenize, "tokenize");
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/parser.js
-var require_parser = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/parser.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _root = _interopRequireDefault(require_root());
-    var _selector = _interopRequireDefault(require_selector());
-    var _className = _interopRequireDefault(require_className());
-    var _comment = _interopRequireDefault(require_comment());
-    var _id = _interopRequireDefault(require_id());
-    var _tag = _interopRequireDefault(require_tag());
-    var _string = _interopRequireDefault(require_string());
-    var _pseudo = _interopRequireDefault(require_pseudo());
-    var _attribute = _interopRequireWildcard(require_attribute());
-    var _universal = _interopRequireDefault(require_universal());
-    var _combinator = _interopRequireDefault(require_combinator());
-    var _nesting = _interopRequireDefault(require_nesting());
-    var _sortAscending = _interopRequireDefault(require_sortAscending());
-    var _tokenize = _interopRequireWildcard(require_tokenize());
-    var tokens = _interopRequireWildcard(require_tokenTypes());
-    var types = _interopRequireWildcard(require_types());
-    var _util = require_util();
-    var _WHITESPACE_TOKENS;
-    var _Object$assign;
-    function _getRequireWildcardCache(nodeInterop) {
-      if (typeof WeakMap !== "function") return null;
-      var cacheBabelInterop = /* @__PURE__ */ new WeakMap();
-      var cacheNodeInterop = /* @__PURE__ */ new WeakMap();
-      return (_getRequireWildcardCache = /* @__PURE__ */ __name(function _getRequireWildcardCache2(nodeInterop2) {
-        return nodeInterop2 ? cacheNodeInterop : cacheBabelInterop;
-      }, "_getRequireWildcardCache"))(nodeInterop);
-    }
-    __name(_getRequireWildcardCache, "_getRequireWildcardCache");
-    function _interopRequireWildcard(obj, nodeInterop) {
-      if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-      }
-      if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return { "default": obj };
-      }
-      var cache = _getRequireWildcardCache(nodeInterop);
-      if (cache && cache.has(obj)) {
-        return cache.get(obj);
-      }
-      var newObj = {};
-      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var key in obj) {
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-          if (desc && (desc.get || desc.set)) {
-            Object.defineProperty(newObj, key, desc);
-          } else {
-            newObj[key] = obj[key];
-          }
-        }
-      }
-      newObj["default"] = obj;
-      if (cache) {
-        cache.set(obj, newObj);
-      }
-      return newObj;
-    }
-    __name(_interopRequireWildcard, "_interopRequireWildcard");
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function _defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    __name(_defineProperties, "_defineProperties");
-    function _createClass(Constructor, protoProps, staticProps) {
-      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) _defineProperties(Constructor, staticProps);
-      Object.defineProperty(Constructor, "prototype", { writable: false });
-      return Constructor;
-    }
-    __name(_createClass, "_createClass");
-    var WHITESPACE_TOKENS = (_WHITESPACE_TOKENS = {}, _WHITESPACE_TOKENS[tokens.space] = true, _WHITESPACE_TOKENS[tokens.cr] = true, _WHITESPACE_TOKENS[tokens.feed] = true, _WHITESPACE_TOKENS[tokens.newline] = true, _WHITESPACE_TOKENS[tokens.tab] = true, _WHITESPACE_TOKENS);
-    var WHITESPACE_EQUIV_TOKENS = Object.assign({}, WHITESPACE_TOKENS, (_Object$assign = {}, _Object$assign[tokens.comment] = true, _Object$assign));
-    function tokenStart(token) {
-      return {
-        line: token[_tokenize.FIELDS.START_LINE],
-        column: token[_tokenize.FIELDS.START_COL]
-      };
-    }
-    __name(tokenStart, "tokenStart");
-    function tokenEnd(token) {
-      return {
-        line: token[_tokenize.FIELDS.END_LINE],
-        column: token[_tokenize.FIELDS.END_COL]
-      };
-    }
-    __name(tokenEnd, "tokenEnd");
-    function getSource(startLine, startColumn, endLine, endColumn) {
-      return {
-        start: {
-          line: startLine,
-          column: startColumn
-        },
-        end: {
-          line: endLine,
-          column: endColumn
-        }
-      };
-    }
-    __name(getSource, "getSource");
-    function getTokenSource(token) {
-      return getSource(token[_tokenize.FIELDS.START_LINE], token[_tokenize.FIELDS.START_COL], token[_tokenize.FIELDS.END_LINE], token[_tokenize.FIELDS.END_COL]);
-    }
-    __name(getTokenSource, "getTokenSource");
-    function getTokenSourceSpan(startToken, endToken) {
-      if (!startToken) {
-        return void 0;
-      }
-      return getSource(startToken[_tokenize.FIELDS.START_LINE], startToken[_tokenize.FIELDS.START_COL], endToken[_tokenize.FIELDS.END_LINE], endToken[_tokenize.FIELDS.END_COL]);
-    }
-    __name(getTokenSourceSpan, "getTokenSourceSpan");
-    function unescapeProp(node, prop) {
-      var value = node[prop];
-      if (typeof value !== "string") {
-        return;
-      }
-      if (value.indexOf("\\") !== -1) {
-        (0, _util.ensureObject)(node, "raws");
-        node[prop] = (0, _util.unesc)(value);
-        if (node.raws[prop] === void 0) {
-          node.raws[prop] = value;
-        }
-      }
-      return node;
-    }
-    __name(unescapeProp, "unescapeProp");
-    function indexesOf(array, item) {
-      var i = -1;
-      var indexes = [];
-      while ((i = array.indexOf(item, i + 1)) !== -1) {
-        indexes.push(i);
-      }
-      return indexes;
-    }
-    __name(indexesOf, "indexesOf");
-    function uniqs() {
-      var list2 = Array.prototype.concat.apply([], arguments);
-      return list2.filter(function(item, i) {
-        return i === list2.indexOf(item);
-      });
-    }
-    __name(uniqs, "uniqs");
-    var Parser2 = /* @__PURE__ */ function() {
-      function Parser3(rule, options) {
-        if (options === void 0) {
-          options = {};
-        }
-        this.rule = rule;
-        this.options = Object.assign({
-          lossy: false,
-          safe: false
-        }, options);
-        this.position = 0;
-        this.css = typeof this.rule === "string" ? this.rule : this.rule.selector;
-        this.tokens = (0, _tokenize["default"])({
-          css: this.css,
-          error: this._errorGenerator(),
-          safe: this.options.safe
-        });
-        var rootSource = getTokenSourceSpan(this.tokens[0], this.tokens[this.tokens.length - 1]);
-        this.root = new _root["default"]({
-          source: rootSource
-        });
-        this.root.errorGenerator = this._errorGenerator();
-        var selector = new _selector["default"]({
-          source: {
-            start: {
-              line: 1,
-              column: 1
-            }
-          },
-          sourceIndex: 0
-        });
-        this.root.append(selector);
-        this.current = selector;
-        this.loop();
-      }
-      __name(Parser3, "Parser");
-      var _proto = Parser3.prototype;
-      _proto._errorGenerator = /* @__PURE__ */ __name(function _errorGenerator() {
-        var _this = this;
-        return function(message, errorOptions) {
-          if (typeof _this.rule === "string") {
-            return new Error(message);
-          }
-          return _this.rule.error(message, errorOptions);
-        };
-      }, "_errorGenerator");
-      _proto.attribute = /* @__PURE__ */ __name(function attribute() {
-        var attr = [];
-        var startingToken = this.currToken;
-        this.position++;
-        while (this.position < this.tokens.length && this.currToken[_tokenize.FIELDS.TYPE] !== tokens.closeSquare) {
-          attr.push(this.currToken);
-          this.position++;
-        }
-        if (this.currToken[_tokenize.FIELDS.TYPE] !== tokens.closeSquare) {
-          return this.expected("closing square bracket", this.currToken[_tokenize.FIELDS.START_POS]);
-        }
-        var len = attr.length;
-        var node = {
-          source: getSource(startingToken[1], startingToken[2], this.currToken[3], this.currToken[4]),
-          sourceIndex: startingToken[_tokenize.FIELDS.START_POS]
-        };
-        if (len === 1 && !~[tokens.word].indexOf(attr[0][_tokenize.FIELDS.TYPE])) {
-          return this.expected("attribute", attr[0][_tokenize.FIELDS.START_POS]);
-        }
-        var pos = 0;
-        var spaceBefore = "";
-        var commentBefore = "";
-        var lastAdded = null;
-        var spaceAfterMeaningfulToken = false;
-        while (pos < len) {
-          var token = attr[pos];
-          var content = this.content(token);
-          var next = attr[pos + 1];
-          switch (token[_tokenize.FIELDS.TYPE]) {
-            case tokens.space:
-              spaceAfterMeaningfulToken = true;
-              if (this.options.lossy) {
-                break;
-              }
-              if (lastAdded) {
-                (0, _util.ensureObject)(node, "spaces", lastAdded);
-                var prevContent = node.spaces[lastAdded].after || "";
-                node.spaces[lastAdded].after = prevContent + content;
-                var existingComment = (0, _util.getProp)(node, "raws", "spaces", lastAdded, "after") || null;
-                if (existingComment) {
-                  node.raws.spaces[lastAdded].after = existingComment + content;
-                }
-              } else {
-                spaceBefore = spaceBefore + content;
-                commentBefore = commentBefore + content;
-              }
-              break;
-            case tokens.asterisk:
-              if (next[_tokenize.FIELDS.TYPE] === tokens.equals) {
-                node.operator = content;
-                lastAdded = "operator";
-              } else if ((!node.namespace || lastAdded === "namespace" && !spaceAfterMeaningfulToken) && next) {
-                if (spaceBefore) {
-                  (0, _util.ensureObject)(node, "spaces", "attribute");
-                  node.spaces.attribute.before = spaceBefore;
-                  spaceBefore = "";
-                }
-                if (commentBefore) {
-                  (0, _util.ensureObject)(node, "raws", "spaces", "attribute");
-                  node.raws.spaces.attribute.before = spaceBefore;
-                  commentBefore = "";
-                }
-                node.namespace = (node.namespace || "") + content;
-                var rawValue = (0, _util.getProp)(node, "raws", "namespace") || null;
-                if (rawValue) {
-                  node.raws.namespace += content;
-                }
-                lastAdded = "namespace";
-              }
-              spaceAfterMeaningfulToken = false;
-              break;
-            case tokens.dollar:
-              if (lastAdded === "value") {
-                var oldRawValue = (0, _util.getProp)(node, "raws", "value");
-                node.value += "$";
-                if (oldRawValue) {
-                  node.raws.value = oldRawValue + "$";
-                }
-                break;
-              }
-            // Falls through
-            case tokens.caret:
-              if (next[_tokenize.FIELDS.TYPE] === tokens.equals) {
-                node.operator = content;
-                lastAdded = "operator";
-              }
-              spaceAfterMeaningfulToken = false;
-              break;
-            case tokens.combinator:
-              if (content === "~" && next[_tokenize.FIELDS.TYPE] === tokens.equals) {
-                node.operator = content;
-                lastAdded = "operator";
-              }
-              if (content !== "|") {
-                spaceAfterMeaningfulToken = false;
-                break;
-              }
-              if (next[_tokenize.FIELDS.TYPE] === tokens.equals) {
-                node.operator = content;
-                lastAdded = "operator";
-              } else if (!node.namespace && !node.attribute) {
-                node.namespace = true;
-              }
-              spaceAfterMeaningfulToken = false;
-              break;
-            case tokens.word:
-              if (next && this.content(next) === "|" && attr[pos + 2] && attr[pos + 2][_tokenize.FIELDS.TYPE] !== tokens.equals && // this look-ahead probably fails with comment nodes involved.
-              !node.operator && !node.namespace) {
-                node.namespace = content;
-                lastAdded = "namespace";
-              } else if (!node.attribute || lastAdded === "attribute" && !spaceAfterMeaningfulToken) {
-                if (spaceBefore) {
-                  (0, _util.ensureObject)(node, "spaces", "attribute");
-                  node.spaces.attribute.before = spaceBefore;
-                  spaceBefore = "";
-                }
-                if (commentBefore) {
-                  (0, _util.ensureObject)(node, "raws", "spaces", "attribute");
-                  node.raws.spaces.attribute.before = commentBefore;
-                  commentBefore = "";
-                }
-                node.attribute = (node.attribute || "") + content;
-                var _rawValue = (0, _util.getProp)(node, "raws", "attribute") || null;
-                if (_rawValue) {
-                  node.raws.attribute += content;
-                }
-                lastAdded = "attribute";
-              } else if (!node.value && node.value !== "" || lastAdded === "value" && !(spaceAfterMeaningfulToken || node.quoteMark)) {
-                var _unescaped = (0, _util.unesc)(content);
-                var _oldRawValue = (0, _util.getProp)(node, "raws", "value") || "";
-                var oldValue = node.value || "";
-                node.value = oldValue + _unescaped;
-                node.quoteMark = null;
-                if (_unescaped !== content || _oldRawValue) {
-                  (0, _util.ensureObject)(node, "raws");
-                  node.raws.value = (_oldRawValue || oldValue) + content;
-                }
-                lastAdded = "value";
-              } else {
-                var insensitive = content === "i" || content === "I";
-                if ((node.value || node.value === "") && (node.quoteMark || spaceAfterMeaningfulToken)) {
-                  node.insensitive = insensitive;
-                  if (!insensitive || content === "I") {
-                    (0, _util.ensureObject)(node, "raws");
-                    node.raws.insensitiveFlag = content;
-                  }
-                  lastAdded = "insensitive";
-                  if (spaceBefore) {
-                    (0, _util.ensureObject)(node, "spaces", "insensitive");
-                    node.spaces.insensitive.before = spaceBefore;
-                    spaceBefore = "";
-                  }
-                  if (commentBefore) {
-                    (0, _util.ensureObject)(node, "raws", "spaces", "insensitive");
-                    node.raws.spaces.insensitive.before = commentBefore;
-                    commentBefore = "";
-                  }
-                } else if (node.value || node.value === "") {
-                  lastAdded = "value";
-                  node.value += content;
-                  if (node.raws.value) {
-                    node.raws.value += content;
-                  }
-                }
-              }
-              spaceAfterMeaningfulToken = false;
-              break;
-            case tokens.str:
-              if (!node.attribute || !node.operator) {
-                return this.error("Expected an attribute followed by an operator preceding the string.", {
-                  index: token[_tokenize.FIELDS.START_POS]
-                });
-              }
-              var _unescapeValue = (0, _attribute.unescapeValue)(content), unescaped = _unescapeValue.unescaped, quoteMark = _unescapeValue.quoteMark;
-              node.value = unescaped;
-              node.quoteMark = quoteMark;
-              lastAdded = "value";
-              (0, _util.ensureObject)(node, "raws");
-              node.raws.value = content;
-              spaceAfterMeaningfulToken = false;
-              break;
-            case tokens.equals:
-              if (!node.attribute) {
-                return this.expected("attribute", token[_tokenize.FIELDS.START_POS], content);
-              }
-              if (node.value) {
-                return this.error('Unexpected "=" found; an operator was already defined.', {
-                  index: token[_tokenize.FIELDS.START_POS]
-                });
-              }
-              node.operator = node.operator ? node.operator + content : content;
-              lastAdded = "operator";
-              spaceAfterMeaningfulToken = false;
-              break;
-            case tokens.comment:
-              if (lastAdded) {
-                if (spaceAfterMeaningfulToken || next && next[_tokenize.FIELDS.TYPE] === tokens.space || lastAdded === "insensitive") {
-                  var lastComment = (0, _util.getProp)(node, "spaces", lastAdded, "after") || "";
-                  var rawLastComment = (0, _util.getProp)(node, "raws", "spaces", lastAdded, "after") || lastComment;
-                  (0, _util.ensureObject)(node, "raws", "spaces", lastAdded);
-                  node.raws.spaces[lastAdded].after = rawLastComment + content;
-                } else {
-                  var lastValue = node[lastAdded] || "";
-                  var rawLastValue = (0, _util.getProp)(node, "raws", lastAdded) || lastValue;
-                  (0, _util.ensureObject)(node, "raws");
-                  node.raws[lastAdded] = rawLastValue + content;
-                }
-              } else {
-                commentBefore = commentBefore + content;
-              }
-              break;
-            default:
-              return this.error('Unexpected "' + content + '" found.', {
-                index: token[_tokenize.FIELDS.START_POS]
-              });
-          }
-          pos++;
-        }
-        unescapeProp(node, "attribute");
-        unescapeProp(node, "namespace");
-        this.newNode(new _attribute["default"](node));
-        this.position++;
-      }, "attribute");
-      _proto.parseWhitespaceEquivalentTokens = /* @__PURE__ */ __name(function parseWhitespaceEquivalentTokens(stopPosition) {
-        if (stopPosition < 0) {
-          stopPosition = this.tokens.length;
-        }
-        var startPosition = this.position;
-        var nodes = [];
-        var space = "";
-        var lastComment = void 0;
-        do {
-          if (WHITESPACE_TOKENS[this.currToken[_tokenize.FIELDS.TYPE]]) {
-            if (!this.options.lossy) {
-              space += this.content();
-            }
-          } else if (this.currToken[_tokenize.FIELDS.TYPE] === tokens.comment) {
-            var spaces = {};
-            if (space) {
-              spaces.before = space;
-              space = "";
-            }
-            lastComment = new _comment["default"]({
-              value: this.content(),
-              source: getTokenSource(this.currToken),
-              sourceIndex: this.currToken[_tokenize.FIELDS.START_POS],
-              spaces
-            });
-            nodes.push(lastComment);
-          }
-        } while (++this.position < stopPosition);
-        if (space) {
-          if (lastComment) {
-            lastComment.spaces.after = space;
-          } else if (!this.options.lossy) {
-            var firstToken = this.tokens[startPosition];
-            var lastToken = this.tokens[this.position - 1];
-            nodes.push(new _string["default"]({
-              value: "",
-              source: getSource(firstToken[_tokenize.FIELDS.START_LINE], firstToken[_tokenize.FIELDS.START_COL], lastToken[_tokenize.FIELDS.END_LINE], lastToken[_tokenize.FIELDS.END_COL]),
-              sourceIndex: firstToken[_tokenize.FIELDS.START_POS],
-              spaces: {
-                before: space,
-                after: ""
-              }
-            }));
-          }
-        }
-        return nodes;
-      }, "parseWhitespaceEquivalentTokens");
-      _proto.convertWhitespaceNodesToSpace = /* @__PURE__ */ __name(function convertWhitespaceNodesToSpace(nodes, requiredSpace) {
-        var _this2 = this;
-        if (requiredSpace === void 0) {
-          requiredSpace = false;
-        }
-        var space = "";
-        var rawSpace = "";
-        nodes.forEach(function(n) {
-          var spaceBefore = _this2.lossySpace(n.spaces.before, requiredSpace);
-          var rawSpaceBefore = _this2.lossySpace(n.rawSpaceBefore, requiredSpace);
-          space += spaceBefore + _this2.lossySpace(n.spaces.after, requiredSpace && spaceBefore.length === 0);
-          rawSpace += spaceBefore + n.value + _this2.lossySpace(n.rawSpaceAfter, requiredSpace && rawSpaceBefore.length === 0);
-        });
-        if (rawSpace === space) {
-          rawSpace = void 0;
-        }
-        var result = {
-          space,
-          rawSpace
-        };
-        return result;
-      }, "convertWhitespaceNodesToSpace");
-      _proto.isNamedCombinator = /* @__PURE__ */ __name(function isNamedCombinator(position) {
-        if (position === void 0) {
-          position = this.position;
-        }
-        return this.tokens[position + 0] && this.tokens[position + 0][_tokenize.FIELDS.TYPE] === tokens.slash && this.tokens[position + 1] && this.tokens[position + 1][_tokenize.FIELDS.TYPE] === tokens.word && this.tokens[position + 2] && this.tokens[position + 2][_tokenize.FIELDS.TYPE] === tokens.slash;
-      }, "isNamedCombinator");
-      _proto.namedCombinator = /* @__PURE__ */ __name(function namedCombinator() {
-        if (this.isNamedCombinator()) {
-          var nameRaw = this.content(this.tokens[this.position + 1]);
-          var name = (0, _util.unesc)(nameRaw).toLowerCase();
-          var raws = {};
-          if (name !== nameRaw) {
-            raws.value = "/" + nameRaw + "/";
-          }
-          var node = new _combinator["default"]({
-            value: "/" + name + "/",
-            source: getSource(this.currToken[_tokenize.FIELDS.START_LINE], this.currToken[_tokenize.FIELDS.START_COL], this.tokens[this.position + 2][_tokenize.FIELDS.END_LINE], this.tokens[this.position + 2][_tokenize.FIELDS.END_COL]),
-            sourceIndex: this.currToken[_tokenize.FIELDS.START_POS],
-            raws
-          });
-          this.position = this.position + 3;
-          return node;
-        } else {
-          this.unexpected();
-        }
-      }, "namedCombinator");
-      _proto.combinator = /* @__PURE__ */ __name(function combinator() {
-        var _this3 = this;
-        if (this.content() === "|") {
-          return this.namespace();
-        }
-        var nextSigTokenPos = this.locateNextMeaningfulToken(this.position);
-        if (nextSigTokenPos < 0 || this.tokens[nextSigTokenPos][_tokenize.FIELDS.TYPE] === tokens.comma || this.tokens[nextSigTokenPos][_tokenize.FIELDS.TYPE] === tokens.closeParenthesis) {
-          var nodes = this.parseWhitespaceEquivalentTokens(nextSigTokenPos);
-          if (nodes.length > 0) {
-            var last = this.current.last;
-            if (last) {
-              var _this$convertWhitespa = this.convertWhitespaceNodesToSpace(nodes), space = _this$convertWhitespa.space, rawSpace = _this$convertWhitespa.rawSpace;
-              if (rawSpace !== void 0) {
-                last.rawSpaceAfter += rawSpace;
-              }
-              last.spaces.after += space;
-            } else {
-              nodes.forEach(function(n) {
-                return _this3.newNode(n);
-              });
-            }
-          }
-          return;
-        }
-        var firstToken = this.currToken;
-        var spaceOrDescendantSelectorNodes = void 0;
-        if (nextSigTokenPos > this.position) {
-          spaceOrDescendantSelectorNodes = this.parseWhitespaceEquivalentTokens(nextSigTokenPos);
-        }
-        var node;
-        if (this.isNamedCombinator()) {
-          node = this.namedCombinator();
-        } else if (this.currToken[_tokenize.FIELDS.TYPE] === tokens.combinator) {
-          node = new _combinator["default"]({
-            value: this.content(),
-            source: getTokenSource(this.currToken),
-            sourceIndex: this.currToken[_tokenize.FIELDS.START_POS]
-          });
-          this.position++;
-        } else if (WHITESPACE_TOKENS[this.currToken[_tokenize.FIELDS.TYPE]]) {
-        } else if (!spaceOrDescendantSelectorNodes) {
-          this.unexpected();
-        }
-        if (node) {
-          if (spaceOrDescendantSelectorNodes) {
-            var _this$convertWhitespa2 = this.convertWhitespaceNodesToSpace(spaceOrDescendantSelectorNodes), _space = _this$convertWhitespa2.space, _rawSpace = _this$convertWhitespa2.rawSpace;
-            node.spaces.before = _space;
-            node.rawSpaceBefore = _rawSpace;
-          }
-        } else {
-          var _this$convertWhitespa3 = this.convertWhitespaceNodesToSpace(spaceOrDescendantSelectorNodes, true), _space2 = _this$convertWhitespa3.space, _rawSpace2 = _this$convertWhitespa3.rawSpace;
-          if (!_rawSpace2) {
-            _rawSpace2 = _space2;
-          }
-          var spaces = {};
-          var raws = {
-            spaces: {}
-          };
-          if (_space2.endsWith(" ") && _rawSpace2.endsWith(" ")) {
-            spaces.before = _space2.slice(0, _space2.length - 1);
-            raws.spaces.before = _rawSpace2.slice(0, _rawSpace2.length - 1);
-          } else if (_space2.startsWith(" ") && _rawSpace2.startsWith(" ")) {
-            spaces.after = _space2.slice(1);
-            raws.spaces.after = _rawSpace2.slice(1);
-          } else {
-            raws.value = _rawSpace2;
-          }
-          node = new _combinator["default"]({
-            value: " ",
-            source: getTokenSourceSpan(firstToken, this.tokens[this.position - 1]),
-            sourceIndex: firstToken[_tokenize.FIELDS.START_POS],
-            spaces,
-            raws
-          });
-        }
-        if (this.currToken && this.currToken[_tokenize.FIELDS.TYPE] === tokens.space) {
-          node.spaces.after = this.optionalSpace(this.content());
-          this.position++;
-        }
-        return this.newNode(node);
-      }, "combinator");
-      _proto.comma = /* @__PURE__ */ __name(function comma() {
-        if (this.position === this.tokens.length - 1) {
-          this.root.trailingComma = true;
-          this.position++;
-          return;
-        }
-        this.current._inferEndPosition();
-        var selector = new _selector["default"]({
-          source: {
-            start: tokenStart(this.tokens[this.position + 1])
-          },
-          sourceIndex: this.tokens[this.position + 1][_tokenize.FIELDS.START_POS]
-        });
-        this.current.parent.append(selector);
-        this.current = selector;
-        this.position++;
-      }, "comma");
-      _proto.comment = /* @__PURE__ */ __name(function comment() {
-        var current = this.currToken;
-        this.newNode(new _comment["default"]({
-          value: this.content(),
-          source: getTokenSource(current),
-          sourceIndex: current[_tokenize.FIELDS.START_POS]
-        }));
-        this.position++;
-      }, "comment");
-      _proto.error = /* @__PURE__ */ __name(function error(message, opts) {
-        throw this.root.error(message, opts);
-      }, "error");
-      _proto.missingBackslash = /* @__PURE__ */ __name(function missingBackslash() {
-        return this.error("Expected a backslash preceding the semicolon.", {
-          index: this.currToken[_tokenize.FIELDS.START_POS]
-        });
-      }, "missingBackslash");
-      _proto.missingParenthesis = /* @__PURE__ */ __name(function missingParenthesis() {
-        return this.expected("opening parenthesis", this.currToken[_tokenize.FIELDS.START_POS]);
-      }, "missingParenthesis");
-      _proto.missingSquareBracket = /* @__PURE__ */ __name(function missingSquareBracket() {
-        return this.expected("opening square bracket", this.currToken[_tokenize.FIELDS.START_POS]);
-      }, "missingSquareBracket");
-      _proto.unexpected = /* @__PURE__ */ __name(function unexpected() {
-        return this.error("Unexpected '" + this.content() + "'. Escaping special characters with \\ may help.", this.currToken[_tokenize.FIELDS.START_POS]);
-      }, "unexpected");
-      _proto.unexpectedPipe = /* @__PURE__ */ __name(function unexpectedPipe() {
-        return this.error("Unexpected '|'.", this.currToken[_tokenize.FIELDS.START_POS]);
-      }, "unexpectedPipe");
-      _proto.namespace = /* @__PURE__ */ __name(function namespace() {
-        var before = this.prevToken && this.content(this.prevToken) || true;
-        if (this.nextToken[_tokenize.FIELDS.TYPE] === tokens.word) {
-          this.position++;
-          return this.word(before);
-        } else if (this.nextToken[_tokenize.FIELDS.TYPE] === tokens.asterisk) {
-          this.position++;
-          return this.universal(before);
-        }
-        this.unexpectedPipe();
-      }, "namespace");
-      _proto.nesting = /* @__PURE__ */ __name(function nesting() {
-        if (this.nextToken) {
-          var nextContent = this.content(this.nextToken);
-          if (nextContent === "|") {
-            this.position++;
-            return;
-          }
-        }
-        var current = this.currToken;
-        this.newNode(new _nesting["default"]({
-          value: this.content(),
-          source: getTokenSource(current),
-          sourceIndex: current[_tokenize.FIELDS.START_POS]
-        }));
-        this.position++;
-      }, "nesting");
-      _proto.parentheses = /* @__PURE__ */ __name(function parentheses() {
-        var last = this.current.last;
-        var unbalanced = 1;
-        this.position++;
-        if (last && last.type === types.PSEUDO) {
-          var selector = new _selector["default"]({
-            source: {
-              start: tokenStart(this.tokens[this.position])
-            },
-            sourceIndex: this.tokens[this.position][_tokenize.FIELDS.START_POS]
-          });
-          var cache = this.current;
-          last.append(selector);
-          this.current = selector;
-          while (this.position < this.tokens.length && unbalanced) {
-            if (this.currToken[_tokenize.FIELDS.TYPE] === tokens.openParenthesis) {
-              unbalanced++;
-            }
-            if (this.currToken[_tokenize.FIELDS.TYPE] === tokens.closeParenthesis) {
-              unbalanced--;
-            }
-            if (unbalanced) {
-              this.parse();
-            } else {
-              this.current.source.end = tokenEnd(this.currToken);
-              this.current.parent.source.end = tokenEnd(this.currToken);
-              this.position++;
-            }
-          }
-          this.current = cache;
-        } else {
-          var parenStart = this.currToken;
-          var parenValue = "(";
-          var parenEnd;
-          while (this.position < this.tokens.length && unbalanced) {
-            if (this.currToken[_tokenize.FIELDS.TYPE] === tokens.openParenthesis) {
-              unbalanced++;
-            }
-            if (this.currToken[_tokenize.FIELDS.TYPE] === tokens.closeParenthesis) {
-              unbalanced--;
-            }
-            parenEnd = this.currToken;
-            parenValue += this.parseParenthesisToken(this.currToken);
-            this.position++;
-          }
-          if (last) {
-            last.appendToPropertyAndEscape("value", parenValue, parenValue);
-          } else {
-            this.newNode(new _string["default"]({
-              value: parenValue,
-              source: getSource(parenStart[_tokenize.FIELDS.START_LINE], parenStart[_tokenize.FIELDS.START_COL], parenEnd[_tokenize.FIELDS.END_LINE], parenEnd[_tokenize.FIELDS.END_COL]),
-              sourceIndex: parenStart[_tokenize.FIELDS.START_POS]
-            }));
-          }
-        }
-        if (unbalanced) {
-          return this.expected("closing parenthesis", this.currToken[_tokenize.FIELDS.START_POS]);
-        }
-      }, "parentheses");
-      _proto.pseudo = /* @__PURE__ */ __name(function pseudo() {
-        var _this4 = this;
-        var pseudoStr = "";
-        var startingToken = this.currToken;
-        while (this.currToken && this.currToken[_tokenize.FIELDS.TYPE] === tokens.colon) {
-          pseudoStr += this.content();
-          this.position++;
-        }
-        if (!this.currToken) {
-          return this.expected(["pseudo-class", "pseudo-element"], this.position - 1);
-        }
-        if (this.currToken[_tokenize.FIELDS.TYPE] === tokens.word) {
-          this.splitWord(false, function(first, length) {
-            pseudoStr += first;
-            _this4.newNode(new _pseudo["default"]({
-              value: pseudoStr,
-              source: getTokenSourceSpan(startingToken, _this4.currToken),
-              sourceIndex: startingToken[_tokenize.FIELDS.START_POS]
-            }));
-            if (length > 1 && _this4.nextToken && _this4.nextToken[_tokenize.FIELDS.TYPE] === tokens.openParenthesis) {
-              _this4.error("Misplaced parenthesis.", {
-                index: _this4.nextToken[_tokenize.FIELDS.START_POS]
-              });
-            }
-          });
-        } else {
-          return this.expected(["pseudo-class", "pseudo-element"], this.currToken[_tokenize.FIELDS.START_POS]);
-        }
-      }, "pseudo");
-      _proto.space = /* @__PURE__ */ __name(function space() {
-        var content = this.content();
-        if (this.position === 0 || this.prevToken[_tokenize.FIELDS.TYPE] === tokens.comma || this.prevToken[_tokenize.FIELDS.TYPE] === tokens.openParenthesis || this.current.nodes.every(function(node) {
-          return node.type === "comment";
-        })) {
-          this.spaces = this.optionalSpace(content);
-          this.position++;
-        } else if (this.position === this.tokens.length - 1 || this.nextToken[_tokenize.FIELDS.TYPE] === tokens.comma || this.nextToken[_tokenize.FIELDS.TYPE] === tokens.closeParenthesis) {
-          this.current.last.spaces.after = this.optionalSpace(content);
-          this.position++;
-        } else {
-          this.combinator();
-        }
-      }, "space");
-      _proto.string = /* @__PURE__ */ __name(function string() {
-        var current = this.currToken;
-        this.newNode(new _string["default"]({
-          value: this.content(),
-          source: getTokenSource(current),
-          sourceIndex: current[_tokenize.FIELDS.START_POS]
-        }));
-        this.position++;
-      }, "string");
-      _proto.universal = /* @__PURE__ */ __name(function universal(namespace) {
-        var nextToken = this.nextToken;
-        if (nextToken && this.content(nextToken) === "|") {
-          this.position++;
-          return this.namespace();
-        }
-        var current = this.currToken;
-        this.newNode(new _universal["default"]({
-          value: this.content(),
-          source: getTokenSource(current),
-          sourceIndex: current[_tokenize.FIELDS.START_POS]
-        }), namespace);
-        this.position++;
-      }, "universal");
-      _proto.splitWord = /* @__PURE__ */ __name(function splitWord(namespace, firstCallback) {
-        var _this5 = this;
-        var nextToken = this.nextToken;
-        var word = this.content();
-        while (nextToken && ~[tokens.dollar, tokens.caret, tokens.equals, tokens.word].indexOf(nextToken[_tokenize.FIELDS.TYPE])) {
-          this.position++;
-          var current = this.content();
-          word += current;
-          if (current.lastIndexOf("\\") === current.length - 1) {
-            var next = this.nextToken;
-            if (next && next[_tokenize.FIELDS.TYPE] === tokens.space) {
-              word += this.requiredSpace(this.content(next));
-              this.position++;
-            }
-          }
-          nextToken = this.nextToken;
-        }
-        var hasClass = indexesOf(word, ".").filter(function(i) {
-          var escapedDot = word[i - 1] === "\\";
-          var isKeyframesPercent = /^\d+\.\d+%$/.test(word);
-          return !escapedDot && !isKeyframesPercent;
-        });
-        var hasId = indexesOf(word, "#").filter(function(i) {
-          return word[i - 1] !== "\\";
-        });
-        var interpolations = indexesOf(word, "#{");
-        if (interpolations.length) {
-          hasId = hasId.filter(function(hashIndex) {
-            return !~interpolations.indexOf(hashIndex);
-          });
-        }
-        var indices = (0, _sortAscending["default"])(uniqs([0].concat(hasClass, hasId)));
-        indices.forEach(function(ind, i) {
-          var index = indices[i + 1] || word.length;
-          var value = word.slice(ind, index);
-          if (i === 0 && firstCallback) {
-            return firstCallback.call(_this5, value, indices.length);
-          }
-          var node;
-          var current2 = _this5.currToken;
-          var sourceIndex = current2[_tokenize.FIELDS.START_POS] + indices[i];
-          var source = getSource(current2[1], current2[2] + ind, current2[3], current2[2] + (index - 1));
-          if (~hasClass.indexOf(ind)) {
-            var classNameOpts = {
-              value: value.slice(1),
-              source,
-              sourceIndex
-            };
-            node = new _className["default"](unescapeProp(classNameOpts, "value"));
-          } else if (~hasId.indexOf(ind)) {
-            var idOpts = {
-              value: value.slice(1),
-              source,
-              sourceIndex
-            };
-            node = new _id["default"](unescapeProp(idOpts, "value"));
-          } else {
-            var tagOpts = {
-              value,
-              source,
-              sourceIndex
-            };
-            unescapeProp(tagOpts, "value");
-            node = new _tag["default"](tagOpts);
-          }
-          _this5.newNode(node, namespace);
-          namespace = null;
-        });
-        this.position++;
-      }, "splitWord");
-      _proto.word = /* @__PURE__ */ __name(function word(namespace) {
-        var nextToken = this.nextToken;
-        if (nextToken && this.content(nextToken) === "|") {
-          this.position++;
-          return this.namespace();
-        }
-        return this.splitWord(namespace);
-      }, "word");
-      _proto.loop = /* @__PURE__ */ __name(function loop() {
-        while (this.position < this.tokens.length) {
-          this.parse(true);
-        }
-        this.current._inferEndPosition();
-        return this.root;
-      }, "loop");
-      _proto.parse = /* @__PURE__ */ __name(function parse4(throwOnParenthesis) {
-        switch (this.currToken[_tokenize.FIELDS.TYPE]) {
-          case tokens.space:
-            this.space();
-            break;
-          case tokens.comment:
-            this.comment();
-            break;
-          case tokens.openParenthesis:
-            this.parentheses();
-            break;
-          case tokens.closeParenthesis:
-            if (throwOnParenthesis) {
-              this.missingParenthesis();
-            }
-            break;
-          case tokens.openSquare:
-            this.attribute();
-            break;
-          case tokens.dollar:
-          case tokens.caret:
-          case tokens.equals:
-          case tokens.word:
-            this.word();
-            break;
-          case tokens.colon:
-            this.pseudo();
-            break;
-          case tokens.comma:
-            this.comma();
-            break;
-          case tokens.asterisk:
-            this.universal();
-            break;
-          case tokens.ampersand:
-            this.nesting();
-            break;
-          case tokens.slash:
-          case tokens.combinator:
-            this.combinator();
-            break;
-          case tokens.str:
-            this.string();
-            break;
-          // These cases throw; no break needed.
-          case tokens.closeSquare:
-            this.missingSquareBracket();
-          case tokens.semicolon:
-            this.missingBackslash();
-          default:
-            this.unexpected();
-        }
-      }, "parse");
-      _proto.expected = /* @__PURE__ */ __name(function expected(description, index, found) {
-        if (Array.isArray(description)) {
-          var last = description.pop();
-          description = description.join(", ") + " or " + last;
-        }
-        var an = /^[aeiou]/.test(description[0]) ? "an" : "a";
-        if (!found) {
-          return this.error("Expected " + an + " " + description + ".", {
-            index
-          });
-        }
-        return this.error("Expected " + an + " " + description + ', found "' + found + '" instead.', {
-          index
-        });
-      }, "expected");
-      _proto.requiredSpace = /* @__PURE__ */ __name(function requiredSpace(space) {
-        return this.options.lossy ? " " : space;
-      }, "requiredSpace");
-      _proto.optionalSpace = /* @__PURE__ */ __name(function optionalSpace(space) {
-        return this.options.lossy ? "" : space;
-      }, "optionalSpace");
-      _proto.lossySpace = /* @__PURE__ */ __name(function lossySpace(space, required) {
-        if (this.options.lossy) {
-          return required ? " " : "";
-        } else {
-          return space;
-        }
-      }, "lossySpace");
-      _proto.parseParenthesisToken = /* @__PURE__ */ __name(function parseParenthesisToken(token) {
-        var content = this.content(token);
-        if (token[_tokenize.FIELDS.TYPE] === tokens.space) {
-          return this.requiredSpace(content);
-        } else {
-          return content;
-        }
-      }, "parseParenthesisToken");
-      _proto.newNode = /* @__PURE__ */ __name(function newNode(node, namespace) {
-        if (namespace) {
-          if (/^ +$/.test(namespace)) {
-            if (!this.options.lossy) {
-              this.spaces = (this.spaces || "") + namespace;
-            }
-            namespace = true;
-          }
-          node.namespace = namespace;
-          unescapeProp(node, "namespace");
-        }
-        if (this.spaces) {
-          node.spaces.before = this.spaces;
-          this.spaces = "";
-        }
-        return this.current.append(node);
-      }, "newNode");
-      _proto.content = /* @__PURE__ */ __name(function content(token) {
-        if (token === void 0) {
-          token = this.currToken;
-        }
-        return this.css.slice(token[_tokenize.FIELDS.START_POS], token[_tokenize.FIELDS.END_POS]);
-      }, "content");
-      _proto.locateNextMeaningfulToken = /* @__PURE__ */ __name(function locateNextMeaningfulToken(startPosition) {
-        if (startPosition === void 0) {
-          startPosition = this.position + 1;
-        }
-        var searchPosition = startPosition;
-        while (searchPosition < this.tokens.length) {
-          if (WHITESPACE_EQUIV_TOKENS[this.tokens[searchPosition][_tokenize.FIELDS.TYPE]]) {
-            searchPosition++;
-            continue;
-          } else {
-            return searchPosition;
-          }
-        }
-        return -1;
-      }, "locateNextMeaningfulToken");
-      _createClass(Parser3, [{
-        key: "currToken",
-        get: /* @__PURE__ */ __name(function get() {
-          return this.tokens[this.position];
-        }, "get")
-      }, {
-        key: "nextToken",
-        get: /* @__PURE__ */ __name(function get() {
-          return this.tokens[this.position + 1];
-        }, "get")
-      }, {
-        key: "prevToken",
-        get: /* @__PURE__ */ __name(function get() {
-          return this.tokens[this.position - 1];
-        }, "get")
-      }]);
-      return Parser3;
-    }();
-    exports["default"] = Parser2;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/processor.js
-var require_processor = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/processor.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _parser = _interopRequireDefault(require_parser());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    var Processor4 = /* @__PURE__ */ function() {
-      function Processor5(func, options) {
-        this.func = func || /* @__PURE__ */ __name(function noop() {
-        }, "noop");
-        this.funcRes = null;
-        this.options = options;
-      }
-      __name(Processor5, "Processor");
-      var _proto = Processor5.prototype;
-      _proto._shouldUpdateSelector = /* @__PURE__ */ __name(function _shouldUpdateSelector(rule, options) {
-        if (options === void 0) {
-          options = {};
-        }
-        var merged = Object.assign({}, this.options, options);
-        if (merged.updateSelector === false) {
-          return false;
-        } else {
-          return typeof rule !== "string";
-        }
-      }, "_shouldUpdateSelector");
-      _proto._isLossy = /* @__PURE__ */ __name(function _isLossy(options) {
-        if (options === void 0) {
-          options = {};
-        }
-        var merged = Object.assign({}, this.options, options);
-        if (merged.lossless === false) {
-          return true;
-        } else {
-          return false;
-        }
-      }, "_isLossy");
-      _proto._root = /* @__PURE__ */ __name(function _root(rule, options) {
-        if (options === void 0) {
-          options = {};
-        }
-        var parser = new _parser["default"](rule, this._parseOptions(options));
-        return parser.root;
-      }, "_root");
-      _proto._parseOptions = /* @__PURE__ */ __name(function _parseOptions(options) {
-        return {
-          lossy: this._isLossy(options)
-        };
-      }, "_parseOptions");
-      _proto._run = /* @__PURE__ */ __name(function _run(rule, options) {
-        var _this = this;
-        if (options === void 0) {
-          options = {};
-        }
-        return new Promise(function(resolve, reject) {
-          try {
-            var root = _this._root(rule, options);
-            Promise.resolve(_this.func(root)).then(function(transform) {
-              var string = void 0;
-              if (_this._shouldUpdateSelector(rule, options)) {
-                string = root.toString();
-                rule.selector = string;
-              }
-              return {
-                transform,
-                root,
-                string
-              };
-            }).then(resolve, reject);
-          } catch (e) {
-            reject(e);
-            return;
-          }
-        });
-      }, "_run");
-      _proto._runSync = /* @__PURE__ */ __name(function _runSync(rule, options) {
-        if (options === void 0) {
-          options = {};
-        }
-        var root = this._root(rule, options);
-        var transform = this.func(root);
-        if (transform && typeof transform.then === "function") {
-          throw new Error("Selector processor returned a promise to a synchronous call.");
-        }
-        var string = void 0;
-        if (options.updateSelector && typeof rule !== "string") {
-          string = root.toString();
-          rule.selector = string;
-        }
-        return {
-          transform,
-          root,
-          string
-        };
-      }, "_runSync");
-      _proto.ast = /* @__PURE__ */ __name(function ast(rule, options) {
-        return this._run(rule, options).then(function(result) {
-          return result.root;
-        });
-      }, "ast");
-      _proto.astSync = /* @__PURE__ */ __name(function astSync(rule, options) {
-        return this._runSync(rule, options).root;
-      }, "astSync");
-      _proto.transform = /* @__PURE__ */ __name(function transform(rule, options) {
-        return this._run(rule, options).then(function(result) {
-          return result.transform;
-        });
-      }, "transform");
-      _proto.transformSync = /* @__PURE__ */ __name(function transformSync(rule, options) {
-        return this._runSync(rule, options).transform;
-      }, "transformSync");
-      _proto.process = /* @__PURE__ */ __name(function process2(rule, options) {
-        return this._run(rule, options).then(function(result) {
-          return result.string || result.root.toString();
-        });
-      }, "process");
-      _proto.processSync = /* @__PURE__ */ __name(function processSync(rule, options) {
-        var result = this._runSync(rule, options);
-        return result.string || result.root.toString();
-      }, "processSync");
-      return Processor5;
-    }();
-    exports["default"] = Processor4;
-    module.exports = exports.default;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/constructors.js
-var require_constructors = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/constructors.js"(exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.universal = exports.tag = exports.string = exports.selector = exports.root = exports.pseudo = exports.nesting = exports.id = exports.comment = exports.combinator = exports.className = exports.attribute = void 0;
-    var _attribute = _interopRequireDefault(require_attribute());
-    var _className = _interopRequireDefault(require_className());
-    var _combinator = _interopRequireDefault(require_combinator());
-    var _comment = _interopRequireDefault(require_comment());
-    var _id = _interopRequireDefault(require_id());
-    var _nesting = _interopRequireDefault(require_nesting());
-    var _pseudo = _interopRequireDefault(require_pseudo());
-    var _root = _interopRequireDefault(require_root());
-    var _selector = _interopRequireDefault(require_selector());
-    var _string = _interopRequireDefault(require_string());
-    var _tag = _interopRequireDefault(require_tag());
-    var _universal = _interopRequireDefault(require_universal());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    var attribute = /* @__PURE__ */ __name(function attribute2(opts) {
-      return new _attribute["default"](opts);
-    }, "attribute");
-    exports.attribute = attribute;
-    var className = /* @__PURE__ */ __name(function className2(opts) {
-      return new _className["default"](opts);
-    }, "className");
-    exports.className = className;
-    var combinator = /* @__PURE__ */ __name(function combinator2(opts) {
-      return new _combinator["default"](opts);
-    }, "combinator");
-    exports.combinator = combinator;
-    var comment = /* @__PURE__ */ __name(function comment2(opts) {
-      return new _comment["default"](opts);
-    }, "comment");
-    exports.comment = comment;
-    var id = /* @__PURE__ */ __name(function id2(opts) {
-      return new _id["default"](opts);
-    }, "id");
-    exports.id = id;
-    var nesting = /* @__PURE__ */ __name(function nesting2(opts) {
-      return new _nesting["default"](opts);
-    }, "nesting");
-    exports.nesting = nesting;
-    var pseudo = /* @__PURE__ */ __name(function pseudo2(opts) {
-      return new _pseudo["default"](opts);
-    }, "pseudo");
-    exports.pseudo = pseudo;
-    var root = /* @__PURE__ */ __name(function root2(opts) {
-      return new _root["default"](opts);
-    }, "root");
-    exports.root = root;
-    var selector = /* @__PURE__ */ __name(function selector2(opts) {
-      return new _selector["default"](opts);
-    }, "selector");
-    exports.selector = selector;
-    var string = /* @__PURE__ */ __name(function string2(opts) {
-      return new _string["default"](opts);
-    }, "string");
-    exports.string = string;
-    var tag = /* @__PURE__ */ __name(function tag2(opts) {
-      return new _tag["default"](opts);
-    }, "tag");
-    exports.tag = tag;
-    var universal = /* @__PURE__ */ __name(function universal2(opts) {
-      return new _universal["default"](opts);
-    }, "universal");
-    exports.universal = universal;
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/guards.js
-var require_guards = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/guards.js"(exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.isComment = exports.isCombinator = exports.isClassName = exports.isAttribute = void 0;
-    exports.isContainer = isContainer;
-    exports.isIdentifier = void 0;
-    exports.isNamespace = isNamespace;
-    exports.isNesting = void 0;
-    exports.isNode = isNode;
-    exports.isPseudo = void 0;
-    exports.isPseudoClass = isPseudoClass;
-    exports.isPseudoElement = isPseudoElement;
-    exports.isUniversal = exports.isTag = exports.isString = exports.isSelector = exports.isRoot = void 0;
-    var _types = require_types();
-    var _IS_TYPE;
-    var IS_TYPE = (_IS_TYPE = {}, _IS_TYPE[_types.ATTRIBUTE] = true, _IS_TYPE[_types.CLASS] = true, _IS_TYPE[_types.COMBINATOR] = true, _IS_TYPE[_types.COMMENT] = true, _IS_TYPE[_types.ID] = true, _IS_TYPE[_types.NESTING] = true, _IS_TYPE[_types.PSEUDO] = true, _IS_TYPE[_types.ROOT] = true, _IS_TYPE[_types.SELECTOR] = true, _IS_TYPE[_types.STRING] = true, _IS_TYPE[_types.TAG] = true, _IS_TYPE[_types.UNIVERSAL] = true, _IS_TYPE);
-    function isNode(node) {
-      return typeof node === "object" && IS_TYPE[node.type];
-    }
-    __name(isNode, "isNode");
-    function isNodeType(type, node) {
-      return isNode(node) && node.type === type;
-    }
-    __name(isNodeType, "isNodeType");
-    var isAttribute = isNodeType.bind(null, _types.ATTRIBUTE);
-    exports.isAttribute = isAttribute;
-    var isClassName = isNodeType.bind(null, _types.CLASS);
-    exports.isClassName = isClassName;
-    var isCombinator = isNodeType.bind(null, _types.COMBINATOR);
-    exports.isCombinator = isCombinator;
-    var isComment = isNodeType.bind(null, _types.COMMENT);
-    exports.isComment = isComment;
-    var isIdentifier = isNodeType.bind(null, _types.ID);
-    exports.isIdentifier = isIdentifier;
-    var isNesting = isNodeType.bind(null, _types.NESTING);
-    exports.isNesting = isNesting;
-    var isPseudo = isNodeType.bind(null, _types.PSEUDO);
-    exports.isPseudo = isPseudo;
-    var isRoot = isNodeType.bind(null, _types.ROOT);
-    exports.isRoot = isRoot;
-    var isSelector = isNodeType.bind(null, _types.SELECTOR);
-    exports.isSelector = isSelector;
-    var isString = isNodeType.bind(null, _types.STRING);
-    exports.isString = isString;
-    var isTag = isNodeType.bind(null, _types.TAG);
-    exports.isTag = isTag;
-    var isUniversal = isNodeType.bind(null, _types.UNIVERSAL);
-    exports.isUniversal = isUniversal;
-    function isPseudoElement(node) {
-      return isPseudo(node) && node.value && (node.value.startsWith("::") || node.value.toLowerCase() === ":before" || node.value.toLowerCase() === ":after" || node.value.toLowerCase() === ":first-letter" || node.value.toLowerCase() === ":first-line");
-    }
-    __name(isPseudoElement, "isPseudoElement");
-    function isPseudoClass(node) {
-      return isPseudo(node) && !isPseudoElement(node);
-    }
-    __name(isPseudoClass, "isPseudoClass");
-    function isContainer(node) {
-      return !!(isNode(node) && node.walk);
-    }
-    __name(isContainer, "isContainer");
-    function isNamespace(node) {
-      return isAttribute(node) || isTag(node);
-    }
-    __name(isNamespace, "isNamespace");
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/index.js
-var require_selectors = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/selectors/index.js"(exports) {
-    "use strict";
-    exports.__esModule = true;
-    var _types = require_types();
-    Object.keys(_types).forEach(function(key) {
-      if (key === "default" || key === "__esModule") return;
-      if (key in exports && exports[key] === _types[key]) return;
-      exports[key] = _types[key];
-    });
-    var _constructors = require_constructors();
-    Object.keys(_constructors).forEach(function(key) {
-      if (key === "default" || key === "__esModule") return;
-      if (key in exports && exports[key] === _constructors[key]) return;
-      exports[key] = _constructors[key];
-    });
-    var _guards = require_guards();
-    Object.keys(_guards).forEach(function(key) {
-      if (key === "default" || key === "__esModule") return;
-      if (key in exports && exports[key] === _guards[key]) return;
-      exports[key] = _guards[key];
-    });
-  }
-});
-
-// node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/index.js
-var require_dist = __commonJS({
-  "node_modules/.pnpm/postcss-selector-parser@6.1.2/node_modules/postcss-selector-parser/dist/index.js"(exports, module) {
-    "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    var _processor = _interopRequireDefault(require_processor());
-    var selectors = _interopRequireWildcard(require_selectors());
-    function _getRequireWildcardCache(nodeInterop) {
-      if (typeof WeakMap !== "function") return null;
-      var cacheBabelInterop = /* @__PURE__ */ new WeakMap();
-      var cacheNodeInterop = /* @__PURE__ */ new WeakMap();
-      return (_getRequireWildcardCache = /* @__PURE__ */ __name(function _getRequireWildcardCache2(nodeInterop2) {
-        return nodeInterop2 ? cacheNodeInterop : cacheBabelInterop;
-      }, "_getRequireWildcardCache"))(nodeInterop);
-    }
-    __name(_getRequireWildcardCache, "_getRequireWildcardCache");
-    function _interopRequireWildcard(obj, nodeInterop) {
-      if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-      }
-      if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return { "default": obj };
-      }
-      var cache = _getRequireWildcardCache(nodeInterop);
-      if (cache && cache.has(obj)) {
-        return cache.get(obj);
-      }
-      var newObj = {};
-      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var key in obj) {
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-          if (desc && (desc.get || desc.set)) {
-            Object.defineProperty(newObj, key, desc);
-          } else {
-            newObj[key] = obj[key];
-          }
-        }
-      }
-      newObj["default"] = obj;
-      if (cache) {
-        cache.set(obj, newObj);
-      }
-      return newObj;
-    }
-    __name(_interopRequireWildcard, "_interopRequireWildcard");
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { "default": obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    var parser = /* @__PURE__ */ __name(function parser2(processor) {
-      return new _processor["default"](processor);
-    }, "parser");
-    Object.assign(parser, selectors);
-    delete parser.__esModule;
-    var _default = parser;
-    exports["default"] = _default;
-    module.exports = exports.default;
   }
 });
 
@@ -6549,9 +2825,9 @@ var NoWorkResult = class {
     this._css = css;
     this._opts = opts;
     this._map = void 0;
-    let root;
-    const str = stringify;
-    this.result = new Result(this._processor, root, this._opts);
+    let root2;
+    const str2 = stringify;
+    this.result = new Result(this._processor, root2, this._opts);
     this.result.css = css;
     const self = this;
     Object.defineProperty(this.result, "root", {
@@ -6559,7 +2835,7 @@ var NoWorkResult = class {
         return self.root;
       }
     });
-    const map = new MapGenerator(str, root, this._opts, css);
+    const map = new MapGenerator(str2, root2, this._opts, css);
     if (map.isMap()) {
       const [generatedCSS, generatedMap] = map.generate();
       if (generatedCSS) {
@@ -6625,18 +2901,18 @@ var NoWorkResult = class {
     if (this._root) {
       return this._root;
     }
-    let root;
-    const parser = parse2;
+    let root2;
+    const parser2 = parse2;
     try {
-      root = parser(this._css, this._opts);
+      root2 = parser2(this._css, this._opts);
     } catch (error) {
       this.error = error;
     }
     if (this.error) {
       throw this.error;
     } else {
-      this._root = root;
-      return root;
+      this._root = root2;
+      return root2;
     }
   }
   get [Symbol.toStringTag]() {
@@ -6748,32 +3024,32 @@ var LazyResult3 = class _LazyResult {
   constructor(processor, css, opts) {
     this.stringified = false;
     this.processed = false;
-    let root;
+    let root2;
     if (typeof css === "object" && css !== null && (css.type === "root" || css.type === "document")) {
-      root = cleanMarks(css);
+      root2 = cleanMarks(css);
     } else if (css instanceof _LazyResult || css instanceof Result2) {
-      root = cleanMarks(css.root);
+      root2 = cleanMarks(css.root);
       if (css.map) {
         if (typeof opts.map === "undefined") opts.map = {};
         if (!opts.map.inline) opts.map.inline = false;
         opts.map.prev = css.map;
       }
     } else {
-      let parser = parse3;
-      if (opts.syntax) parser = opts.syntax.parse;
-      if (opts.parser) parser = opts.parser;
-      if (parser.parse) parser = parser.parse;
+      let parser2 = parse3;
+      if (opts.syntax) parser2 = opts.syntax.parse;
+      if (opts.parser) parser2 = opts.parser;
+      if (parser2.parse) parser2 = parser2.parse;
       try {
-        root = parser(css, opts);
+        root2 = parser2(css, opts);
       } catch (error) {
         this.processed = true;
         this.error = error;
       }
-      if (root && !root[my2]) {
-        Container2.rebuild(root);
+      if (root2 && !root2[my2]) {
+        Container2.rebuild(root2);
       }
     }
-    this.result = new Result2(processor, root, opts);
+    this.result = new Result2(processor, root2, opts);
     this.helpers = { ...postcss, postcss, result: this.result };
     this.plugins = this.processor.plugins.map((plugin2) => {
       if (typeof plugin2 === "object" && plugin2.prepare) {
@@ -6878,10 +3154,10 @@ var LazyResult3 = class _LazyResult {
     }
     this.prepareVisitors();
     if (this.hasListener) {
-      const root = this.result.root;
-      while (!root[isClean2]) {
-        root[isClean2] = true;
-        const stack = [toStack(root)];
+      const root2 = this.result.root;
+      while (!root2[isClean2]) {
+        root2[isClean2] = true;
+        const stack = [toStack(root2)];
         while (stack.length > 0) {
           const promise = this.visitTick(stack);
           if (isPromise(promise)) {
@@ -6898,13 +3174,13 @@ var LazyResult3 = class _LazyResult {
         for (const [plugin2, visitor] of this.listeners.OnceExit) {
           this.result.lastPlugin = plugin2;
           try {
-            if (root.type === "document") {
-              const roots = root.nodes.map(
+            if (root2.type === "document") {
+              const roots = root2.nodes.map(
                 (subRoot) => visitor(subRoot, this.helpers)
               );
               await Promise.all(roots);
             } else {
-              await visitor(root, this.helpers);
+              await visitor(root2, this.helpers);
             }
           } catch (e) {
             throw this.handleError(e);
@@ -6921,7 +3197,7 @@ var LazyResult3 = class _LazyResult {
       if (typeof plugin2 === "object" && plugin2.Once) {
         if (this.result.root.type === "document") {
           const roots = this.result.root.nodes.map(
-            (root) => plugin2.Once(root, this.helpers)
+            (root2) => plugin2.Once(root2, this.helpers)
           );
           if (isPromise(roots[0])) {
             return Promise.all(roots);
@@ -6942,11 +3218,11 @@ var LazyResult3 = class _LazyResult {
     this.stringified = true;
     this.sync();
     const opts = this.result.opts;
-    let str = stringify2;
-    if (opts.syntax) str = opts.syntax.stringify;
-    if (opts.stringifier) str = opts.stringifier;
-    if (str.stringify) str = str.stringify;
-    const map = new MapGenerator2(str, this.result.root, this.result.opts);
+    let str2 = stringify2;
+    if (opts.syntax) str2 = opts.syntax.stringify;
+    if (opts.stringifier) str2 = opts.stringifier;
+    if (str2.stringify) str2 = str2.stringify;
+    const map = new MapGenerator2(str2, this.result.root, this.result.opts);
     const data = map.generate();
     this.result.css = data[0];
     this.result.map = data[1];
@@ -6967,18 +3243,18 @@ var LazyResult3 = class _LazyResult {
     }
     this.prepareVisitors();
     if (this.hasListener) {
-      const root = this.result.root;
-      while (!root[isClean2]) {
-        root[isClean2] = true;
-        this.walkSync(root);
+      const root2 = this.result.root;
+      while (!root2[isClean2]) {
+        root2[isClean2] = true;
+        this.walkSync(root2);
       }
       if (this.listeners.OnceExit) {
-        if (root.type === "document") {
-          for (const subRoot of root.nodes) {
+        if (root2.type === "document") {
+          for (const subRoot of root2.nodes) {
             this.visitSync(this.listeners.OnceExit, subRoot);
           }
         } else {
-          this.visitSync(this.listeners.OnceExit, root);
+          this.visitSync(this.listeners.OnceExit, root2);
         }
       }
     }
@@ -7223,14 +3499,2710 @@ postcss2.Root = Root2;
 postcss2.Node = Node;
 var postcss_default = postcss2;
 
-// src/index.ts
-var import_postcss_selector_parser = __toESM(require_dist(), 1);
+// src/postcss-selector-parser/util/unesc.js
+function gobbleHex(str2) {
+  const lower = str2.toLowerCase();
+  let hex2 = "";
+  let spaceTerminated = false;
+  for (let i = 0; i < 6 && lower[i] !== void 0; i++) {
+    const code = lower.charCodeAt(i);
+    const valid = code >= 97 && code <= 102 || code >= 48 && code <= 57;
+    spaceTerminated = code === 32;
+    if (!valid) {
+      break;
+    }
+    hex2 += lower[i];
+  }
+  if (hex2.length === 0) {
+    return void 0;
+  }
+  const codePoint = parseInt(hex2, 16);
+  const isSurrogate = codePoint >= 55296 && codePoint <= 57343;
+  if (isSurrogate || codePoint === 0 || codePoint > 1114111) {
+    return ["\uFFFD", hex2.length + (spaceTerminated ? 1 : 0)];
+  }
+  return [
+    String.fromCodePoint(codePoint),
+    hex2.length + (spaceTerminated ? 1 : 0)
+  ];
+}
+__name(gobbleHex, "gobbleHex");
+var CONTAINS_ESCAPE = /\\/;
+function unesc(str2) {
+  let needToProcess = CONTAINS_ESCAPE.test(str2);
+  if (!needToProcess) {
+    return str2;
+  }
+  let ret = "";
+  for (let i = 0; i < str2.length; i++) {
+    if (str2[i] === "\\") {
+      const gobbled = gobbleHex(str2.slice(i + 1, i + 7));
+      if (gobbled !== void 0) {
+        ret += gobbled[0];
+        i += gobbled[1];
+        continue;
+      }
+      if (str2[i + 1] === "\\") {
+        ret += "\\";
+        i++;
+        continue;
+      }
+      if (str2.length === i + 1) {
+        ret += str2[i];
+      }
+      continue;
+    }
+    ret += str2[i];
+  }
+  return ret;
+}
+__name(unesc, "unesc");
 
-// src/constants.ts
-var IGNORE_ANNOTATION_CURRENT = "purgecss ignore current";
-var IGNORE_ANNOTATION_NEXT = "purgecss ignore";
-var IGNORE_ANNOTATION_START = "purgecss start ignore";
-var IGNORE_ANNOTATION_END = "purgecss end ignore";
+// src/postcss-selector-parser/util/getProp.js
+function getProp(obj, ...props) {
+  while (props.length > 0) {
+    const prop = props.shift();
+    if (!obj[prop]) {
+      return void 0;
+    }
+    obj = obj[prop];
+  }
+  return obj;
+}
+__name(getProp, "getProp");
+
+// src/postcss-selector-parser/util/ensureObject.js
+function ensureObject(obj, ...props) {
+  while (props.length > 0) {
+    const prop = props.shift();
+    if (!obj[prop]) {
+      obj[prop] = {};
+    }
+    obj = obj[prop];
+  }
+}
+__name(ensureObject, "ensureObject");
+
+// src/postcss-selector-parser/selectors/node.js
+var cloneNode2 = /* @__PURE__ */ __name(function(obj, parent) {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+  let cloned = new obj.constructor();
+  for (let i in obj) {
+    if (!obj.hasOwnProperty(i)) {
+      continue;
+    }
+    let value = obj[i];
+    let type = typeof value;
+    if (i === "parent" && type === "object") {
+      if (parent) {
+        cloned[i] = parent;
+      }
+    } else if (value instanceof Array) {
+      cloned[i] = value.map((j) => cloneNode2(j, cloned));
+    } else {
+      cloned[i] = cloneNode2(value, cloned);
+    }
+  }
+  return cloned;
+}, "cloneNode");
+var Node2 = class {
+  static {
+    __name(this, "Node");
+  }
+  constructor(opts = {}) {
+    Object.assign(this, opts);
+    this.spaces = this.spaces || {};
+    this.spaces.before = this.spaces.before || "";
+    this.spaces.after = this.spaces.after || "";
+  }
+  remove() {
+    if (this.parent) {
+      this.parent.removeChild(this);
+    }
+    this.parent = void 0;
+    return this;
+  }
+  replaceWith() {
+    if (this.parent) {
+      for (let index in arguments) {
+        this.parent.insertBefore(this, arguments[index]);
+      }
+      this.remove();
+    }
+    return this;
+  }
+  next() {
+    return this.parent.at(this.parent.index(this) + 1);
+  }
+  prev() {
+    return this.parent.at(this.parent.index(this) - 1);
+  }
+  clone(overrides = {}) {
+    let cloned = cloneNode2(this);
+    for (let name in overrides) {
+      cloned[name] = overrides[name];
+    }
+    return cloned;
+  }
+  /**
+   * Some non-standard syntax doesn't follow normal escaping rules for css.
+   * This allows non standard syntax to be appended to an existing property
+   * by specifying the escaped value. By specifying the escaped value,
+   * illegal characters are allowed to be directly inserted into css output.
+   * @param {string} name the property to set
+   * @param {any} value the unescaped value of the property
+   * @param {string} valueEscaped optional. the escaped value of the property.
+   */
+  appendToPropertyAndEscape(name, value, valueEscaped) {
+    if (!this.raws) {
+      this.raws = {};
+    }
+    let originalValue = this[name];
+    let originalEscaped = this.raws[name];
+    this[name] = originalValue + value;
+    if (originalEscaped || valueEscaped !== value) {
+      this.raws[name] = (originalEscaped || originalValue) + valueEscaped;
+    } else {
+      delete this.raws[name];
+    }
+  }
+  /**
+   * Some non-standard syntax doesn't follow normal escaping rules for css.
+   * This allows the escaped value to be specified directly, allowing illegal
+   * characters to be directly inserted into css output.
+   * @param {string} name the property to set
+   * @param {any} value the unescaped value of the property
+   * @param {string} valueEscaped the escaped value of the property.
+   */
+  setPropertyAndEscape(name, value, valueEscaped) {
+    if (!this.raws) {
+      this.raws = {};
+    }
+    this[name] = value;
+    this.raws[name] = valueEscaped;
+  }
+  /**
+   * When you want a value to passed through to CSS directly. This method
+   * deletes the corresponding raw value causing the stringifier to fallback
+   * to the unescaped value.
+   * @param {string} name the property to set.
+   * @param {any} value The value that is both escaped and unescaped.
+   */
+  setPropertyWithoutEscape(name, value) {
+    this[name] = value;
+    if (this.raws) {
+      delete this.raws[name];
+    }
+  }
+  /**
+   *
+   * @param {number} line The number (starting with 1)
+   * @param {number} column The column number (starting with 1)
+   */
+  isAtPosition(line, column) {
+    if (this.source && this.source.start && this.source.end) {
+      if (this.source.start.line > line) {
+        return false;
+      }
+      if (this.source.end.line < line) {
+        return false;
+      }
+      if (this.source.start.line === line && this.source.start.column > column) {
+        return false;
+      }
+      if (this.source.end.line === line && this.source.end.column < column) {
+        return false;
+      }
+      return true;
+    }
+    return void 0;
+  }
+  stringifyProperty(name) {
+    return this.raws && this.raws[name] || this[name];
+  }
+  get rawSpaceBefore() {
+    let rawSpace = this.raws && this.raws.spaces && this.raws.spaces.before;
+    if (rawSpace === void 0) {
+      rawSpace = this.spaces && this.spaces.before;
+    }
+    return rawSpace || "";
+  }
+  set rawSpaceBefore(raw) {
+    ensureObject(this, "raws", "spaces");
+    this.raws.spaces.before = raw;
+  }
+  get rawSpaceAfter() {
+    let rawSpace = this.raws && this.raws.spaces && this.raws.spaces.after;
+    if (rawSpace === void 0) {
+      rawSpace = this.spaces.after;
+    }
+    return rawSpace || "";
+  }
+  set rawSpaceAfter(raw) {
+    ensureObject(this, "raws", "spaces");
+    this.raws.spaces.after = raw;
+  }
+  valueToString() {
+    return String(this.stringifyProperty("value"));
+  }
+  toString() {
+    return [
+      this.rawSpaceBefore,
+      this.valueToString(),
+      this.rawSpaceAfter
+    ].join("");
+  }
+};
+
+// src/postcss-selector-parser/selectors/types.js
+var TAG = "tag";
+var STRING = "string";
+var SELECTOR = "selector";
+var ROOT = "root";
+var PSEUDO = "pseudo";
+var NESTING = "nesting";
+var ID = "id";
+var COMMENT = "comment";
+var COMBINATOR = "combinator";
+var CLASS = "class";
+var ATTRIBUTE = "attribute";
+var UNIVERSAL = "universal";
+
+// src/postcss-selector-parser/selectors/container.js
+var Container3 = class extends Node2 {
+  static {
+    __name(this, "Container");
+  }
+  constructor(opts) {
+    super(opts);
+    if (!this.nodes) {
+      this.nodes = [];
+    }
+  }
+  append(selector2) {
+    selector2.parent = this;
+    this.nodes.push(selector2);
+    return this;
+  }
+  prepend(selector2) {
+    selector2.parent = this;
+    this.nodes.unshift(selector2);
+    for (let id2 in this.indexes) {
+      this.indexes[id2]++;
+    }
+    return this;
+  }
+  at(index) {
+    return this.nodes[index];
+  }
+  index(child) {
+    if (typeof child === "number") {
+      return child;
+    }
+    return this.nodes.indexOf(child);
+  }
+  get first() {
+    return this.at(0);
+  }
+  get last() {
+    return this.at(this.length - 1);
+  }
+  get length() {
+    return this.nodes.length;
+  }
+  removeChild(child) {
+    child = this.index(child);
+    this.at(child).parent = void 0;
+    this.nodes.splice(child, 1);
+    let index;
+    for (let id2 in this.indexes) {
+      index = this.indexes[id2];
+      if (index >= child) {
+        this.indexes[id2] = index - 1;
+      }
+    }
+    return this;
+  }
+  removeAll() {
+    for (let node of this.nodes) {
+      node.parent = void 0;
+    }
+    this.nodes = [];
+    return this;
+  }
+  empty() {
+    return this.removeAll();
+  }
+  insertAfter(oldNode, newNode) {
+    newNode.parent = this;
+    let oldIndex = this.index(oldNode);
+    this.nodes.splice(oldIndex + 1, 0, newNode);
+    newNode.parent = this;
+    let index;
+    for (let id2 in this.indexes) {
+      index = this.indexes[id2];
+      if (oldIndex < index) {
+        this.indexes[id2] = index + 1;
+      }
+    }
+    return this;
+  }
+  insertBefore(oldNode, newNode) {
+    newNode.parent = this;
+    let oldIndex = this.index(oldNode);
+    this.nodes.splice(oldIndex, 0, newNode);
+    newNode.parent = this;
+    let index;
+    for (let id2 in this.indexes) {
+      index = this.indexes[id2];
+      if (index >= oldIndex) {
+        this.indexes[id2] = index + 1;
+      }
+    }
+    return this;
+  }
+  _findChildAtPosition(line, col) {
+    let found = void 0;
+    this.each((node) => {
+      if (node.atPosition) {
+        let foundChild = node.atPosition(line, col);
+        if (foundChild) {
+          found = foundChild;
+          return false;
+        }
+      } else if (node.isAtPosition(line, col)) {
+        found = node;
+        return false;
+      }
+    });
+    return found;
+  }
+  /**
+   * Return the most specific node at the line and column number given.
+   * The source location is based on the original parsed location, locations aren't
+   * updated as selector nodes are mutated.
+   * 
+   * Note that this location is relative to the location of the first character
+   * of the selector, and not the location of the selector in the overall document
+   * when used in conjunction with postcss.
+   *
+   * If not found, returns undefined.
+   * @param {number} line The line number of the node to find. (1-based index)
+   * @param {number} col  The column number of the node to find. (1-based index)
+   */
+  atPosition(line, col) {
+    if (this.isAtPosition(line, col)) {
+      return this._findChildAtPosition(line, col) || this;
+    } else {
+      return void 0;
+    }
+  }
+  _inferEndPosition() {
+    if (this.last && this.last.source && this.last.source.end) {
+      this.source = this.source || {};
+      this.source.end = this.source.end || {};
+      Object.assign(this.source.end, this.last.source.end);
+    }
+  }
+  each(callback) {
+    if (!this.lastEach) {
+      this.lastEach = 0;
+    }
+    if (!this.indexes) {
+      this.indexes = {};
+    }
+    this.lastEach++;
+    let id2 = this.lastEach;
+    this.indexes[id2] = 0;
+    if (!this.length) {
+      return void 0;
+    }
+    let index, result;
+    while (this.indexes[id2] < this.length) {
+      index = this.indexes[id2];
+      result = callback(this.at(index), index);
+      if (result === false) {
+        break;
+      }
+      this.indexes[id2] += 1;
+    }
+    delete this.indexes[id2];
+    if (result === false) {
+      return false;
+    }
+  }
+  walk(callback) {
+    return this.each((node, i) => {
+      let result = callback(node, i);
+      if (result !== false && node.length) {
+        result = node.walk(callback);
+      }
+      if (result === false) {
+        return false;
+      }
+    });
+  }
+  walkAttributes(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === ATTRIBUTE) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  walkClasses(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === CLASS) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  walkCombinators(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === COMBINATOR) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  walkComments(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === COMMENT) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  walkIds(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === ID) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  walkNesting(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === NESTING) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  walkPseudos(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === PSEUDO) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  walkTags(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === TAG) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  walkUniversals(callback) {
+    return this.walk((selector2) => {
+      if (selector2.type === UNIVERSAL) {
+        return callback.call(this, selector2);
+      }
+    });
+  }
+  split(callback) {
+    let current = [];
+    return this.reduce((memo, node, index) => {
+      let split = callback.call(this, node);
+      current.push(node);
+      if (split) {
+        memo.push(current);
+        current = [];
+      } else if (index === this.length - 1) {
+        memo.push(current);
+      }
+      return memo;
+    }, []);
+  }
+  map(callback) {
+    return this.nodes.map(callback);
+  }
+  reduce(callback, memo) {
+    return this.nodes.reduce(callback, memo);
+  }
+  every(callback) {
+    return this.nodes.every(callback);
+  }
+  some(callback) {
+    return this.nodes.some(callback);
+  }
+  filter(callback) {
+    return this.nodes.filter(callback);
+  }
+  sort(callback) {
+    return this.nodes.sort(callback);
+  }
+  toString() {
+    return this.map(String).join("");
+  }
+};
+
+// src/postcss-selector-parser/selectors/root.js
+var Root3 = class extends Container3 {
+  static {
+    __name(this, "Root");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = ROOT;
+  }
+  toString() {
+    let str2 = this.reduce((memo, selector2) => {
+      memo.push(String(selector2));
+      return memo;
+    }, []).join(",");
+    return this.trailingComma ? str2 + "," : str2;
+  }
+  error(message, options) {
+    if (this._error) {
+      return this._error(message, options);
+    } else {
+      return new Error(message);
+    }
+  }
+  set errorGenerator(handler) {
+    this._error = handler;
+  }
+};
+
+// src/postcss-selector-parser/selectors/selector.js
+var Selector = class extends Container3 {
+  static {
+    __name(this, "Selector");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = SELECTOR;
+  }
+};
+
+// src/cssesc/index.js
+var object = {};
+var hasOwnProperty = object.hasOwnProperty;
+var merge = /* @__PURE__ */ __name((options, defaults) => {
+  if (!options) {
+    return defaults;
+  }
+  const result = {};
+  for (const key in defaults) {
+    result[key] = hasOwnProperty.call(options, key) ? options[key] : defaults[key];
+  }
+  return result;
+}, "merge");
+var regexAnySingleEscape = /<%= anySingleEscape %>/;
+var regexSingleEscape = /<%= singleEscapes %>/;
+var regexExcessiveSpaces = /(^|\\+)?(\\[A-F0-9]{1,6})\x20(?![a-fA-F0-9\x20])/g;
+var cssesc = /* @__PURE__ */ __name(/* @__NO_SIDE_EFFECTS__ */ (string2, options) => {
+  options = merge(options, cssesc.options);
+  if (options.quotes != "single" && options.quotes != "double") {
+    options.quotes = "single";
+  }
+  const quote = options.quotes == "double" ? '"' : "'";
+  const isIdentifier2 = options.isIdentifier;
+  const firstChar = string2.charAt(0);
+  let output = "";
+  let counter = 0;
+  const length = string2.length;
+  while (counter < length) {
+    const character = string2.charAt(counter++);
+    let codePoint = character.charCodeAt();
+    let value;
+    if (codePoint < 32 || codePoint > 126) {
+      if (codePoint >= 55296 && codePoint <= 56319 && counter < length) {
+        const extra = string2.charCodeAt(counter++);
+        if ((extra & 64512) == 56320) {
+          codePoint = ((codePoint & 1023) << 10) + (extra & 1023) + 65536;
+        } else {
+          counter--;
+        }
+      }
+      value = "\\" + codePoint.toString(16).toUpperCase() + " ";
+    } else {
+      if (options.escapeEverything) {
+        if (regexAnySingleEscape.test(character)) {
+          value = "\\" + character;
+        } else {
+          value = "\\" + codePoint.toString(16).toUpperCase() + " ";
+        }
+      } else if (/[\t\n\f\r\x0B]/.test(character)) {
+        value = "\\" + codePoint.toString(16).toUpperCase() + " ";
+      } else if (character == "\\" || !isIdentifier2 && (character == '"' && quote == character || character == "'" && quote == character) || isIdentifier2 && regexSingleEscape.test(character)) {
+        value = "\\" + character;
+      } else {
+        value = character;
+      }
+    }
+    output += value;
+  }
+  if (isIdentifier2) {
+    if (/^-[-\d]/.test(output)) {
+      output = "\\-" + output.slice(1);
+    } else if (/\d/.test(firstChar)) {
+      output = "\\3" + firstChar + " " + output.slice(1);
+    }
+  }
+  output = output.replace(regexExcessiveSpaces, ($0, $1, $2) => {
+    if ($1 && $1.length % 2) {
+      return $0;
+    }
+    return ($1 || "") + $2;
+  });
+  if (!isIdentifier2 && options.wrap) {
+    return quote + output + quote;
+  }
+  return output;
+}, "cssesc");
+cssesc.options = {
+  "escapeEverything": false,
+  "isIdentifier": false,
+  "quotes": "single",
+  "wrap": false
+};
+var cssesc_default = cssesc;
+
+// src/postcss-selector-parser/selectors/className.js
+var ClassName = class extends Node2 {
+  static {
+    __name(this, "ClassName");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = CLASS;
+    this._constructed = true;
+  }
+  set value(v) {
+    if (this._constructed) {
+      const escaped = cssesc_default(v, { isIdentifier: true });
+      if (escaped !== v) {
+        ensureObject(this, "raws");
+        this.raws.value = escaped;
+      } else if (this.raws) {
+        delete this.raws.value;
+      }
+    }
+    this._value = v;
+  }
+  get value() {
+    return this._value;
+  }
+  valueToString() {
+    return "." + super.valueToString();
+  }
+};
+
+// src/postcss-selector-parser/selectors/comment.js
+var Comment2 = class extends Node2 {
+  static {
+    __name(this, "Comment");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = COMMENT;
+  }
+};
+
+// src/postcss-selector-parser/selectors/id.js
+var ID2 = class extends Node2 {
+  static {
+    __name(this, "ID");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = ID;
+  }
+  valueToString() {
+    return "#" + super.valueToString();
+  }
+};
+
+// src/postcss-selector-parser/selectors/namespace.js
+var Namespace = class extends Node2 {
+  static {
+    __name(this, "Namespace");
+  }
+  get namespace() {
+    return this._namespace;
+  }
+  set namespace(namespace) {
+    if (namespace === true || namespace === "*" || namespace === "&") {
+      this._namespace = namespace;
+      if (this.raws) {
+        delete this.raws.namespace;
+      }
+      return;
+    }
+    const escaped = cssesc_default(namespace, { isIdentifier: true });
+    this._namespace = namespace;
+    if (escaped !== namespace) {
+      ensureObject(this, "raws");
+      this.raws.namespace = escaped;
+    } else if (this.raws) {
+      delete this.raws.namespace;
+    }
+  }
+  get ns() {
+    return this._namespace;
+  }
+  set ns(namespace) {
+    this.namespace = namespace;
+  }
+  get namespaceString() {
+    if (this.namespace) {
+      const ns = this.stringifyProperty("namespace");
+      if (ns === true) {
+        return "";
+      } else {
+        return ns;
+      }
+    } else {
+      return "";
+    }
+  }
+  qualifiedName(value) {
+    if (this.namespace) {
+      return `${this.namespaceString}|${value}`;
+    } else {
+      return value;
+    }
+  }
+  valueToString() {
+    return this.qualifiedName(super.valueToString());
+  }
+};
+
+// src/postcss-selector-parser/selectors/tag.js
+var Tag = class extends Namespace {
+  static {
+    __name(this, "Tag");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = TAG;
+  }
+};
+
+// src/postcss-selector-parser/selectors/string.js
+var String2 = class extends Node2 {
+  static {
+    __name(this, "String");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = STRING;
+  }
+};
+
+// src/postcss-selector-parser/selectors/pseudo.js
+var Pseudo = class extends Container3 {
+  static {
+    __name(this, "Pseudo");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = PSEUDO;
+  }
+  toString() {
+    let params = this.length ? "(" + this.map(String).join(",") + ")" : "";
+    return [
+      this.rawSpaceBefore,
+      this.stringifyProperty("value"),
+      params,
+      this.rawSpaceAfter
+    ].join("");
+  }
+};
+
+// src/postcss-selector-parser/selectors/attribute.js
+var WRAPPED_IN_QUOTES = /^('|")([^]*)\1$/;
+function unescapeValue(value) {
+  let deprecatedUsage = false;
+  let quoteMark = null;
+  let unescaped = value;
+  const m = unescaped.match(WRAPPED_IN_QUOTES);
+  if (m) {
+    quoteMark = m[1];
+    unescaped = m[2];
+  }
+  unescaped = unesc(unescaped);
+  if (unescaped !== value) {
+    deprecatedUsage = true;
+  }
+  return {
+    deprecatedUsage,
+    unescaped,
+    quoteMark
+  };
+}
+__name(unescapeValue, "unescapeValue");
+function handleDeprecatedContructorOpts(opts) {
+  if (opts.quoteMark !== void 0) {
+    return opts;
+  }
+  if (opts.value === void 0) {
+    return opts;
+  }
+  warnOfDeprecatedConstructor();
+  const { quoteMark, unescaped } = unescapeValue(opts.value);
+  if (!opts.raws) {
+    opts.raws = {};
+  }
+  if (opts.raws.value === void 0) {
+    opts.raws.value = opts.value;
+  }
+  opts.value = unescaped;
+  opts.quoteMark = quoteMark;
+  return opts;
+}
+__name(handleDeprecatedContructorOpts, "handleDeprecatedContructorOpts");
+var Attribute = class _Attribute extends Namespace {
+  static {
+    __name(this, "Attribute");
+  }
+  static NO_QUOTE = null;
+  static SINGLE_QUOTE = "'";
+  static DOUBLE_QUOTE = '"';
+  constructor(opts = {}) {
+    super(handleDeprecatedContructorOpts(opts));
+    this.type = ATTRIBUTE;
+    this.raws = this.raws || {};
+    this._constructed = true;
+  }
+  /**
+   * Returns the Attribute's value quoted such that it would be legal to use
+   * in the value of a css file. The original value's quotation setting
+   * used for stringification is left unchanged. See `setValue(value, options)`
+   * if you want to control the quote settings of a new value for the attribute.
+   *
+   * You can also change the quotation used for the current value by setting quoteMark.
+   *
+   * Options:
+   *   * quoteMark {'"' | "'" | null} - Use this value to quote the value. If this
+   *     option is not set, the original value for quoteMark will be used. If
+   *     indeterminate, a double quote is used. The legal values are:
+   *     * `null` - the value will be unquoted and characters will be escaped as necessary.
+   *     * `'` - the value will be quoted with a single quote and single quotes are escaped.
+   *     * `"` - the value will be quoted with a double quote and double quotes are escaped.
+   *   * preferCurrentQuoteMark {boolean} - if true, prefer the source quote mark
+   *     over the quoteMark option value.
+   *   * smart {boolean} - if true, will select a quote mark based on the value
+   *     and the other options specified here. See the `smartQuoteMark()`
+   *     method.
+   **/
+  getQuotedValue(options = {}) {
+    const quoteMark = this._determineQuoteMark(options);
+    const cssescopts = CSSESC_QUOTE_OPTIONS[quoteMark];
+    const escaped = cssesc_default(this._value, cssescopts);
+    return escaped;
+  }
+  _determineQuoteMark(options) {
+    return options.smart ? this.smartQuoteMark(options) : this.preferredQuoteMark(options);
+  }
+  /**
+   * Set the unescaped value with the specified quotation options. The value
+   * provided must not include any wrapping quote marks -- those quotes will
+   * be interpreted as part of the value and escaped accordingly.
+   */
+  setValue(value, options = {}) {
+    this._value = value;
+    this._quoteMark = this._determineQuoteMark(options);
+    this._syncRawValue();
+  }
+  /**
+   * Intelligently select a quoteMark value based on the value's contents. If
+   * the value is a legal CSS ident, it will not be quoted. Otherwise a quote
+   * mark will be picked that minimizes the number of escapes.
+   *
+   * If there's no clear winner, the quote mark from these options is used,
+   * then the source quote mark (this is inverted if `preferCurrentQuoteMark` is
+   * true). If the quoteMark is unspecified, a double quote is used.
+   *
+   * @param options This takes the quoteMark and preferCurrentQuoteMark options
+   * from the quoteValue method.
+   */
+  smartQuoteMark(options) {
+    const v = this.value;
+    const numSingleQuotes = v.replace(/[^']/g, "").length;
+    const numDoubleQuotes = v.replace(/[^"]/g, "").length;
+    if (numSingleQuotes + numDoubleQuotes === 0) {
+      const escaped = cssesc_default(v, { isIdentifier: true });
+      if (escaped === v) {
+        return _Attribute.NO_QUOTE;
+      } else {
+        const pref = this.preferredQuoteMark(options);
+        if (pref === _Attribute.NO_QUOTE) {
+          const quote = this.quoteMark || options.quoteMark || _Attribute.DOUBLE_QUOTE;
+          const opts = CSSESC_QUOTE_OPTIONS[quote];
+          const quoteValue = cssesc_default(v, opts);
+          if (quoteValue.length < escaped.length) {
+            return quote;
+          }
+        }
+        return pref;
+      }
+    } else if (numDoubleQuotes === numSingleQuotes) {
+      return this.preferredQuoteMark(options);
+    } else if (numDoubleQuotes < numSingleQuotes) {
+      return _Attribute.DOUBLE_QUOTE;
+    } else {
+      return _Attribute.SINGLE_QUOTE;
+    }
+  }
+  /**
+   * Selects the preferred quote mark based on the options and the current quote mark value.
+   * If you want the quote mark to depend on the attribute value, call `smartQuoteMark(opts)`
+   * instead.
+   */
+  preferredQuoteMark(options) {
+    let quoteMark = options.preferCurrentQuoteMark ? this.quoteMark : options.quoteMark;
+    if (quoteMark === void 0) {
+      quoteMark = options.preferCurrentQuoteMark ? options.quoteMark : this.quoteMark;
+    }
+    if (quoteMark === void 0) {
+      quoteMark = _Attribute.DOUBLE_QUOTE;
+    }
+    return quoteMark;
+  }
+  get quoted() {
+    const qm = this.quoteMark;
+    return qm === "'" || qm === '"';
+  }
+  set quoted(value) {
+    warnOfDeprecatedQuotedAssignment();
+  }
+  /**
+   * returns a single (`'`) or double (`"`) quote character if the value is quoted.
+   * returns `null` if the value is not quoted.
+   * returns `undefined` if the quotation state is unknown (this can happen when
+   * the attribute is constructed without specifying a quote mark.)
+   */
+  get quoteMark() {
+    return this._quoteMark;
+  }
+  /**
+   * Set the quote mark to be used by this attribute's value.
+   * If the quote mark changes, the raw (escaped) value at `attr.raws.value` of the attribute
+   * value is updated accordingly.
+   *
+   * @param {"'" | '"' | null} quoteMark The quote mark or `null` if the value should be unquoted.
+   */
+  set quoteMark(quoteMark) {
+    if (!this._constructed) {
+      this._quoteMark = quoteMark;
+      return;
+    }
+    if (this._quoteMark !== quoteMark) {
+      this._quoteMark = quoteMark;
+      this._syncRawValue();
+    }
+  }
+  _syncRawValue() {
+    const rawValue = cssesc_default(this._value, CSSESC_QUOTE_OPTIONS[this.quoteMark]);
+    if (rawValue === this._value) {
+      if (this.raws) {
+        delete this.raws.value;
+      }
+    } else {
+      this.raws.value = rawValue;
+    }
+  }
+  get qualifiedAttribute() {
+    return this.qualifiedName(this.raws.attribute || this.attribute);
+  }
+  get insensitiveFlag() {
+    return this.insensitive ? "i" : "";
+  }
+  get value() {
+    return this._value;
+  }
+  get insensitive() {
+    return this._insensitive;
+  }
+  /**
+   * Set the case insensitive flag.
+   * If the case insensitive flag changes, the raw (escaped) value at `attr.raws.insensitiveFlag`
+   * of the attribute is updated accordingly.
+   *
+   * @param {true | false} insensitive true if the attribute should match case-insensitively.
+   */
+  set insensitive(insensitive) {
+    if (!insensitive) {
+      this._insensitive = false;
+      if (this.raws && (this.raws.insensitiveFlag === "I" || this.raws.insensitiveFlag === "i")) {
+        this.raws.insensitiveFlag = void 0;
+      }
+    }
+    this._insensitive = insensitive;
+  }
+  /**
+   * Before 3.0, the value had to be set to an escaped value including any wrapped
+   * quote marks. In 3.0, the semantics of `Attribute.value` changed so that the value
+   * is unescaped during parsing and any quote marks are removed.
+   *
+   * Because the ambiguity of this semantic change, if you set `attr.value = newValue`,
+   * a deprecation warning is raised when the new value contains any characters that would
+   * require escaping (including if it contains wrapped quotes).
+   *
+   * Instead, you should call `attr.setValue(newValue, opts)` and pass options that describe
+   * how the new value is quoted.
+   */
+  set value(v) {
+    if (this._constructed) {
+      const {
+        deprecatedUsage,
+        unescaped,
+        quoteMark
+      } = unescapeValue(v);
+      if (deprecatedUsage) {
+        warnOfDeprecatedValueAssignment();
+      }
+      if (unescaped === this._value && quoteMark === this._quoteMark) {
+        return;
+      }
+      this._value = unescaped;
+      this._quoteMark = quoteMark;
+      this._syncRawValue();
+    } else {
+      this._value = v;
+    }
+  }
+  get attribute() {
+    return this._attribute;
+  }
+  set attribute(name) {
+    this._handleEscapes("attribute", name);
+    this._attribute = name;
+  }
+  _handleEscapes(prop, value) {
+    if (this._constructed) {
+      const escaped = cssesc_default(value, { isIdentifier: true });
+      if (escaped !== value) {
+        this.raws[prop] = escaped;
+      } else {
+        delete this.raws[prop];
+      }
+    }
+  }
+  _spacesFor(name) {
+    const attrSpaces = { before: "", after: "" };
+    const spaces = this.spaces[name] || {};
+    const rawSpaces = this.raws.spaces && this.raws.spaces[name] || {};
+    return Object.assign(attrSpaces, spaces, rawSpaces);
+  }
+  _stringFor(name, spaceName = name, concat = defaultAttrConcat) {
+    const attrSpaces = this._spacesFor(spaceName);
+    return concat(this.stringifyProperty(name), attrSpaces);
+  }
+  /**
+   * returns the offset of the attribute part specified relative to the
+   * start of the node of the output string.
+   *
+   * * "ns" - alias for "namespace"
+   * * "namespace" - the namespace if it exists.
+   * * "attribute" - the attribute name
+   * * "attributeNS" - the start of the attribute or its namespace
+   * * "operator" - the match operator of the attribute
+   * * "value" - The value (string or identifier)
+   * * "insensitive" - the case insensitivity flag;
+   * @param part One of the possible values inside an attribute.
+   * @returns -1 if the name is invalid or the value doesn't exist in this attribute.
+   */
+  offsetOf(name) {
+    let count = 1;
+    const attributeSpaces = this._spacesFor("attribute");
+    count += attributeSpaces.before.length;
+    if (name === "namespace" || name === "ns") {
+      return this.namespace ? count : -1;
+    }
+    if (name === "attributeNS") {
+      return count;
+    }
+    count += this.namespaceString.length;
+    if (this.namespace) {
+      count += 1;
+    }
+    if (name === "attribute") {
+      return count;
+    }
+    count += this.stringifyProperty("attribute").length;
+    count += attributeSpaces.after.length;
+    const operatorSpaces = this._spacesFor("operator");
+    count += operatorSpaces.before.length;
+    const operator = this.stringifyProperty("operator");
+    if (name === "operator") {
+      return operator ? count : -1;
+    }
+    count += operator.length;
+    count += operatorSpaces.after.length;
+    const valueSpaces = this._spacesFor("value");
+    count += valueSpaces.before.length;
+    const value = this.stringifyProperty("value");
+    if (name === "value") {
+      return value ? count : -1;
+    }
+    count += value.length;
+    count += valueSpaces.after.length;
+    const insensitiveSpaces = this._spacesFor("insensitive");
+    count += insensitiveSpaces.before.length;
+    if (name === "insensitive") {
+      return this.insensitive ? count : -1;
+    }
+    return -1;
+  }
+  toString() {
+    const selector2 = [
+      this.rawSpaceBefore,
+      "["
+    ];
+    selector2.push(this._stringFor("qualifiedAttribute", "attribute"));
+    if (this.operator && (this.value || this.value === "")) {
+      selector2.push(this._stringFor("operator"));
+      selector2.push(this._stringFor("value"));
+      selector2.push(this._stringFor("insensitiveFlag", "insensitive", (attrValue, attrSpaces) => {
+        if (attrValue.length > 0 && !this.quoted && attrSpaces.before.length === 0 && !(this.spaces.value && this.spaces.value.after)) {
+          attrSpaces.before = " ";
+        }
+        return defaultAttrConcat(attrValue, attrSpaces);
+      }));
+    }
+    selector2.push("]");
+    selector2.push(this.rawSpaceAfter);
+    return selector2.join("");
+  }
+};
+var CSSESC_QUOTE_OPTIONS = {
+  "'": { quotes: "single", wrap: true },
+  '"': { quotes: "double", wrap: true },
+  [null]: { isIdentifier: true }
+};
+function defaultAttrConcat(attrValue, attrSpaces) {
+  return `${attrSpaces.before}${attrValue}${attrSpaces.after}`;
+}
+__name(defaultAttrConcat, "defaultAttrConcat");
+
+// src/postcss-selector-parser/selectors/universal.js
+var Universal = class extends Namespace {
+  static {
+    __name(this, "Universal");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = UNIVERSAL;
+    this.value = "*";
+  }
+};
+
+// src/postcss-selector-parser/selectors/combinator.js
+var Combinator = class extends Node2 {
+  static {
+    __name(this, "Combinator");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = COMBINATOR;
+  }
+};
+
+// src/postcss-selector-parser/selectors/nesting.js
+var Nesting = class extends Node2 {
+  static {
+    __name(this, "Nesting");
+  }
+  constructor(opts) {
+    super(opts);
+    this.type = NESTING;
+    this.value = "&";
+  }
+};
+
+// src/postcss-selector-parser/sortAscending.js
+function sortAscending(list2) {
+  return list2.sort((a, b) => a - b);
+}
+__name(sortAscending, "sortAscending");
+
+// src/postcss-selector-parser/tokenTypes.js
+var ampersand = 38;
+var asterisk = 42;
+var comma = 44;
+var colon = 58;
+var semicolon = 59;
+var openParenthesis = 40;
+var closeParenthesis = 41;
+var openSquare = 91;
+var closeSquare = 93;
+var dollar = 36;
+var tilde = 126;
+var caret = 94;
+var plus = 43;
+var equals = 61;
+var pipe = 124;
+var greaterThan = 62;
+var space = 32;
+var singleQuote = 39;
+var doubleQuote = 34;
+var slash = 47;
+var bang = 33;
+var backslash = 92;
+var cr = 13;
+var feed = 12;
+var newline = 10;
+var tab = 9;
+var str = singleQuote;
+var comment = -1;
+var word = -2;
+var combinator = -3;
+
+// src/postcss-selector-parser/tokenize.js
+var unescapable = {
+  [tab]: true,
+  [newline]: true,
+  [cr]: true,
+  [feed]: true
+};
+var wordDelimiters = {
+  [space]: true,
+  [tab]: true,
+  [newline]: true,
+  [cr]: true,
+  [feed]: true,
+  [ampersand]: true,
+  [asterisk]: true,
+  [bang]: true,
+  [comma]: true,
+  [colon]: true,
+  [semicolon]: true,
+  [openParenthesis]: true,
+  [closeParenthesis]: true,
+  [openSquare]: true,
+  [closeSquare]: true,
+  [singleQuote]: true,
+  [doubleQuote]: true,
+  [plus]: true,
+  [pipe]: true,
+  [tilde]: true,
+  [greaterThan]: true,
+  [equals]: true,
+  [dollar]: true,
+  [caret]: true,
+  [slash]: true
+};
+var hex = {};
+var hexChars = "0123456789abcdefABCDEF";
+for (let i = 0; i < hexChars.length; i++) {
+  hex[hexChars.charCodeAt(i)] = true;
+}
+function consumeWord(css, start) {
+  let next = start;
+  let code;
+  do {
+    code = css.charCodeAt(next);
+    if (wordDelimiters[code]) {
+      return next - 1;
+    } else if (code === backslash) {
+      next = consumeEscape(css, next) + 1;
+    } else {
+      next++;
+    }
+  } while (next < css.length);
+  return next - 1;
+}
+__name(consumeWord, "consumeWord");
+function consumeEscape(css, start) {
+  let next = start;
+  let code = css.charCodeAt(next + 1);
+  if (unescapable[code]) {
+  } else if (hex[code]) {
+    let hexDigits = 0;
+    do {
+      next++;
+      hexDigits++;
+      code = css.charCodeAt(next + 1);
+    } while (hex[code] && hexDigits < 6);
+    if (hexDigits < 6 && code === space) {
+      next++;
+    }
+  } else {
+    next++;
+  }
+  return next;
+}
+__name(consumeEscape, "consumeEscape");
+var FIELDS = {
+  TYPE: 0,
+  START_LINE: 1,
+  START_COL: 2,
+  END_LINE: 3,
+  END_COL: 4,
+  START_POS: 5,
+  END_POS: 6
+};
+function tokenize(input) {
+  const tokens = [];
+  let css = input.css.valueOf();
+  let { length } = css;
+  let offset = -1;
+  let line = 1;
+  let start = 0;
+  let end = 0;
+  let code, content, endColumn, endLine, escaped, escapePos, last, lines, next, nextLine, nextOffset, quote, tokenType;
+  function unclosed(what, fix) {
+    if (input.safe) {
+      css += fix;
+      next = css.length - 1;
+    } else {
+      throw input.error("Unclosed " + what, line, start - offset, start);
+    }
+  }
+  __name(unclosed, "unclosed");
+  while (start < length) {
+    code = css.charCodeAt(start);
+    if (code === newline) {
+      offset = start;
+      line += 1;
+    }
+    switch (code) {
+      case space:
+      case tab:
+      case newline:
+      case cr:
+      case feed:
+        next = start;
+        do {
+          next += 1;
+          code = css.charCodeAt(next);
+          if (code === newline) {
+            offset = next;
+            line += 1;
+          }
+        } while (code === space || code === newline || code === tab || code === cr || code === feed);
+        tokenType = space;
+        endLine = line;
+        endColumn = next - offset - 1;
+        end = next;
+        break;
+      case plus:
+      case greaterThan:
+      case tilde:
+      case pipe:
+        next = start;
+        do {
+          next += 1;
+          code = css.charCodeAt(next);
+        } while (code === plus || code === greaterThan || code === tilde || code === pipe);
+        tokenType = combinator;
+        endLine = line;
+        endColumn = start - offset;
+        end = next;
+        break;
+      // Consume these characters as single tokens.
+      case asterisk:
+      case ampersand:
+      case bang:
+      case comma:
+      case equals:
+      case dollar:
+      case caret:
+      case openSquare:
+      case closeSquare:
+      case colon:
+      case semicolon:
+      case openParenthesis:
+      case closeParenthesis:
+        next = start;
+        tokenType = code;
+        endLine = line;
+        endColumn = start - offset;
+        end = next + 1;
+        break;
+      case singleQuote:
+      case doubleQuote:
+        quote = code === singleQuote ? "'" : '"';
+        next = start;
+        do {
+          escaped = false;
+          next = css.indexOf(quote, next + 1);
+          if (next === -1) {
+            unclosed("quote", quote);
+          }
+          escapePos = next;
+          while (css.charCodeAt(escapePos - 1) === backslash) {
+            escapePos -= 1;
+            escaped = !escaped;
+          }
+        } while (escaped);
+        tokenType = str;
+        endLine = line;
+        endColumn = start - offset;
+        end = next + 1;
+        break;
+      default:
+        if (code === slash && css.charCodeAt(start + 1) === asterisk) {
+          next = css.indexOf("*/", start + 2) + 1;
+          if (next === 0) {
+            unclosed("comment", "*/");
+          }
+          content = css.slice(start, next + 1);
+          lines = content.split("\n");
+          last = lines.length - 1;
+          if (last > 0) {
+            nextLine = line + last;
+            nextOffset = next - lines[last].length;
+          } else {
+            nextLine = line;
+            nextOffset = offset;
+          }
+          tokenType = comment;
+          line = nextLine;
+          endLine = nextLine;
+          endColumn = next - nextOffset;
+        } else if (code === slash) {
+          next = start;
+          tokenType = code;
+          endLine = line;
+          endColumn = start - offset;
+          end = next + 1;
+        } else {
+          next = consumeWord(css, start);
+          tokenType = word;
+          endLine = line;
+          endColumn = next - offset;
+        }
+        end = next + 1;
+        break;
+    }
+    tokens.push([
+      tokenType,
+      // [0] Token type
+      line,
+      // [1] Starting line
+      start - offset,
+      // [2] Starting column
+      endLine,
+      // [3] Ending line
+      endColumn,
+      // [4] Ending column
+      start,
+      // [5] Start position / Source index
+      end
+      // [6] End position
+    ]);
+    if (nextOffset) {
+      offset = nextOffset;
+      nextOffset = null;
+    }
+    start = end;
+  }
+  return tokens;
+}
+__name(tokenize, "tokenize");
+
+// src/postcss-selector-parser/parser.js
+var WHITESPACE_TOKENS = {
+  [space]: true,
+  [cr]: true,
+  [feed]: true,
+  [newline]: true,
+  [tab]: true
+};
+var WHITESPACE_EQUIV_TOKENS = {
+  ...WHITESPACE_TOKENS,
+  [comment]: true
+};
+function tokenStart(token) {
+  return {
+    line: token[FIELDS.START_LINE],
+    column: token[FIELDS.START_COL]
+  };
+}
+__name(tokenStart, "tokenStart");
+function tokenEnd(token) {
+  return {
+    line: token[FIELDS.END_LINE],
+    column: token[FIELDS.END_COL]
+  };
+}
+__name(tokenEnd, "tokenEnd");
+function getSource(startLine, startColumn, endLine, endColumn) {
+  return {
+    start: {
+      line: startLine,
+      column: startColumn
+    },
+    end: {
+      line: endLine,
+      column: endColumn
+    }
+  };
+}
+__name(getSource, "getSource");
+function getTokenSource(token) {
+  return getSource(
+    token[FIELDS.START_LINE],
+    token[FIELDS.START_COL],
+    token[FIELDS.END_LINE],
+    token[FIELDS.END_COL]
+  );
+}
+__name(getTokenSource, "getTokenSource");
+function getTokenSourceSpan(startToken, endToken) {
+  if (!startToken) {
+    return void 0;
+  }
+  return getSource(
+    startToken[FIELDS.START_LINE],
+    startToken[FIELDS.START_COL],
+    endToken[FIELDS.END_LINE],
+    endToken[FIELDS.END_COL]
+  );
+}
+__name(getTokenSourceSpan, "getTokenSourceSpan");
+function unescapeProp(node, prop) {
+  let value = node[prop];
+  if (typeof value !== "string") {
+    return;
+  }
+  if (value.indexOf("\\") !== -1) {
+    ensureObject(node, "raws");
+    node[prop] = unesc(value);
+    if (node.raws[prop] === void 0) {
+      node.raws[prop] = value;
+    }
+  }
+  return node;
+}
+__name(unescapeProp, "unescapeProp");
+function indexesOf(array, item) {
+  let i = -1;
+  const indexes = [];
+  while ((i = array.indexOf(item, i + 1)) !== -1) {
+    indexes.push(i);
+  }
+  return indexes;
+}
+__name(indexesOf, "indexesOf");
+function uniqs() {
+  const list2 = Array.prototype.concat.apply([], arguments);
+  return list2.filter((item, i) => i === list2.indexOf(item));
+}
+__name(uniqs, "uniqs");
+var Parser2 = class {
+  static {
+    __name(this, "Parser");
+  }
+  constructor(rule, options = {}) {
+    this.rule = rule;
+    this.options = Object.assign({ lossy: false, safe: false }, options);
+    this.position = 0;
+    this.css = typeof this.rule === "string" ? this.rule : this.rule.selector;
+    this.tokens = tokenize({
+      css: this.css,
+      error: this._errorGenerator(),
+      safe: this.options.safe
+    });
+    let rootSource = getTokenSourceSpan(this.tokens[0], this.tokens[this.tokens.length - 1]);
+    this.root = new Root3({ source: rootSource });
+    this.root.errorGenerator = this._errorGenerator();
+    const selector2 = new Selector({
+      source: { start: { line: 1, column: 1 } },
+      sourceIndex: 0
+    });
+    this.root.append(selector2);
+    this.current = selector2;
+    this.loop();
+  }
+  _errorGenerator() {
+    return (message, errorOptions) => {
+      if (typeof this.rule === "string") {
+        return new Error(message);
+      }
+      return this.rule.error(message, errorOptions);
+    };
+  }
+  attribute() {
+    const attr = [];
+    const startingToken = this.currToken;
+    this.position++;
+    while (this.position < this.tokens.length && this.currToken[FIELDS.TYPE] !== closeSquare) {
+      attr.push(this.currToken);
+      this.position++;
+    }
+    if (this.currToken[FIELDS.TYPE] !== closeSquare) {
+      return this.expected("closing square bracket", this.currToken[FIELDS.START_POS]);
+    }
+    const len = attr.length;
+    const node = {
+      source: getSource(
+        startingToken[1],
+        startingToken[2],
+        this.currToken[3],
+        this.currToken[4]
+      ),
+      sourceIndex: startingToken[FIELDS.START_POS]
+    };
+    if (len === 1 && !~[word].indexOf(attr[0][FIELDS.TYPE])) {
+      return this.expected("attribute", attr[0][FIELDS.START_POS]);
+    }
+    let pos = 0;
+    let spaceBefore = "";
+    let commentBefore = "";
+    let lastAdded = null;
+    let spaceAfterMeaningfulToken = false;
+    while (pos < len) {
+      const token = attr[pos];
+      const content = this.content(token);
+      const next = attr[pos + 1];
+      switch (token[FIELDS.TYPE]) {
+        case space:
+          spaceAfterMeaningfulToken = true;
+          if (this.options.lossy) {
+            break;
+          }
+          if (lastAdded) {
+            ensureObject(node, "spaces", lastAdded);
+            const prevContent = node.spaces[lastAdded].after || "";
+            node.spaces[lastAdded].after = prevContent + content;
+            const existingComment = getProp(node, "raws", "spaces", lastAdded, "after") || null;
+            if (existingComment) {
+              node.raws.spaces[lastAdded].after = existingComment + content;
+            }
+          } else {
+            spaceBefore = spaceBefore + content;
+            commentBefore = commentBefore + content;
+          }
+          break;
+        case asterisk:
+          if (next[FIELDS.TYPE] === equals) {
+            node.operator = content;
+            lastAdded = "operator";
+          } else if ((!node.namespace || lastAdded === "namespace" && !spaceAfterMeaningfulToken) && next) {
+            if (spaceBefore) {
+              ensureObject(node, "spaces", "attribute");
+              node.spaces.attribute.before = spaceBefore;
+              spaceBefore = "";
+            }
+            if (commentBefore) {
+              ensureObject(node, "raws", "spaces", "attribute");
+              node.raws.spaces.attribute.before = spaceBefore;
+              commentBefore = "";
+            }
+            node.namespace = (node.namespace || "") + content;
+            const rawValue = getProp(node, "raws", "namespace") || null;
+            if (rawValue) {
+              node.raws.namespace += content;
+            }
+            lastAdded = "namespace";
+          }
+          spaceAfterMeaningfulToken = false;
+          break;
+        case dollar:
+          if (lastAdded === "value") {
+            let oldRawValue = getProp(node, "raws", "value");
+            node.value += "$";
+            if (oldRawValue) {
+              node.raws.value = oldRawValue + "$";
+            }
+            break;
+          }
+        // Falls through
+        case caret:
+          if (next[FIELDS.TYPE] === equals) {
+            node.operator = content;
+            lastAdded = "operator";
+          }
+          spaceAfterMeaningfulToken = false;
+          break;
+        case combinator:
+          if (content === "~" && next[FIELDS.TYPE] === equals) {
+            node.operator = content;
+            lastAdded = "operator";
+          }
+          if (content !== "|") {
+            spaceAfterMeaningfulToken = false;
+            break;
+          }
+          if (next[FIELDS.TYPE] === equals) {
+            node.operator = content;
+            lastAdded = "operator";
+          } else if (!node.namespace && !node.attribute) {
+            node.namespace = true;
+          }
+          spaceAfterMeaningfulToken = false;
+          break;
+        case word:
+          if (next && this.content(next) === "|" && (attr[pos + 2] && attr[pos + 2][FIELDS.TYPE] !== equals) && // this look-ahead probably fails with comment nodes involved.
+          !node.operator && !node.namespace) {
+            node.namespace = content;
+            lastAdded = "namespace";
+          } else if (!node.attribute || lastAdded === "attribute" && !spaceAfterMeaningfulToken) {
+            if (spaceBefore) {
+              ensureObject(node, "spaces", "attribute");
+              node.spaces.attribute.before = spaceBefore;
+              spaceBefore = "";
+            }
+            if (commentBefore) {
+              ensureObject(node, "raws", "spaces", "attribute");
+              node.raws.spaces.attribute.before = commentBefore;
+              commentBefore = "";
+            }
+            node.attribute = (node.attribute || "") + content;
+            const rawValue = getProp(node, "raws", "attribute") || null;
+            if (rawValue) {
+              node.raws.attribute += content;
+            }
+            lastAdded = "attribute";
+          } else if (!node.value && node.value !== "" || lastAdded === "value" && !(spaceAfterMeaningfulToken || node.quoteMark)) {
+            let unescaped2 = unesc(content);
+            let oldRawValue = getProp(node, "raws", "value") || "";
+            let oldValue = node.value || "";
+            node.value = oldValue + unescaped2;
+            node.quoteMark = null;
+            if (unescaped2 !== content || oldRawValue) {
+              ensureObject(node, "raws");
+              node.raws.value = (oldRawValue || oldValue) + content;
+            }
+            lastAdded = "value";
+          } else {
+            let insensitive = content === "i" || content === "I";
+            if ((node.value || node.value === "") && (node.quoteMark || spaceAfterMeaningfulToken)) {
+              node.insensitive = insensitive;
+              if (!insensitive || content === "I") {
+                ensureObject(node, "raws");
+                node.raws.insensitiveFlag = content;
+              }
+              lastAdded = "insensitive";
+              if (spaceBefore) {
+                ensureObject(node, "spaces", "insensitive");
+                node.spaces.insensitive.before = spaceBefore;
+                spaceBefore = "";
+              }
+              if (commentBefore) {
+                ensureObject(node, "raws", "spaces", "insensitive");
+                node.raws.spaces.insensitive.before = commentBefore;
+                commentBefore = "";
+              }
+            } else if (node.value || node.value === "") {
+              lastAdded = "value";
+              node.value += content;
+              if (node.raws.value) {
+                node.raws.value += content;
+              }
+            }
+          }
+          spaceAfterMeaningfulToken = false;
+          break;
+        case str:
+          if (!node.attribute || !node.operator) {
+            return this.error(`Expected an attribute followed by an operator preceding the string.`, {
+              index: token[FIELDS.START_POS]
+            });
+          }
+          let { unescaped, quoteMark } = unescapeValue(content);
+          node.value = unescaped;
+          node.quoteMark = quoteMark;
+          lastAdded = "value";
+          ensureObject(node, "raws");
+          node.raws.value = content;
+          spaceAfterMeaningfulToken = false;
+          break;
+        case equals:
+          if (!node.attribute) {
+            return this.expected("attribute", token[FIELDS.START_POS], content);
+          }
+          if (node.value) {
+            return this.error('Unexpected "=" found; an operator was already defined.', { index: token[FIELDS.START_POS] });
+          }
+          node.operator = node.operator ? node.operator + content : content;
+          lastAdded = "operator";
+          spaceAfterMeaningfulToken = false;
+          break;
+        case comment:
+          if (lastAdded) {
+            if (spaceAfterMeaningfulToken || next && next[FIELDS.TYPE] === space || lastAdded === "insensitive") {
+              const lastComment = getProp(node, "spaces", lastAdded, "after") || "";
+              const rawLastComment = getProp(node, "raws", "spaces", lastAdded, "after") || lastComment;
+              ensureObject(node, "raws", "spaces", lastAdded);
+              node.raws.spaces[lastAdded].after = rawLastComment + content;
+            } else {
+              const lastValue = node[lastAdded] || "";
+              const rawLastValue = getProp(node, "raws", lastAdded) || lastValue;
+              ensureObject(node, "raws");
+              node.raws[lastAdded] = rawLastValue + content;
+            }
+          } else {
+            commentBefore = commentBefore + content;
+          }
+          break;
+        default:
+          return this.error(`Unexpected "${content}" found.`, { index: token[FIELDS.START_POS] });
+      }
+      pos++;
+    }
+    unescapeProp(node, "attribute");
+    unescapeProp(node, "namespace");
+    this.newNode(new Attribute(node));
+    this.position++;
+  }
+  /**
+   * return a node containing meaningless garbage up to (but not including) the specified token position.
+   * if the token position is negative, all remaining tokens are consumed.
+   *
+   * This returns an array containing a single string node if all whitespace,
+   * otherwise an array of comment nodes with space before and after.
+   *
+   * These tokens are not added to the current selector, the caller can add them or use them to amend
+   * a previous node's space metadata.
+   *
+   * In lossy mode, this returns only comments.
+   */
+  parseWhitespaceEquivalentTokens(stopPosition) {
+    if (stopPosition < 0) {
+      stopPosition = this.tokens.length;
+    }
+    let startPosition = this.position;
+    let nodes = [];
+    let space2 = "";
+    let lastComment = void 0;
+    do {
+      if (WHITESPACE_TOKENS[this.currToken[FIELDS.TYPE]]) {
+        if (!this.options.lossy) {
+          space2 += this.content();
+        }
+      } else if (this.currToken[FIELDS.TYPE] === comment) {
+        let spaces = {};
+        if (space2) {
+          spaces.before = space2;
+          space2 = "";
+        }
+        lastComment = new Comment2({
+          value: this.content(),
+          source: getTokenSource(this.currToken),
+          sourceIndex: this.currToken[FIELDS.START_POS],
+          spaces
+        });
+        nodes.push(lastComment);
+      }
+    } while (++this.position < stopPosition);
+    if (space2) {
+      if (lastComment) {
+        lastComment.spaces.after = space2;
+      } else if (!this.options.lossy) {
+        let firstToken = this.tokens[startPosition];
+        let lastToken = this.tokens[this.position - 1];
+        nodes.push(new String2({
+          value: "",
+          source: getSource(
+            firstToken[FIELDS.START_LINE],
+            firstToken[FIELDS.START_COL],
+            lastToken[FIELDS.END_LINE],
+            lastToken[FIELDS.END_COL]
+          ),
+          sourceIndex: firstToken[FIELDS.START_POS],
+          spaces: { before: space2, after: "" }
+        }));
+      }
+    }
+    return nodes;
+  }
+  /**
+   *
+   * @param {*} nodes
+   */
+  convertWhitespaceNodesToSpace(nodes, requiredSpace = false) {
+    let space2 = "";
+    let rawSpace = "";
+    nodes.forEach((n) => {
+      let spaceBefore = this.lossySpace(n.spaces.before, requiredSpace);
+      let rawSpaceBefore = this.lossySpace(n.rawSpaceBefore, requiredSpace);
+      space2 += spaceBefore + this.lossySpace(n.spaces.after, requiredSpace && spaceBefore.length === 0);
+      rawSpace += spaceBefore + n.value + this.lossySpace(n.rawSpaceAfter, requiredSpace && rawSpaceBefore.length === 0);
+    });
+    if (rawSpace === space2) {
+      rawSpace = void 0;
+    }
+    let result = { space: space2, rawSpace };
+    return result;
+  }
+  isNamedCombinator(position = this.position) {
+    return this.tokens[position + 0] && this.tokens[position + 0][FIELDS.TYPE] === slash && this.tokens[position + 1] && this.tokens[position + 1][FIELDS.TYPE] === word && this.tokens[position + 2] && this.tokens[position + 2][FIELDS.TYPE] === slash;
+  }
+  namedCombinator() {
+    if (this.isNamedCombinator()) {
+      let nameRaw = this.content(this.tokens[this.position + 1]);
+      let name = unesc(nameRaw).toLowerCase();
+      let raws = {};
+      if (name !== nameRaw) {
+        raws.value = `/${nameRaw}/`;
+      }
+      let node = new Combinator({
+        value: `/${name}/`,
+        source: getSource(
+          this.currToken[FIELDS.START_LINE],
+          this.currToken[FIELDS.START_COL],
+          this.tokens[this.position + 2][FIELDS.END_LINE],
+          this.tokens[this.position + 2][FIELDS.END_COL]
+        ),
+        sourceIndex: this.currToken[FIELDS.START_POS],
+        raws
+      });
+      this.position = this.position + 3;
+      return node;
+    } else {
+      this.unexpected();
+    }
+  }
+  combinator() {
+    if (this.content() === "|") {
+      return this.namespace();
+    }
+    let nextSigTokenPos = this.locateNextMeaningfulToken(this.position);
+    if (nextSigTokenPos < 0 || this.tokens[nextSigTokenPos][FIELDS.TYPE] === comma || this.tokens[nextSigTokenPos][FIELDS.TYPE] === closeParenthesis) {
+      let nodes = this.parseWhitespaceEquivalentTokens(nextSigTokenPos);
+      if (nodes.length > 0) {
+        let last = this.current.last;
+        if (last) {
+          let { space: space2, rawSpace } = this.convertWhitespaceNodesToSpace(nodes);
+          if (rawSpace !== void 0) {
+            last.rawSpaceAfter += rawSpace;
+          }
+          last.spaces.after += space2;
+        } else {
+          nodes.forEach((n) => this.newNode(n));
+        }
+      }
+      return;
+    }
+    let firstToken = this.currToken;
+    let spaceOrDescendantSelectorNodes = void 0;
+    if (nextSigTokenPos > this.position) {
+      spaceOrDescendantSelectorNodes = this.parseWhitespaceEquivalentTokens(nextSigTokenPos);
+    }
+    let node;
+    if (this.isNamedCombinator()) {
+      node = this.namedCombinator();
+    } else if (this.currToken[FIELDS.TYPE] === combinator) {
+      node = new Combinator({
+        value: this.content(),
+        source: getTokenSource(this.currToken),
+        sourceIndex: this.currToken[FIELDS.START_POS]
+      });
+      this.position++;
+    } else if (WHITESPACE_TOKENS[this.currToken[FIELDS.TYPE]]) {
+    } else if (!spaceOrDescendantSelectorNodes) {
+      this.unexpected();
+    }
+    if (node) {
+      if (spaceOrDescendantSelectorNodes) {
+        let { space: space2, rawSpace } = this.convertWhitespaceNodesToSpace(spaceOrDescendantSelectorNodes);
+        node.spaces.before = space2;
+        node.rawSpaceBefore = rawSpace;
+      }
+    } else {
+      let { space: space2, rawSpace } = this.convertWhitespaceNodesToSpace(spaceOrDescendantSelectorNodes, true);
+      if (!rawSpace) {
+        rawSpace = space2;
+      }
+      let spaces = {};
+      let raws = { spaces: {} };
+      if (space2.endsWith(" ") && rawSpace.endsWith(" ")) {
+        spaces.before = space2.slice(0, space2.length - 1);
+        raws.spaces.before = rawSpace.slice(0, rawSpace.length - 1);
+      } else if (space2.startsWith(" ") && rawSpace.startsWith(" ")) {
+        spaces.after = space2.slice(1);
+        raws.spaces.after = rawSpace.slice(1);
+      } else {
+        raws.value = rawSpace;
+      }
+      node = new Combinator({
+        value: " ",
+        source: getTokenSourceSpan(firstToken, this.tokens[this.position - 1]),
+        sourceIndex: firstToken[FIELDS.START_POS],
+        spaces,
+        raws
+      });
+    }
+    if (this.currToken && this.currToken[FIELDS.TYPE] === space) {
+      node.spaces.after = this.optionalSpace(this.content());
+      this.position++;
+    }
+    return this.newNode(node);
+  }
+  comma() {
+    if (this.position === this.tokens.length - 1) {
+      this.root.trailingComma = true;
+      this.position++;
+      return;
+    }
+    this.current._inferEndPosition();
+    const selector2 = new Selector({
+      source: {
+        start: tokenStart(this.tokens[this.position + 1])
+      },
+      sourceIndex: this.tokens[this.position + 1][FIELDS.START_POS]
+    });
+    this.current.parent.append(selector2);
+    this.current = selector2;
+    this.position++;
+  }
+  comment() {
+    const current = this.currToken;
+    this.newNode(new Comment2({
+      value: this.content(),
+      source: getTokenSource(current),
+      sourceIndex: current[FIELDS.START_POS]
+    }));
+    this.position++;
+  }
+  error(message, opts) {
+    throw this.root.error(message, opts);
+  }
+  missingBackslash() {
+    return this.error("Expected a backslash preceding the semicolon.", {
+      index: this.currToken[FIELDS.START_POS]
+    });
+  }
+  missingParenthesis() {
+    return this.expected("opening parenthesis", this.currToken[FIELDS.START_POS]);
+  }
+  missingSquareBracket() {
+    return this.expected("opening square bracket", this.currToken[FIELDS.START_POS]);
+  }
+  unexpected() {
+    return this.error(`Unexpected '${this.content()}'. Escaping special characters with \\ may help.`, this.currToken[FIELDS.START_POS]);
+  }
+  unexpectedPipe() {
+    return this.error(`Unexpected '|'.`, this.currToken[FIELDS.START_POS]);
+  }
+  namespace() {
+    const before = this.prevToken && this.content(this.prevToken) || true;
+    if (this.nextToken[FIELDS.TYPE] === word) {
+      this.position++;
+      return this.word(before);
+    } else if (this.nextToken[FIELDS.TYPE] === asterisk) {
+      this.position++;
+      return this.universal(before);
+    }
+    this.unexpectedPipe();
+  }
+  nesting() {
+    if (this.nextToken) {
+      let nextContent = this.content(this.nextToken);
+      if (nextContent === "|") {
+        this.position++;
+        return;
+      }
+    }
+    const current = this.currToken;
+    this.newNode(new Nesting({
+      value: this.content(),
+      source: getTokenSource(current),
+      sourceIndex: current[FIELDS.START_POS]
+    }));
+    this.position++;
+  }
+  parentheses() {
+    let last = this.current.last;
+    let unbalanced = 1;
+    this.position++;
+    if (last && last.type === PSEUDO) {
+      const selector2 = new Selector({
+        source: { start: tokenStart(this.tokens[this.position]) },
+        sourceIndex: this.tokens[this.position][FIELDS.START_POS]
+      });
+      const cache = this.current;
+      last.append(selector2);
+      this.current = selector2;
+      while (this.position < this.tokens.length && unbalanced) {
+        if (this.currToken[FIELDS.TYPE] === openParenthesis) {
+          unbalanced++;
+        }
+        if (this.currToken[FIELDS.TYPE] === closeParenthesis) {
+          unbalanced--;
+        }
+        if (unbalanced) {
+          this.parse();
+        } else {
+          this.current.source.end = tokenEnd(this.currToken);
+          this.current.parent.source.end = tokenEnd(this.currToken);
+          this.position++;
+        }
+      }
+      this.current = cache;
+    } else {
+      let parenStart = this.currToken;
+      let parenValue = "(";
+      let parenEnd;
+      while (this.position < this.tokens.length && unbalanced) {
+        if (this.currToken[FIELDS.TYPE] === openParenthesis) {
+          unbalanced++;
+        }
+        if (this.currToken[FIELDS.TYPE] === closeParenthesis) {
+          unbalanced--;
+        }
+        parenEnd = this.currToken;
+        parenValue += this.parseParenthesisToken(this.currToken);
+        this.position++;
+      }
+      if (last) {
+        last.appendToPropertyAndEscape("value", parenValue, parenValue);
+      } else {
+        this.newNode(new String2({
+          value: parenValue,
+          source: getSource(
+            parenStart[FIELDS.START_LINE],
+            parenStart[FIELDS.START_COL],
+            parenEnd[FIELDS.END_LINE],
+            parenEnd[FIELDS.END_COL]
+          ),
+          sourceIndex: parenStart[FIELDS.START_POS]
+        }));
+      }
+    }
+    if (unbalanced) {
+      return this.expected("closing parenthesis", this.currToken[FIELDS.START_POS]);
+    }
+  }
+  pseudo() {
+    let pseudoStr = "";
+    let startingToken = this.currToken;
+    while (this.currToken && this.currToken[FIELDS.TYPE] === colon) {
+      pseudoStr += this.content();
+      this.position++;
+    }
+    if (!this.currToken) {
+      return this.expected(["pseudo-class", "pseudo-element"], this.position - 1);
+    }
+    if (this.currToken[FIELDS.TYPE] === word) {
+      this.splitWord(false, (first, length) => {
+        pseudoStr += first;
+        this.newNode(new Pseudo({
+          value: pseudoStr,
+          source: getTokenSourceSpan(startingToken, this.currToken),
+          sourceIndex: startingToken[FIELDS.START_POS]
+        }));
+        if (length > 1 && this.nextToken && this.nextToken[FIELDS.TYPE] === openParenthesis) {
+          this.error("Misplaced parenthesis.", {
+            index: this.nextToken[FIELDS.START_POS]
+          });
+        }
+      });
+    } else {
+      return this.expected(["pseudo-class", "pseudo-element"], this.currToken[FIELDS.START_POS]);
+    }
+  }
+  space() {
+    const content = this.content();
+    if (this.position === 0 || this.prevToken[FIELDS.TYPE] === comma || this.prevToken[FIELDS.TYPE] === openParenthesis || this.current.nodes.every((node) => node.type === "comment")) {
+      this.spaces = this.optionalSpace(content);
+      this.position++;
+    } else if (this.position === this.tokens.length - 1 || this.nextToken[FIELDS.TYPE] === comma || this.nextToken[FIELDS.TYPE] === closeParenthesis) {
+      this.current.last.spaces.after = this.optionalSpace(content);
+      this.position++;
+    } else {
+      this.combinator();
+    }
+  }
+  string() {
+    const current = this.currToken;
+    this.newNode(new String2({
+      value: this.content(),
+      source: getTokenSource(current),
+      sourceIndex: current[FIELDS.START_POS]
+    }));
+    this.position++;
+  }
+  universal(namespace) {
+    const nextToken = this.nextToken;
+    if (nextToken && this.content(nextToken) === "|") {
+      this.position++;
+      return this.namespace();
+    }
+    const current = this.currToken;
+    this.newNode(new Universal({
+      value: this.content(),
+      source: getTokenSource(current),
+      sourceIndex: current[FIELDS.START_POS]
+    }), namespace);
+    this.position++;
+  }
+  splitWord(namespace, firstCallback) {
+    let nextToken = this.nextToken;
+    let word2 = this.content();
+    while (nextToken && ~[dollar, caret, equals, word].indexOf(nextToken[FIELDS.TYPE])) {
+      this.position++;
+      let current = this.content();
+      word2 += current;
+      if (current.lastIndexOf("\\") === current.length - 1) {
+        let next = this.nextToken;
+        if (next && next[FIELDS.TYPE] === space) {
+          word2 += this.requiredSpace(this.content(next));
+          this.position++;
+        }
+      }
+      nextToken = this.nextToken;
+    }
+    const hasClass = indexesOf(word2, ".").filter((i) => {
+      const escapedDot = word2[i - 1] === "\\";
+      const isKeyframesPercent = /^\d+\.\d+%$/.test(word2);
+      return !escapedDot && !isKeyframesPercent;
+    });
+    let hasId = indexesOf(word2, "#").filter((i) => word2[i - 1] !== "\\");
+    const interpolations = indexesOf(word2, "#{");
+    if (interpolations.length) {
+      hasId = hasId.filter((hashIndex) => !~interpolations.indexOf(hashIndex));
+    }
+    let indices = sortAscending(uniqs([0, ...hasClass, ...hasId]));
+    indices.forEach((ind, i) => {
+      const index = indices[i + 1] || word2.length;
+      const value = word2.slice(ind, index);
+      if (i === 0 && firstCallback) {
+        return firstCallback.call(this, value, indices.length);
+      }
+      let node;
+      const current = this.currToken;
+      const sourceIndex = current[FIELDS.START_POS] + indices[i];
+      const source = getSource(
+        current[1],
+        current[2] + ind,
+        current[3],
+        current[2] + (index - 1)
+      );
+      if (~hasClass.indexOf(ind)) {
+        let classNameOpts = {
+          value: value.slice(1),
+          source,
+          sourceIndex
+        };
+        node = new ClassName(unescapeProp(classNameOpts, "value"));
+      } else if (~hasId.indexOf(ind)) {
+        let idOpts = {
+          value: value.slice(1),
+          source,
+          sourceIndex
+        };
+        node = new ID2(unescapeProp(idOpts, "value"));
+      } else {
+        let tagOpts = {
+          value,
+          source,
+          sourceIndex
+        };
+        unescapeProp(tagOpts, "value");
+        node = new Tag(tagOpts);
+      }
+      this.newNode(node, namespace);
+      namespace = null;
+    });
+    this.position++;
+  }
+  word(namespace) {
+    const nextToken = this.nextToken;
+    if (nextToken && this.content(nextToken) === "|") {
+      this.position++;
+      return this.namespace();
+    }
+    return this.splitWord(namespace);
+  }
+  loop() {
+    while (this.position < this.tokens.length) {
+      this.parse(true);
+    }
+    this.current._inferEndPosition();
+    return this.root;
+  }
+  parse(throwOnParenthesis) {
+    switch (this.currToken[FIELDS.TYPE]) {
+      case space:
+        this.space();
+        break;
+      case comment:
+        this.comment();
+        break;
+      case openParenthesis:
+        this.parentheses();
+        break;
+      case closeParenthesis:
+        if (throwOnParenthesis) {
+          this.missingParenthesis();
+        }
+        break;
+      case openSquare:
+        this.attribute();
+        break;
+      case dollar:
+      case caret:
+      case equals:
+      case word:
+        this.word();
+        break;
+      case colon:
+        this.pseudo();
+        break;
+      case comma:
+        this.comma();
+        break;
+      case asterisk:
+        this.universal();
+        break;
+      case ampersand:
+        this.nesting();
+        break;
+      case slash:
+      case combinator:
+        this.combinator();
+        break;
+      case str:
+        this.string();
+        break;
+      // These cases throw; no break needed.
+      case closeSquare:
+        this.missingSquareBracket();
+      case semicolon:
+        this.missingBackslash();
+      default:
+        this.unexpected();
+    }
+  }
+  /**
+   * Helpers
+   */
+  expected(description, index, found) {
+    if (Array.isArray(description)) {
+      const last = description.pop();
+      description = `${description.join(", ")} or ${last}`;
+    }
+    const an = /^[aeiou]/.test(description[0]) ? "an" : "a";
+    if (!found) {
+      return this.error(
+        `Expected ${an} ${description}.`,
+        { index }
+      );
+    }
+    return this.error(
+      `Expected ${an} ${description}, found "${found}" instead.`,
+      { index }
+    );
+  }
+  requiredSpace(space2) {
+    return this.options.lossy ? " " : space2;
+  }
+  optionalSpace(space2) {
+    return this.options.lossy ? "" : space2;
+  }
+  lossySpace(space2, required) {
+    if (this.options.lossy) {
+      return required ? " " : "";
+    } else {
+      return space2;
+    }
+  }
+  parseParenthesisToken(token) {
+    const content = this.content(token);
+    if (token[FIELDS.TYPE] === space) {
+      return this.requiredSpace(content);
+    } else {
+      return content;
+    }
+  }
+  newNode(node, namespace) {
+    if (namespace) {
+      if (/^ +$/.test(namespace)) {
+        if (!this.options.lossy) {
+          this.spaces = (this.spaces || "") + namespace;
+        }
+        namespace = true;
+      }
+      node.namespace = namespace;
+      unescapeProp(node, "namespace");
+    }
+    if (this.spaces) {
+      node.spaces.before = this.spaces;
+      this.spaces = "";
+    }
+    return this.current.append(node);
+  }
+  content(token = this.currToken) {
+    return this.css.slice(token[FIELDS.START_POS], token[FIELDS.END_POS]);
+  }
+  get currToken() {
+    return this.tokens[this.position];
+  }
+  get nextToken() {
+    return this.tokens[this.position + 1];
+  }
+  get prevToken() {
+    return this.tokens[this.position - 1];
+  }
+  /**
+   * returns the index of the next non-whitespace, non-comment token.
+   * returns -1 if no meaningful token is found.
+   */
+  locateNextMeaningfulToken(startPosition = this.position + 1) {
+    let searchPosition = startPosition;
+    while (searchPosition < this.tokens.length) {
+      if (WHITESPACE_EQUIV_TOKENS[this.tokens[searchPosition][FIELDS.TYPE]]) {
+        searchPosition++;
+        continue;
+      } else {
+        return searchPosition;
+      }
+    }
+    return -1;
+  }
+};
+
+// src/postcss-selector-parser/processor.js
+var Processor4 = class {
+  static {
+    __name(this, "Processor");
+  }
+  constructor(func, options) {
+    this.func = func || /* @__PURE__ */ __name(function noop() {
+    }, "noop");
+    this.funcRes = null;
+    this.options = options;
+  }
+  _shouldUpdateSelector(rule, options = {}) {
+    let merged = Object.assign({}, this.options, options);
+    if (merged.updateSelector === false) {
+      return false;
+    } else {
+      return typeof rule !== "string";
+    }
+  }
+  _isLossy(options = {}) {
+    let merged = Object.assign({}, this.options, options);
+    if (merged.lossless === false) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  _root(rule, options = {}) {
+    let parser2 = new Parser2(rule, this._parseOptions(options));
+    return parser2.root;
+  }
+  _parseOptions(options) {
+    return {
+      lossy: this._isLossy(options)
+    };
+  }
+  _run(rule, options = {}) {
+    return new Promise((resolve, reject) => {
+      try {
+        let root2 = this._root(rule, options);
+        Promise.resolve(this.func(root2)).then((transform) => {
+          let string2 = void 0;
+          if (this._shouldUpdateSelector(rule, options)) {
+            string2 = root2.toString();
+            rule.selector = string2;
+          }
+          return { transform, root: root2, string: string2 };
+        }).then(resolve, reject);
+      } catch (e) {
+        reject(e);
+        return;
+      }
+    });
+  }
+  _runSync(rule, options = {}) {
+    let root2 = this._root(rule, options);
+    let transform = this.func(root2);
+    if (transform && typeof transform.then === "function") {
+      throw new Error("Selector processor returned a promise to a synchronous call.");
+    }
+    let string2 = void 0;
+    if (options.updateSelector && typeof rule !== "string") {
+      string2 = root2.toString();
+      rule.selector = string2;
+    }
+    return { transform, root: root2, string: string2 };
+  }
+  /**
+   * Process rule into a selector AST.
+   *
+   * @param rule {postcss.Rule | string} The css selector to be processed
+   * @param options The options for processing
+   * @returns {Promise<parser.Root>} The AST of the selector after processing it.
+   */
+  ast(rule, options) {
+    return this._run(rule, options).then((result) => result.root);
+  }
+  /**
+   * Process rule into a selector AST synchronously.
+   *
+   * @param rule {postcss.Rule | string} The css selector to be processed
+   * @param options The options for processing
+   * @returns {parser.Root} The AST of the selector after processing it.
+   */
+  astSync(rule, options) {
+    return this._runSync(rule, options).root;
+  }
+  /**
+   * Process a selector into a transformed value asynchronously
+   *
+   * @param rule {postcss.Rule | string} The css selector to be processed
+   * @param options The options for processing
+   * @returns {Promise<any>} The value returned by the processor.
+   */
+  transform(rule, options) {
+    return this._run(rule, options).then((result) => result.transform);
+  }
+  /**
+   * Process a selector into a transformed value synchronously.
+   *
+   * @param rule {postcss.Rule | string} The css selector to be processed
+   * @param options The options for processing
+   * @returns {any} The value returned by the processor.
+   */
+  transformSync(rule, options) {
+    return this._runSync(rule, options).transform;
+  }
+  /**
+   * Process a selector into a new selector string asynchronously.
+   *
+   * @param rule {postcss.Rule | string} The css selector to be processed
+   * @param options The options for processing
+   * @returns {string} the selector after processing.
+   */
+  process(rule, options) {
+    return this._run(rule, options).then((result) => result.string || result.root.toString());
+  }
+  /**
+   * Process a selector into a new selector string synchronously.
+   *
+   * @param rule {postcss.Rule | string} The css selector to be processed
+   * @param options The options for processing
+   * @returns {string} the selector after processing.
+   */
+  processSync(rule, options) {
+    let result = this._runSync(rule, options);
+    return result.string || result.root.toString();
+  }
+};
+
+// src/postcss-selector-parser/selectors/index.js
+var selectors_exports = {};
+__export(selectors_exports, {
+  ATTRIBUTE: () => ATTRIBUTE,
+  CLASS: () => CLASS,
+  COMBINATOR: () => COMBINATOR,
+  COMMENT: () => COMMENT,
+  ID: () => ID,
+  NESTING: () => NESTING,
+  PSEUDO: () => PSEUDO,
+  ROOT: () => ROOT,
+  SELECTOR: () => SELECTOR,
+  STRING: () => STRING,
+  TAG: () => TAG,
+  UNIVERSAL: () => UNIVERSAL,
+  attribute: () => attribute,
+  className: () => className,
+  combinator: () => combinator2,
+  comment: () => comment2,
+  id: () => id,
+  isAttribute: () => isAttribute,
+  isClassName: () => isClassName,
+  isCombinator: () => isCombinator,
+  isComment: () => isComment,
+  isContainer: () => isContainer,
+  isIdentifier: () => isIdentifier,
+  isNamespace: () => isNamespace,
+  isNesting: () => isNesting,
+  isNode: () => isNode,
+  isPseudo: () => isPseudo,
+  isPseudoClass: () => isPseudoClass,
+  isPseudoElement: () => isPseudoElement,
+  isRoot: () => isRoot,
+  isSelector: () => isSelector,
+  isString: () => isString,
+  isTag: () => isTag,
+  isUniversal: () => isUniversal,
+  nesting: () => nesting,
+  pseudo: () => pseudo,
+  root: () => root,
+  selector: () => selector,
+  string: () => string,
+  tag: () => tag,
+  universal: () => universal
+});
+
+// src/postcss-selector-parser/selectors/constructors.js
+var attribute = /* @__PURE__ */ __name((opts) => new Attribute(opts), "attribute");
+var className = /* @__PURE__ */ __name((opts) => new ClassName(opts), "className");
+var combinator2 = /* @__PURE__ */ __name((opts) => new Combinator(opts), "combinator");
+var comment2 = /* @__PURE__ */ __name((opts) => new Comment2(opts), "comment");
+var id = /* @__PURE__ */ __name((opts) => new ID2(opts), "id");
+var nesting = /* @__PURE__ */ __name((opts) => new Nesting(opts), "nesting");
+var pseudo = /* @__PURE__ */ __name((opts) => new Pseudo(opts), "pseudo");
+var root = /* @__PURE__ */ __name((opts) => new Root3(opts), "root");
+var selector = /* @__PURE__ */ __name((opts) => new Selector(opts), "selector");
+var string = /* @__PURE__ */ __name((opts) => new String2(opts), "string");
+var tag = /* @__PURE__ */ __name((opts) => new Tag(opts), "tag");
+var universal = /* @__PURE__ */ __name((opts) => new Universal(opts), "universal");
+
+// src/postcss-selector-parser/selectors/guards.js
+var IS_TYPE = {
+  [ATTRIBUTE]: true,
+  [CLASS]: true,
+  [COMBINATOR]: true,
+  [COMMENT]: true,
+  [ID]: true,
+  [NESTING]: true,
+  [PSEUDO]: true,
+  [ROOT]: true,
+  [SELECTOR]: true,
+  [STRING]: true,
+  [TAG]: true,
+  [UNIVERSAL]: true
+};
+function isNode(node) {
+  return typeof node === "object" && IS_TYPE[node.type];
+}
+__name(isNode, "isNode");
+function isNodeType(type, node) {
+  return isNode(node) && node.type === type;
+}
+__name(isNodeType, "isNodeType");
+var isAttribute = isNodeType.bind(null, ATTRIBUTE);
+var isClassName = isNodeType.bind(null, CLASS);
+var isCombinator = isNodeType.bind(null, COMBINATOR);
+var isComment = isNodeType.bind(null, COMMENT);
+var isIdentifier = isNodeType.bind(null, ID);
+var isNesting = isNodeType.bind(null, NESTING);
+var isPseudo = isNodeType.bind(null, PSEUDO);
+var isRoot = isNodeType.bind(null, ROOT);
+var isSelector = isNodeType.bind(null, SELECTOR);
+var isString = isNodeType.bind(null, STRING);
+var isTag = isNodeType.bind(null, TAG);
+var isUniversal = isNodeType.bind(null, UNIVERSAL);
+function isPseudoElement(node) {
+  return isPseudo(node) && node.value && (node.value.startsWith("::") || node.value.toLowerCase() === ":before" || node.value.toLowerCase() === ":after" || node.value.toLowerCase() === ":first-letter" || node.value.toLowerCase() === ":first-line");
+}
+__name(isPseudoElement, "isPseudoElement");
+function isPseudoClass(node) {
+  return isPseudo(node) && !isPseudoElement(node);
+}
+__name(isPseudoClass, "isPseudoClass");
+function isContainer(node) {
+  return !!(isNode(node) && node.walk);
+}
+__name(isContainer, "isContainer");
+function isNamespace(node) {
+  return isAttribute(node) || isTag(node);
+}
+__name(isNamespace, "isNamespace");
+
+// src/postcss-selector-parser/index.js
+var parser = /* @__PURE__ */ __name((processor) => new Processor4(processor), "parser");
+Object.assign(parser, selectors_exports);
+var postcss_selector_parser_default = parser;
 
 // src/ExtractorResultSets.ts
 function mergeSets(into, from) {
@@ -7295,7 +6267,7 @@ var ExtractorResultSets = class _ExtractorResultSets {
   hasAttrSubstr(substr) {
     const wordSubstr = substr.trim().split(" ");
     return wordSubstr.every(
-      (word) => this.someAttrValue((value) => value.includes(word))
+      (word2) => this.someAttrValue((value) => value.includes(word2))
     );
   }
   hasAttrValue(value) {
@@ -7304,17 +6276,14 @@ var ExtractorResultSets = class _ExtractorResultSets {
   hasClass(name) {
     return this.classes.has(name) || this.undetermined.has(name);
   }
-  hasId(id) {
-    return this.ids.has(id) || this.undetermined.has(id);
+  hasId(id2) {
+    return this.ids.has(id2) || this.undetermined.has(id2);
   }
-  hasTag(tag) {
-    return this.tags.has(tag) || this.undetermined.has(tag);
+  hasTag(tag2) {
+    return this.tags.has(tag2) || this.undetermined.has(tag2);
   }
 };
 var ExtractorResultSets_default = ExtractorResultSets;
-
-// src/internal-safelist.ts
-var CSS_SAFELIST = ["*", ":root", ":after", ":before"];
 
 // src/options.ts
 var defaultOptions = {
@@ -7439,6 +6408,14 @@ var VariablesStructure = class {
 };
 
 // src/index.ts
+var CSS_SAFELIST = ["*", ":root", ":after", ":before"];
+var IGNORE_ANNOTATION_CURRENT = "purgecss ignore current";
+var IGNORE_ANNOTATION_NEXT = "purgecss ignore";
+var IGNORE_ANNOTATION_START = "purgecss start ignore";
+var IGNORE_ANNOTATION_END = "purgecss end ignore";
+var CONFIG_FILENAME = "purgecss.config.js";
+var ERROR_CONFIG_FILE_LOADING = "Error loading the config file";
+// @__NO_SIDE_EFFECTS__
 function standardizeSafelist(userDefinedSafelist = []) {
   if (Array.isArray(userDefinedSafelist)) {
     return {
@@ -7452,10 +6429,12 @@ function standardizeSafelist(userDefinedSafelist = []) {
   };
 }
 __name(standardizeSafelist, "standardizeSafelist");
+// @__NO_SIDE_EFFECTS__
 async function extractSelectors(content, extractor) {
   return new ExtractorResultSets_default(await extractor(content));
 }
 __name(extractSelectors, "extractSelectors");
+// @__NO_SIDE_EFFECTS__
 function isIgnoreAnnotation(node, type) {
   switch (type) {
     case "next":
@@ -7467,13 +6446,15 @@ function isIgnoreAnnotation(node, type) {
   }
 }
 __name(isIgnoreAnnotation, "isIgnoreAnnotation");
+// @__NO_SIDE_EFFECTS__
 function isRuleEmpty(node) {
-  if (isPostCSSRule(node) && !node.selector || node?.nodes && !node.nodes.length || isPostCSSAtRule(node) && (!node.nodes && !node.params || !node.params && node.nodes && !node.nodes.length)) {
+  if (/* @__PURE__ */ isPostCSSRule(node) && !node.selector || node?.nodes && !node.nodes.length || /* @__PURE__ */ isPostCSSAtRule(node) && (!node.nodes && !node.params || !node.params && node.nodes && !node.nodes.length)) {
     return true;
   }
   return false;
 }
 __name(isRuleEmpty, "isRuleEmpty");
+// @__NO_SIDE_EFFECTS__
 function hasIgnoreAnnotation(rule) {
   let found = false;
   rule.walkComments((node) => {
@@ -7485,16 +6466,19 @@ function hasIgnoreAnnotation(rule) {
   return found;
 }
 __name(hasIgnoreAnnotation, "hasIgnoreAnnotation");
+// @__NO_SIDE_EFFECTS__
 function mergeExtractorSelectors(...extractors) {
   const result = new ExtractorResultSets_default([]);
   extractors.forEach(result.merge, result);
   return result;
 }
 __name(mergeExtractorSelectors, "mergeExtractorSelectors");
-function stripQuotes(str) {
-  return str.replace(/(^["'])|(["']$)/g, "");
+// @__NO_SIDE_EFFECTS__
+function stripQuotes(str2) {
+  return str2.replace(/(^["'])|(["']$)/g, "");
 }
 __name(stripQuotes, "stripQuotes");
+// @__NO_SIDE_EFFECTS__
 function isAttributeFound(attributeNode, selectors) {
   if (!selectors.hasAttrName(attributeNode.attribute)) {
     return false;
@@ -7518,30 +6502,36 @@ function isAttributeFound(attributeNode, selectors) {
   }
 }
 __name(isAttributeFound, "isAttributeFound");
+// @__NO_SIDE_EFFECTS__
 function isClassFound(classNode, selectors) {
   return selectors.hasClass(classNode.value);
 }
 __name(isClassFound, "isClassFound");
+// @__NO_SIDE_EFFECTS__
 function isIdentifierFound(identifierNode, selectors) {
   return selectors.hasId(identifierNode.value);
 }
 __name(isIdentifierFound, "isIdentifierFound");
+// @__NO_SIDE_EFFECTS__
 function isTagFound(tagNode, selectors) {
   return selectors.hasTag(tagNode.value);
 }
 __name(isTagFound, "isTagFound");
-function isInPseudoClass(selector) {
-  return selector.parent && selector.parent.type === "pseudo" && selector.parent.value.startsWith(":") || false;
+// @__NO_SIDE_EFFECTS__
+function isInPseudoClass(selector2) {
+  return selector2.parent && selector2.parent.type === "pseudo" && selector2.parent.value.startsWith(":") || false;
 }
 __name(isInPseudoClass, "isInPseudoClass");
-function isInPseudoClassWhereOrIs(selector) {
-  return selector.parent && selector.parent.type === "pseudo" && (selector.parent.value === ":where" || selector.parent.value === ":is") || false;
+// @__NO_SIDE_EFFECTS__
+function isInPseudoClassWhereOrIs(selector2) {
+  return selector2.parent && selector2.parent.type === "pseudo" && (selector2.parent.value === ":where" || selector2.parent.value === ":is") || false;
 }
 __name(isInPseudoClassWhereOrIs, "isInPseudoClassWhereOrIs");
-function isPseudoClassAtRootLevel(selector) {
+// @__NO_SIDE_EFFECTS__
+function isPseudoClassAtRootLevel(selector2) {
   let result = false;
-  if (selector.type === "selector" && selector.parent?.type === "root" && selector.nodes.length === 1) {
-    selector.walk((node) => {
+  if (selector2.type === "selector" && selector2.parent?.type === "root" && selector2.nodes.length === 1) {
+    selector2.walk((node) => {
       if (node.type === "pseudo" && (node.value === ":where" || node.value === ":is" || node.value === ":has" || node.value === ":not")) {
         result = true;
       }
@@ -7550,14 +6540,17 @@ function isPseudoClassAtRootLevel(selector) {
   return result;
 }
 __name(isPseudoClassAtRootLevel, "isPseudoClassAtRootLevel");
+// @__NO_SIDE_EFFECTS__
 function isPostCSSAtRule(node) {
   return node?.type === "atrule";
 }
 __name(isPostCSSAtRule, "isPostCSSAtRule");
+// @__NO_SIDE_EFFECTS__
 function isPostCSSRule(node) {
   return node?.type === "rule";
 }
 __name(isPostCSSRule, "isPostCSSRule");
+// @__NO_SIDE_EFFECTS__
 function isPostCSSComment(node) {
   return node?.type === "comment";
 }
@@ -7597,8 +6590,8 @@ var PurgeCSS = class {
     }
     if (this.options.keyframes) {
       if (prop === "animation" || prop === "animation-name") {
-        for (const word of value.split(/[\s,]+/)) {
-          this.usedAnimations.add(word);
+        for (const word2 of value.split(/[\s,]+/)) {
+          this.usedAnimations.add(word2);
         }
         return;
       }
@@ -7606,7 +6599,7 @@ var PurgeCSS = class {
     if (this.options.fontFace) {
       if (prop === "font-family") {
         for (const fontName of value.split(",")) {
-          const cleanedFontFace = stripQuotes(fontName.trim());
+          const cleanedFontFace = /* @__PURE__ */ stripQuotes(fontName.trim());
           this.usedFontFaces.add(cleanedFontFace);
         }
       }
@@ -7634,7 +6627,7 @@ var PurgeCSS = class {
     const selectors = new ExtractorResultSets_default([]);
     for (const { raw, extension } of content) {
       const extractor = this.getFileExtractor(`.${extension}`, extractors);
-      const extractedSelectors = await extractSelectors(raw, extractor);
+      const extractedSelectors = await /* @__PURE__ */ extractSelectors(raw, extractor);
       selectors.merge(extractedSelectors);
     }
     return selectors;
@@ -7652,7 +6645,7 @@ var PurgeCSS = class {
       for (const childNode of node.nodes) {
         if (childNode.type === "decl" && childNode.prop === "font-family") {
           this.atRules.fontFace.push({
-            name: stripQuotes(childNode.value),
+            name: /* @__PURE__ */ stripQuotes(childNode.value),
             node
           });
         }
@@ -7670,46 +6663,46 @@ var PurgeCSS = class {
       return;
     }
     const annotation = node.prev();
-    if (isPostCSSComment(annotation) && isIgnoreAnnotation(annotation, "next")) {
+    if (/* @__PURE__ */ isPostCSSComment(annotation) && /* @__PURE__ */ isIgnoreAnnotation(annotation, "next")) {
       annotation.remove();
       return;
     }
-    if (node.parent && isPostCSSAtRule(node.parent) && node.parent.name.endsWith("keyframes")) {
+    if (node.parent && /* @__PURE__ */ isPostCSSAtRule(node.parent) && node.parent.name.endsWith("keyframes")) {
       return;
     }
-    if (!isPostCSSRule(node)) {
+    if (!/* @__PURE__ */ isPostCSSRule(node)) {
       return;
     }
-    if (hasIgnoreAnnotation(node)) {
+    if (/* @__PURE__ */ hasIgnoreAnnotation(node)) {
       return;
     }
     const selectorsRemovedFromRule = [];
-    node.selector = (0, import_postcss_selector_parser.default)((selectorsParsed) => {
-      selectorsParsed.walk((selector) => {
-        if (selector.type !== "selector") {
+    node.selector = postcss_selector_parser_default((selectorsParsed) => {
+      selectorsParsed.walk((selector2) => {
+        if (selector2.type !== "selector") {
           return;
         }
-        const keepSelector = this.shouldKeepSelector(selector, selectors);
+        const keepSelector = this.shouldKeepSelector(selector2, selectors);
         if (!keepSelector) {
           if (this.options.rejected) {
-            this.selectorsRemoved.add(selector.toString());
+            this.selectorsRemoved.add(selector2.toString());
           }
           if (this.options.rejectedCss) {
-            selectorsRemovedFromRule.push(selector.toString());
+            selectorsRemovedFromRule.push(selector2.toString());
           }
-          selector.remove();
+          selector2.remove();
         }
       });
-      selectorsParsed.walk((selector) => {
-        if (selector.type !== "selector") {
+      selectorsParsed.walk((selector2) => {
+        if (selector2.type !== "selector") {
           return;
         }
-        if (selector.toString() && /(:where)|(:is)/.test(selector.toString())) {
-          selector.walk((node2) => {
+        if (selector2.toString() && /(:where)|(:is)/.test(selector2.toString())) {
+          selector2.walk((node2) => {
             if (node2.type !== "pseudo") return;
             if (node2.value !== ":where" && node2.value !== ":is") return;
             if (node2.nodes.length === 0) {
-              selector.remove();
+              selector2.remove();
             }
           });
         }
@@ -7725,7 +6718,7 @@ var PurgeCSS = class {
     if (!node.selector) {
       node.remove();
     }
-    if (isRuleEmpty(parent)) parent?.remove();
+    if (/* @__PURE__ */ isRuleEmpty(parent)) parent?.remove();
     if (this.options.rejectedCss) {
       if (selectorsRemovedFromRule.length > 0) {
         const clone = node.clone();
@@ -7755,14 +6748,14 @@ var PurgeCSS = class {
     for (const option of processedOptions) {
       const cssContent = typeof option === "string" ? this.options.stdin ? option : null : option.raw;
       const isFromFile = typeof option === "string" && !this.options.stdin;
-      const root = postcss_default.parse(cssContent, {
+      const root2 = postcss_default.parse(cssContent, {
         from: isFromFile ? option : void 0
       });
-      this.walkThroughCSS(root, selectors);
+      this.walkThroughCSS(root2, selectors);
       if (this.options.fontFace) this.removeUnusedFontFaces();
       if (this.options.keyframes) this.removeUnusedKeyframes();
       if (this.options.variables) this.removeUnusedCSSVariables();
-      const postCSSResult = root.toResult({
+      const postCSSResult = root2.toResult({
         map: this.options.sourceMap,
         to: typeof this.options.sourceMap === "object" ? this.options.sourceMap.to : void 0
       });
@@ -7799,9 +6792,9 @@ var PurgeCSS = class {
    *
    * @param selector - css selector
    */
-  isSelectorBlocklisted(selector) {
+  isSelectorBlocklisted(selector2) {
     return this.options.blocklist.some((blocklistItem) => {
-      return typeof blocklistItem === "string" ? blocklistItem === selector : blocklistItem.test(selector);
+      return typeof blocklistItem === "string" ? blocklistItem === selector2 : blocklistItem.test(selector2);
     });
   }
   /**
@@ -7809,21 +6802,21 @@ var PurgeCSS = class {
    *
    * @param selector - css selector
    */
-  isSelectorSafelisted(selector) {
+  isSelectorSafelisted(selector2) {
     const isSafelisted = this.options.safelist.standard.some((safelistItem) => {
-      return typeof safelistItem === "string" ? safelistItem === selector : safelistItem.test(selector);
+      return typeof safelistItem === "string" ? safelistItem === selector2 : safelistItem.test(selector2);
     });
-    const isPseudoElement = /^::.*/.test(selector);
-    return CSS_SAFELIST.includes(selector) || isPseudoElement || isSafelisted;
+    const isPseudoElement2 = /^::.*/.test(selector2);
+    return CSS_SAFELIST.includes(selector2) || isPseudoElement2 || isSafelisted;
   }
   /**
    * Check if the selector is safelisted with the option safelist deep
    *
    * @param selector - selector
    */
-  isSelectorSafelistedDeep(selector) {
+  isSelectorSafelistedDeep(selector2) {
     return this.options.safelist.deep.some(
-      (safelistItem) => safelistItem.test(selector)
+      (safelistItem) => safelistItem.test(selector2)
     );
   }
   /**
@@ -7831,9 +6824,9 @@ var PurgeCSS = class {
    *
    * @param selector - selector
    */
-  isSelectorSafelistedGreedy(selector) {
+  isSelectorSafelistedGreedy(selector2) {
     return this.options.safelist.greedy.some(
-      (safelistItem) => safelistItem.test(selector)
+      (safelistItem) => safelistItem.test(selector2)
     );
   }
   /**
@@ -7864,7 +6857,7 @@ var PurgeCSS = class {
     this.options = typeof userOptions !== "object" ? await setOptions(userOptions) : {
       ...defaultOptions,
       ...userOptions,
-      safelist: standardizeSafelist(userOptions.safelist)
+      safelist: /* @__PURE__ */ standardizeSafelist(userOptions.safelist)
     };
     const { content, css, extractors, safelist } = this.options;
     if (this.options.variables) {
@@ -7879,7 +6872,7 @@ var PurgeCSS = class {
     );
     return this.getPurgedCSS(
       css,
-      mergeExtractorSelectors({}, cssRawSelectors)
+      /* @__PURE__ */ mergeExtractorSelectors({}, cssRawSelectors)
     );
   }
   /**
@@ -7911,8 +6904,8 @@ var PurgeCSS = class {
   /**
    * Transform a selector node into a string
    */
-  getSelectorValue(selector) {
-    return selector.type === "attribute" && selector.attribute || selector.value;
+  getSelectorValue(selector2) {
+    return selector2.type === "attribute" && selector2.attribute || selector2.value;
   }
   /**
    * Determine if the selector should be kept, based on the selectors found in the files
@@ -7922,15 +6915,15 @@ var PurgeCSS = class {
    *
    * @returns true if the selector should be kept in the processed CSS
    */
-  shouldKeepSelector(selector, selectorsFromExtractor) {
-    if (isInPseudoClass(selector) && !isInPseudoClassWhereOrIs(selector)) {
+  shouldKeepSelector(selector2, selectorsFromExtractor) {
+    if (/* @__PURE__ */ isInPseudoClass(selector2) && !/* @__PURE__ */ isInPseudoClassWhereOrIs(selector2)) {
       return true;
     }
-    if (isPseudoClassAtRootLevel(selector)) {
+    if (/* @__PURE__ */ isPseudoClassAtRootLevel(selector2)) {
       return true;
     }
     if (this.options.safelist.greedy.length > 0) {
-      const selectorParts = selector.nodes.map(this.getSelectorValue);
+      const selectorParts = selector2.nodes.map(this.getSelectorValue);
       if (selectorParts.some(
         (selectorPart) => selectorPart && this.isSelectorSafelistedGreedy(selectorPart)
       )) {
@@ -7938,7 +6931,7 @@ var PurgeCSS = class {
       }
     }
     let isPresent = false;
-    for (const selectorNode of selector.nodes) {
+    for (const selectorNode of selector2.nodes) {
       const selectorValue = this.getSelectorValue(selectorNode);
       if (selectorValue && this.isSelectorSafelistedDeep(selectorValue)) {
         return true;
@@ -7958,16 +6951,16 @@ var PurgeCSS = class {
             "checked",
             "selected",
             "open"
-          ].includes(selectorNode.attribute) ? true : isAttributeFound(selectorNode, selectorsFromExtractor);
+          ].includes(selectorNode.attribute) ? true : /* @__PURE__ */ isAttributeFound(selectorNode, selectorsFromExtractor);
           break;
         case "class":
-          isPresent = isClassFound(selectorNode, selectorsFromExtractor);
+          isPresent = /* @__PURE__ */ isClassFound(selectorNode, selectorsFromExtractor);
           break;
         case "id":
-          isPresent = isIdentifierFound(selectorNode, selectorsFromExtractor);
+          isPresent = /* @__PURE__ */ isIdentifierFound(selectorNode, selectorsFromExtractor);
           break;
         case "tag":
-          isPresent = isTagFound(selectorNode, selectorsFromExtractor);
+          isPresent = /* @__PURE__ */ isTagFound(selectorNode, selectorsFromExtractor);
           break;
         default:
           continue;
@@ -7984,8 +6977,8 @@ var PurgeCSS = class {
    * @param root - root node of the postcss AST
    * @param selectors - selectors used in content files
    */
-  walkThroughCSS(root, selectors) {
-    root.walk((node) => {
+  walkThroughCSS(root2, selectors) {
+    root2.walk((node) => {
       if (node.type === "rule") {
         return this.evaluateRule(node, selectors);
       }
@@ -7993,10 +6986,10 @@ var PurgeCSS = class {
         return this.evaluateAtRule(node);
       }
       if (node.type === "comment") {
-        if (isIgnoreAnnotation(node, "start")) {
+        if (/* @__PURE__ */ isIgnoreAnnotation(node, "start")) {
           this.ignore = true;
           node.remove();
-        } else if (isIgnoreAnnotation(node, "end")) {
+        } else if (/* @__PURE__ */ isIgnoreAnnotation(node, "end")) {
           this.ignore = false;
           node.remove();
         }
@@ -8005,7 +6998,13 @@ var PurgeCSS = class {
   }
 };
 export {
+  CONFIG_FILENAME,
+  ERROR_CONFIG_FILE_LOADING,
   ExtractorResultSets_default as ExtractorResultSets,
+  IGNORE_ANNOTATION_CURRENT,
+  IGNORE_ANNOTATION_END,
+  IGNORE_ANNOTATION_NEXT,
+  IGNORE_ANNOTATION_START,
   PurgeCSS,
   VariableNode,
   VariablesStructure,
@@ -8013,9 +7012,4 @@ export {
   mergeExtractorSelectors,
   standardizeSafelist
 };
-/*! Bundled license information:
-
-cssesc/cssesc.js:
-  (*! https://mths.be/cssesc v3.0.0 by @mathias *)
-*/
 //# sourceMappingURL=index.mjs.map

@@ -1,6 +1,5 @@
 
 
-import { nanoid } from 'nanoid/non-secure';
 import { CssSyntaxError } from "./css-syntax-error";
 
 const fromOffsetCache = Symbol('fromOffsetCache')
@@ -24,9 +23,6 @@ export class Input {
       this.hasBOM = false
     }
 
-    if (!this.file) {
-      this.id = '<input css ' + nanoid(6) + '>'
-    }
     if (this.map) this.map.file = this.from
   }
 

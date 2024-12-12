@@ -7,15 +7,8 @@
  */
 
 import postcss from "./postcss/postcss";
-import selectorParser from "postcss-selector-parser";
-import {
-  IGNORE_ANNOTATION_CURRENT,
-  IGNORE_ANNOTATION_END,
-  IGNORE_ANNOTATION_NEXT,
-  IGNORE_ANNOTATION_START
-} from "./constants";
+import selectorParser from "./postcss-selector-parser";
 import ExtractorResultSets from "./ExtractorResultSets";
-import { CSS_SAFELIST } from "./internal-safelist";
 import { defaultOptions } from "./options";
 import type {
   AtRules,
@@ -39,15 +32,15 @@ export * from "./types";
 export { defaultOptions, ExtractorResultSets, PurgeCSS, VariablesStructure };
 export * from "./VariablesStructure";
 
+const CSS_SAFELIST = ["*", ":root", ":after", ":before"];
+export const IGNORE_ANNOTATION_CURRENT = "purgecss ignore current";
+export const IGNORE_ANNOTATION_NEXT = "purgecss ignore";
+export const IGNORE_ANNOTATION_START = "purgecss start ignore";
+export const IGNORE_ANNOTATION_END = "purgecss end ignore";
+export const CONFIG_FILENAME = "purgecss.config.js";
+export const ERROR_CONFIG_FILE_LOADING = "Error loading the config file";
 
-/**
- * Format the user defined safelist into a standardized safelist object
- *
- * @param userDefinedSafelist - the user defined safelist
- * @returns the formatted safelist object that can be used in the PurgeCSS options
- *
- * @public
- */
+/*@__NO_SIDE_EFFECTS__*/
 export function standardizeSafelist(
   userDefinedSafelist: UserDefinedSafelist = [],
 ): Required<ComplexSafelist> {
@@ -63,13 +56,7 @@ export function standardizeSafelist(
   };
 }
 
-/**
- * Use the extract function to get the list of selectors
- *
- * @param content - content (e.g. html file)
- * @param extractor - PurgeCSS extractor used to extract the selectors
- * @returns the sets containing the result of the extractor function
- */
+/*@__NO_SIDE_EFFECTS__*/
 async function extractSelectors(
   content: string,
   extractor: ExtractorFunction,
@@ -77,13 +64,7 @@ async function extractSelectors(
   return new ExtractorResultSets(await extractor(content));
 }
 
-/**
- * Check if the node is a css comment indication to ignore the selector rule
- *
- * @param node - node of postcss AST
- * @param type - type of css comment
- * @returns true if the node is a PurgeCSS ignore comment
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isIgnoreAnnotation(node: any, type: IgnoreType): boolean {
   switch (type) {
     case "next":
@@ -95,12 +76,7 @@ function isIgnoreAnnotation(node: any, type: IgnoreType): boolean {
   }
 }
 
-/**
- * Check if the node correspond to an empty css rule
- *
- * @param node - node of postcss AST
- * @returns true if the rule is empty
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isRuleEmpty(node?: any): boolean {
   if (
     (isPostCSSRule(node) && !node.selector) ||
@@ -114,11 +90,7 @@ function isRuleEmpty(node?: any): boolean {
   return false;
 }
 
-/**
- * Check if the node has a css comment indicating to ignore the current selector rule
- *
- * @param rule - rule of postcss AST
- */
+/*@__NO_SIDE_EFFECTS__*/
 function hasIgnoreAnnotation(rule: any): boolean {
   let found = false;
   rule.walkComments((node) => {
@@ -134,15 +106,7 @@ function hasIgnoreAnnotation(rule: any): boolean {
   return found;
 }
 
-/**
- * Merge two extractor selectors
- *
- * @param extractorSelectorsA - extractor selectors A
- * @param extractorSelectorsB - extractor selectors B
- * @returns  the merged extractor result sets
- *
- * @public
- */
+/*@__NO_SIDE_EFFECTS__*/
 export function mergeExtractorSelectors(
   ...extractors: (ExtractorResultDetailed | ExtractorResultSets)[]
 ): ExtractorResultSets {
@@ -150,22 +114,12 @@ export function mergeExtractorSelectors(
   extractors.forEach(result.merge, result);
   return result;
 }
-
-/**
- * Strips quotes of a string
- *
- * @param str - string to be stripped
- */
+/*@__NO_SIDE_EFFECTS__*/
 function stripQuotes(str: string): string {
   return str.replace(/(^["'])|(["']$)/g, "");
 }
 
-/**
- * Returns true if the attribute is found in the extractor selectors
- *
- * @param attributeNode - node of type `attribute`
- * @param selectors - extractor selectors
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isAttributeFound(
   attributeNode: selectorParser.Attribute,
   selectors: ExtractorResultSets,
@@ -194,12 +148,7 @@ function isAttributeFound(
   }
 }
 
-/**
- * Returns true if the class is found in the extractor selectors
- *
- * @param classNode - node of type `class`
- * @param selectors - extractor selectors
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isClassFound(
   classNode: selectorParser.ClassName,
   selectors: ExtractorResultSets,
@@ -207,12 +156,7 @@ function isClassFound(
   return selectors.hasClass(classNode.value);
 }
 
-/**
- * Returns true if the identifier is found in the extractor selectors
- *
- * @param identifierNode - node of type `identifier`
- * @param selectors - extractor selectors
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isIdentifierFound(
   identifierNode: selectorParser.Identifier,
   selectors: ExtractorResultSets,
@@ -220,12 +164,7 @@ function isIdentifierFound(
   return selectors.hasId(identifierNode.value);
 }
 
-/**
- * Returns true if the tag is found in the extractor selectors
- *
- * @param tagNode - node of type `tag`
- * @param selectors - extractor selectors
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isTagFound(
   tagNode: selectorParser.Tag,
   selectors: ExtractorResultSets,
@@ -233,12 +172,7 @@ function isTagFound(
   return selectors.hasTag(tagNode.value);
 }
 
-/**
- * Returns true if the selector is inside a pseudo class
- * (e.g. :nth-child, :nth-of-type, :only-child, :not)
- *
- * @param selector - selector
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isInPseudoClass(selector: selectorParser.Node): boolean {
   return (
     (selector.parent &&
@@ -248,10 +182,7 @@ function isInPseudoClass(selector: selectorParser.Node): boolean {
   );
 }
 
-/**
- * Returns true if the selector is inside the pseudo classes :where() or :is()
- * @param selector - selector
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isInPseudoClassWhereOrIs(selector: selectorParser.Node): boolean {
   return (
     (selector.parent &&
@@ -262,11 +193,7 @@ function isInPseudoClassWhereOrIs(selector: selectorParser.Node): boolean {
   );
 }
 
-/**
- * Returns true if the selector is a pseudo class at the root level
- * Pseudo classes checked: :where, :is, :has, :not
- * @param selector - selector
- */
+/*@__NO_SIDE_EFFECTS__*/
 function isPseudoClassAtRootLevel(selector: selectorParser.Node): boolean {
   let result = false;
   if (
@@ -289,14 +216,17 @@ function isPseudoClassAtRootLevel(selector: selectorParser.Node): boolean {
   return result;
 }
 
+/*@__NO_SIDE_EFFECTS__*/
 function isPostCSSAtRule(node?: any): node is any {
   return node?.type === "atrule";
 }
 
+/*@__NO_SIDE_EFFECTS__*/
 function isPostCSSRule(node?: any): node is any {
   return node?.type === "rule";
 }
 
+/*@__NO_SIDE_EFFECTS__*/
 function isPostCSSComment(
 		node?: any,
 	): node is any {

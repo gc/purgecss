@@ -1,17 +1,6 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// node_modules/.pnpm/nanoid@5.0.8/node_modules/nanoid/non-secure/index.js
-var urlAlphabet = "useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
-var nanoid = /* @__PURE__ */ __name((size = 21) => {
-  let id = "";
-  let i = size;
-  while (i--) {
-    id += urlAlphabet[Math.random() * 64 | 0];
-  }
-  return id;
-}, "nanoid");
-
 // src/postcss/css-syntax-error.js
 var CssSyntaxError = class _CssSyntaxError extends Error {
   static {
@@ -82,9 +71,6 @@ var Input = class {
       this.css = this.css.slice(1);
     } else {
       this.hasBOM = false;
-    }
-    if (!this.file) {
-      this.id = "<input css " + nanoid(6) + ">";
     }
     if (this.map) this.map.file = this.from;
   }

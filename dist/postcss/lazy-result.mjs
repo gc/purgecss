@@ -1303,28 +1303,11 @@ var init_document = __esm({
   }
 });
 
-// node_modules/.pnpm/nanoid@5.0.8/node_modules/nanoid/non-secure/index.js
-var urlAlphabet, nanoid;
-var init_non_secure = __esm({
-  "node_modules/.pnpm/nanoid@5.0.8/node_modules/nanoid/non-secure/index.js"() {
-    urlAlphabet = "useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
-    nanoid = /* @__PURE__ */ __name((size = 21) => {
-      let id = "";
-      let i = size;
-      while (i--) {
-        id += urlAlphabet[Math.random() * 64 | 0];
-      }
-      return id;
-    }, "nanoid");
-  }
-});
-
 // src/postcss/input.js
 var fromOffsetCache, Input;
 var init_input = __esm({
   "src/postcss/input.js"() {
     "use strict";
-    init_non_secure();
     init_css_syntax_error();
     fromOffsetCache = Symbol("fromOffsetCache");
     Input = class {
@@ -1341,9 +1324,6 @@ var init_input = __esm({
           this.css = this.css.slice(1);
         } else {
           this.hasBOM = false;
-        }
-        if (!this.file) {
-          this.id = "<input css " + nanoid(6) + ">";
         }
         if (this.map) this.map.file = this.from;
       }
