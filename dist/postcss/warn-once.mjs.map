@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/postcss/warn-once.js"],
-  "sourcesContent": ["const printed = {};\r\nexport function warnOnce(message) {\r\n    if (printed[message])\r\n        return;\r\n    printed[message] = true;\r\n    if (typeof console !== 'undefined' && console.warn) {\r\n        console.warn(message);\r\n    }\r\n}\r\n"],
-  "mappings": ";;;;AAAA,IAAM,UAAU,CAAC;AACV,SAAS,SAAS,SAAS;AAC9B,MAAI,QAAQ,OAAO;AACf;AACJ,UAAQ,OAAO,IAAI;AACnB,MAAI,OAAO,YAAY,eAAe,QAAQ,MAAM;AAChD,YAAQ,KAAK,OAAO;AAAA,EACxB;AACJ;AAPgB;",
-  "names": []
-}

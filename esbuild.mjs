@@ -10,7 +10,7 @@ await esbuild.build({
 	target: "esnext",
 	metafile: true,
 	outdir: "dist",
-	entryPoints: ["src/**/*.ts", "src/**/*.js"],
+	entryPoints: ["src/entry.ts"],
 	external: [],
 	outExtension: { ".js": ".mjs" },
 	treeShaking: true

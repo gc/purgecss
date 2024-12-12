@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/postcss-selector-parser/util/getProp.js"],
-  "sourcesContent": ["export default function getProp(obj, ...props) {\r\n    while (props.length > 0) {\r\n        const prop = props.shift();\r\n        if (!obj[prop]) {\r\n            return undefined;\r\n        }\r\n        obj = obj[prop];\r\n    }\r\n    return obj;\r\n}\r\n"],
-  "mappings": ";;;;AAAe,SAAR,QAAyB,QAAQ,OAAO;AAC3C,SAAO,MAAM,SAAS,GAAG;AACrB,UAAM,OAAO,MAAM,MAAM;AACzB,QAAI,CAAC,IAAI,IAAI,GAAG;AACZ,aAAO;AAAA,IACX;AACA,UAAM,IAAI,IAAI;AAAA,EAClB;AACA,SAAO;AACX;AATwB;",
-  "names": []
-}

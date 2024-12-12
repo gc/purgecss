@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/postcss-selector-parser/sortAscending.js"],
-  "sourcesContent": ["export default function sortAscending(list) {\r\n    return list.sort((a, b) => a - b);\r\n}\r\n;\r\n"],
-  "mappings": ";;;;AAAe,SAAR,cAA+B,MAAM;AACxC,SAAO,KAAK,KAAK,CAAC,GAAG,MAAM,IAAI,CAAC;AACpC;AAFwB;",
-  "names": []
-}

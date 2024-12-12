@@ -10,16 +10,14 @@
   "types": "./lib/purgecss.d.ts",
   "scripts": {
     "x": " && tsc -p src --declaration --emitDeclarationOnly",
-    "build": "node esbuild.mjs && npx rollup -c rollup.config.mjs"
-  },
-  "dependencies": {
+    "build": "node esbuild.mjs && node rollup.config.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
-    "rollup-plugin-cleanup": "^3.2.1",
     "esbuild": "^0.24.0",
     "rollup": "^4.28.1",
-    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-esbuild-minify": "^1.2.0",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   },

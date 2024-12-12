@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/postcss-selector-parser/selectors/types.js"],
-  "sourcesContent": ["export const TAG = 'tag';\r\nexport const STRING = 'string';\r\nexport const SELECTOR = 'selector';\r\nexport const ROOT = 'root';\r\nexport const PSEUDO = 'pseudo';\r\nexport const NESTING = 'nesting';\r\nexport const ID = 'id';\r\nexport const COMMENT = 'comment';\r\nexport const COMBINATOR = 'combinator';\r\nexport const CLASS = 'class';\r\nexport const ATTRIBUTE = 'attribute';\r\nexport const UNIVERSAL = 'universal';\r\n"],
-  "mappings": ";AAAO,IAAM,MAAM;AACZ,IAAM,SAAS;AACf,IAAM,WAAW;AACjB,IAAM,OAAO;AACb,IAAM,SAAS;AACf,IAAM,UAAU;AAChB,IAAM,KAAK;AACX,IAAM,UAAU;AAChB,IAAM,aAAa;AACnB,IAAM,QAAQ;AACd,IAAM,YAAY;AAClB,IAAM,YAAY;",
-  "names": []
-}

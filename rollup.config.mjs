@@ -1,27 +1,30 @@
-import dts from 'rollup-plugin-dts';
 import cleanup from 'rollup-plugin-cleanup';
+import { minify } from 'rollup-plugin-esbuild-minify';
+import { rollup } from 'rollup';
 
-const name = 'index';
-const input = 'dist/entry.mjs';
+/** @type {import('rollup').RollupOptions} */
+const inputOptions = {
+	input: 'dist/entry.mjs',
+  plugins: [cleanup({ comments: "none", extensions: ["js", "ts", "mjs"] }), minify()],
+  output: [{ dir: "rollup", format: "esm", sourcemap: false }],
+  treeshake: {
+    moduleSideEffects: false,
+    preset: 'smallest',
+  },
+};
 
-export default [
-  {
-    input,
-    external: id => !/^[./]/.test(id),
-    plugins: [
-      cleanup({ comments: 'none', extensions: ['js', 'ts', 'mjs'] }),
-    ],
-    output: [
-      { dir: `rollup`, format: 'esm', sourcemap: false },
-    ],
-  },
-  {
-    input,
-    external: id => !/^[./]/.test(id),
-    plugins: [dts()],
-    output: {
-      file: `rollup/${name}.d.ts`,
-      format: 'es',
-    },
-  },
-];
+build();
+
+async function build() {
+  const bundle = await rollup(inputOptions);
+
+  await bundle.write({
+    dir: "rollup",
+    format: "esm",
+    sourcemap: false,
+  });
+
+  if (bundle) {
+    await bundle.close();
+  }
+}

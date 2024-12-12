@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/css-tokenizer/util/clone-tokens.ts"],
-  "sourcesContent": ["import type { CSSToken } from '../interfaces/token';\n\nconst supportsStructuredClone = (typeof globalThis !== 'undefined') && 'structuredClone' in globalThis;\n\n/**\n * Deep clone a list of tokens.\n * Useful for mutations without altering the original list.\n */\nexport function cloneTokens(tokens: Array<CSSToken>): Array<CSSToken> {\n\tif (supportsStructuredClone) {\n\t\treturn structuredClone(tokens);\n\t}\n\n\treturn JSON.parse(JSON.stringify(tokens)) as Array<CSSToken>;\n}\n"],
-  "mappings": ";;;;AAEA,IAAM,0BAA2B,OAAO,eAAe,eAAgB,qBAAqB;AAMrF,SAAS,YAAY,QAA0C;AACrE,MAAI,yBAAyB;AAC5B,WAAO,gBAAgB,MAAM;AAAA,EAC9B;AAEA,SAAO,KAAK,MAAM,KAAK,UAAU,MAAM,CAAC;AACzC;AANgB;",
-  "names": []
-}
