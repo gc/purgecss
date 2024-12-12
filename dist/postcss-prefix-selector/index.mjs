@@ -34,13 +34,7 @@ var prefixPlugin = /* @__PURE__ */ __name((options = {}) => {
               return selector;
             }
             if (options.transform) {
-              return options.transform(
-                prefix,
-                selector,
-                prefixWithSpace + selector,
-                root.source.input.file,
-                rule
-              );
+              return options.transform(prefix, selector, prefixWithSpace + selector, root.source.input.file, rule);
             }
             if ([":root", "body", "html"].some((globalSel) => selector.startsWith(globalSel))) {
               if (options.skipGlobalSelectors) {
@@ -74,5 +68,8 @@ function excludeSelector(selector, excludeArr) {
 }
 __name(excludeSelector, "excludeSelector");
 prefixPlugin.postcss = true;
-module.exports = prefixPlugin;
+var postcss_prefix_selector_default = prefixPlugin;
+export {
+  postcss_prefix_selector_default as default
+};
 //# sourceMappingURL=index.mjs.map

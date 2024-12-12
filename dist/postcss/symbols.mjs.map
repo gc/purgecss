@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../src/postcss/symbols.js"],
-  "sourcesContent": ["\n\nexport const isClean = Symbol('isClean')\n\nexport const my = Symbol('my')\n"],
-  "mappings": ";AAEO,IAAM,UAAU,OAAO,SAAS;AAEhC,IAAM,KAAK,OAAO,IAAI;",
+  "sourcesContent": ["export const isClean = Symbol('isClean');\r\nexport const my = Symbol('my');\r\n"],
+  "mappings": ";AAAO,IAAM,UAAU,OAAO,SAAS;AAChC,IAAM,KAAK,OAAO,IAAI;",
   "names": []
 }

@@ -16,7 +16,8 @@ var Warning = class {
       this.endLine = range.end.line;
       this.endColumn = range.end.column;
     }
-    for (const opt in opts) this[opt] = opts[opt];
+    for (const opt in opts)
+      this[opt] = opts[opt];
   }
   toString() {
     if (this.node) {

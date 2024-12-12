@@ -1,50 +1,44 @@
-import {ensureObject} from "../util";
-
+import { ensureObject } from "../util";
 let cloneNode = function (obj, parent) {
     if (typeof obj !== 'object' || obj === null) {
         return obj;
     }
-
     let cloned = new obj.constructor();
-
-    for ( let i in obj ) {
-        if ( !obj.hasOwnProperty(i) ) {
+    for (let i in obj) {
+        if (!obj.hasOwnProperty(i)) {
             continue;
         }
         let value = obj[i];
-        let type  = typeof value;
-
-        if ( i === 'parent' && type === 'object' ) {
+        let type = typeof value;
+        if (i === 'parent' && type === 'object') {
             if (parent) {
                 cloned[i] = parent;
             }
-        } else if ( value instanceof Array ) {
-            cloned[i] = value.map( j => cloneNode(j, cloned) );
-        } else {
+        }
+        else if (value instanceof Array) {
+            cloned[i] = value.map(j => cloneNode(j, cloned));
+        }
+        else {
             cloned[i] = cloneNode(value, cloned);
         }
     }
-
     return cloned;
 };
-
 export default class Node {
-    constructor (opts = {}) {
+    constructor(opts = {}) {
         Object.assign(this, opts);
         this.spaces = this.spaces || {};
         this.spaces.before = this.spaces.before || '';
         this.spaces.after = this.spaces.after || '';
     }
-
-    remove () {
+    remove() {
         if (this.parent) {
             this.parent.removeChild(this);
         }
         this.parent = undefined;
         return this;
     }
-
-    replaceWith () {
+    replaceWith() {
         if (this.parent) {
             for (let index in arguments) {
                 this.parent.insertBefore(this, arguments[index]);
@@ -53,23 +47,19 @@ export default class Node {
         }
         return this;
     }
-
-    next () {
+    next() {
         return this.parent.at(this.parent.index(this) + 1);
     }
-
-    prev () {
+    prev() {
         return this.parent.at(this.parent.index(this) - 1);
     }
-
-    clone (overrides = {}) {
+    clone(overrides = {}) {
         let cloned = cloneNode(this);
         for (let name in overrides) {
             cloned[name] = overrides[name];
         }
         return cloned;
     }
-
     /**
      * Some non-standard syntax doesn't follow normal escaping rules for css.
      * This allows non standard syntax to be appended to an existing property
@@ -79,7 +69,7 @@ export default class Node {
      * @param {any} value the unescaped value of the property
      * @param {string} valueEscaped optional. the escaped value of the property.
      */
-    appendToPropertyAndEscape (name, value, valueEscaped) {
+    appendToPropertyAndEscape(name, value, valueEscaped) {
         if (!this.raws) {
             this.raws = {};
         }
@@ -88,11 +78,11 @@ export default class Node {
         this[name] = originalValue + value; // this may trigger a setter that updates raws, so it has to be set first.
         if (originalEscaped || valueEscaped !== value) {
             this.raws[name] = (originalEscaped || originalValue) + valueEscaped;
-        } else {
+        }
+        else {
             delete this.raws[name]; // delete any escaped value that was created by the setter.
         }
     }
-
     /**
      * Some non-standard syntax doesn't follow normal escaping rules for css.
      * This allows the escaped value to be specified directly, allowing illegal
@@ -101,14 +91,13 @@ export default class Node {
      * @param {any} value the unescaped value of the property
      * @param {string} valueEscaped the escaped value of the property.
      */
-    setPropertyAndEscape (name, value, valueEscaped) {
+    setPropertyAndEscape(name, value, valueEscaped) {
         if (!this.raws) {
             this.raws = {};
         }
         this[name] = value; // this may trigger a setter that updates raws, so it has to be set first.
         this.raws[name] = valueEscaped;
     }
-
     /**
      * When you want a value to passed through to CSS directly. This method
      * deletes the corresponding raw value causing the stringifier to fallback
@@ -116,19 +105,18 @@ export default class Node {
      * @param {string} name the property to set.
      * @param {any} value The value that is both escaped and unescaped.
      */
-    setPropertyWithoutEscape (name, value) {
+    setPropertyWithoutEscape(name, value) {
         this[name] = value; // this may trigger a setter that updates raws, so it has to be set first.
         if (this.raws) {
             delete this.raws[name];
         }
     }
-
     /**
      *
      * @param {number} line The number (starting with 1)
      * @param {number} column The column number (starting with 1)
      */
-    isAtPosition (line, column) {
+    isAtPosition(line, column) {
         if (this.source && this.source.start && this.source.end) {
             if (this.source.start.line > line) {
                 return false;
@@ -146,42 +134,35 @@ export default class Node {
         }
         return undefined;
     }
-
-    stringifyProperty (name) {
+    stringifyProperty(name) {
         return (this.raws && this.raws[name]) || this[name];
     }
-
-    get rawSpaceBefore () {
+    get rawSpaceBefore() {
         let rawSpace = this.raws && this.raws.spaces && this.raws.spaces.before;
         if (rawSpace === undefined) {
             rawSpace = this.spaces && this.spaces.before;
         }
         return rawSpace || "";
     }
-
-    set rawSpaceBefore (raw) {
+    set rawSpaceBefore(raw) {
         ensureObject(this, "raws", "spaces");
         this.raws.spaces.before = raw;
     }
-
-    get rawSpaceAfter () {
+    get rawSpaceAfter() {
         let rawSpace = this.raws && this.raws.spaces && this.raws.spaces.after;
         if (rawSpace === undefined) {
             rawSpace = this.spaces.after;
         }
         return rawSpace || "";
     }
-
-    set rawSpaceAfter (raw) {
+    set rawSpaceAfter(raw) {
         ensureObject(this, "raws", "spaces");
         this.raws.spaces.after = raw;
     }
-
-    valueToString () {
+    valueToString() {
         return String(this.stringifyProperty("value"));
     }
-
-    toString () {
+    toString() {
         return [
             this.rawSpaceBefore,
             this.valueToString(),

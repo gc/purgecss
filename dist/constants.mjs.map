@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/constants.ts"],
-  "sourcesContent": ["export const IGNORE_ANNOTATION_CURRENT = \"purgecss ignore current\";\nexport const IGNORE_ANNOTATION_NEXT = \"purgecss ignore\";\nexport const IGNORE_ANNOTATION_START = \"purgecss start ignore\";\nexport const IGNORE_ANNOTATION_END = \"purgecss end ignore\";\nexport const CONFIG_FILENAME = \"purgecss.config.js\";\n\n// Error Message\nexport const ERROR_CONFIG_FILE_LOADING = \"Error loading the config file\";\n"],
-  "mappings": ";AAAO,IAAM,4BAA4B;AAClC,IAAM,yBAAyB;AAC/B,IAAM,0BAA0B;AAChC,IAAM,wBAAwB;AAC9B,IAAM,kBAAkB;AAGxB,IAAM,4BAA4B;",
-  "names": []
-}

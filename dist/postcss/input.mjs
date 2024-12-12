@@ -72,7 +72,8 @@ var Input = class {
     } else {
       this.hasBOM = false;
     }
-    if (this.map) this.map.file = this.from;
+    if (this.map)
+      this.map.file = this.from;
   }
   error(message, line, column, opts = {}) {
     let endColumn, endLine, result;
@@ -102,23 +103,9 @@ var Input = class {
     }
     const origin = this.origin(line, column, endLine, endColumn);
     if (origin) {
-      result = new CssSyntaxError(
-        message,
-        origin.endLine === void 0 ? origin.line : { column: origin.column, line: origin.line },
-        origin.endLine === void 0 ? origin.column : { column: origin.endColumn, line: origin.endLine },
-        origin.source,
-        origin.file,
-        opts.plugin
-      );
+      result = new CssSyntaxError(message, origin.endLine === void 0 ? origin.line : { column: origin.column, line: origin.line }, origin.endLine === void 0 ? origin.column : { column: origin.endColumn, line: origin.endLine }, origin.source, origin.file, opts.plugin);
     } else {
-      result = new CssSyntaxError(
-        message,
-        endLine === void 0 ? line : { column, line },
-        endLine === void 0 ? column : { column: endColumn, line: endLine },
-        this.css,
-        this.file,
-        opts.plugin
-      );
+      result = new CssSyntaxError(message, endLine === void 0 ? line : { column, line }, endLine === void 0 ? column : { column: endColumn, line: endLine }, this.css, this.file, opts.plugin);
     }
     result.input = { column, endColumn, endLine, line, source: this.css };
     if (this.file) {
@@ -165,19 +152,18 @@ var Input = class {
     };
   }
   origin(line, column, endLine, endColumn) {
-    if (!this.map) return false;
+    if (!this.map)
+      return false;
     const consumer = this.map.consumer();
     const from = consumer.originalPositionFor({ column, line });
-    if (!from.source) return false;
+    if (!from.source)
+      return false;
     let to;
     if (typeof endLine === "number") {
       to = consumer.originalPositionFor({ column: endColumn, line: endLine });
     }
     let fromUrl;
-    fromUrl = new URL(
-      from.source,
-      this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile)
-    );
+    fromUrl = new URL(from.source, this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile));
     const result = {
       column: from.column,
       endColumn: to && to.column,
@@ -186,7 +172,8 @@ var Input = class {
       url: fromUrl.toString()
     };
     const source = consumer.sourceContentFor(from.source);
-    if (source) result.source = source;
+    if (source)
+      result.source = source;
     return result;
   }
   toJSON() {

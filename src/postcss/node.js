@@ -2,419 +2,378 @@ import { CssSyntaxError } from "./css-syntax-error";
 import { Stringifier } from "./stringifier";
 import { stringify } from "./stringify";
 import { isClean, my } from "./symbols";
-
 function cloneNode(obj, parent) {
-  const cloned = new obj.constructor()
-
-  for (const i in obj) {
-    if (!Object.prototype.hasOwnProperty.call(obj, i)) {
-      /* c8 ignore next 2 */
-      continue
+    const cloned = new obj.constructor();
+    for (const i in obj) {
+        if (!Object.prototype.hasOwnProperty.call(obj, i)) {
+            /* c8 ignore next 2 */
+            continue;
+        }
+        if (i === 'proxyCache')
+            continue;
+        let value = obj[i];
+        const type = typeof value;
+        if (i === 'parent' && type === 'object') {
+            if (parent)
+                cloned[i] = parent;
+        }
+        else if (i === 'source') {
+            cloned[i] = value;
+        }
+        else if (Array.isArray(value)) {
+            cloned[i] = value.map(j => cloneNode(j, cloned));
+        }
+        else {
+            if (type === 'object' && value !== null)
+                value = cloneNode(value);
+            cloned[i] = value;
+        }
     }
-    if (i === 'proxyCache') continue
-    let value = obj[i]
-    const type = typeof value
-
-    if (i === 'parent' && type === 'object') {
-      if (parent) cloned[i] = parent
-    } else if (i === 'source') {
-      cloned[i] = value
-    } else if (Array.isArray(value)) {
-      cloned[i] = value.map(j => cloneNode(j, cloned))
-    } else {
-      if (type === 'object' && value !== null) value = cloneNode(value)
-      cloned[i] = value
-    }
-  }
-
-  return cloned
+    return cloned;
 }
-
 function sourceOffset(inputCSS, position) {
-  // Not all custom syntaxes support `offset` in `source.start` and `source.end`
-  if (
-    position &&
-    typeof position.offset !== 'undefined'
-  ) {
-    return position.offset;
-  }
-
-  let column = 1
-  let line = 1
-  let offset = 0
-
-  for (let i = 0; i < inputCSS.length; i++) {
-    if (line === position.line && column === position.column) {
-      offset = i
-      break
+    // Not all custom syntaxes support `offset` in `source.start` and `source.end`
+    if (position &&
+        typeof position.offset !== 'undefined') {
+        return position.offset;
     }
-
-    if (inputCSS[i] === '\n') {
-      column = 1
-      line += 1
-    } else {
-      column += 1
+    let column = 1;
+    let line = 1;
+    let offset = 0;
+    for (let i = 0; i < inputCSS.length; i++) {
+        if (line === position.line && column === position.column) {
+            offset = i;
+            break;
+        }
+        if (inputCSS[i] === '\n') {
+            column = 1;
+            line += 1;
+        }
+        else {
+            column += 1;
+        }
     }
-  }
-
-  return offset
+    return offset;
 }
-
 export class Node {
-  constructor(defaults = {}) {
-    this.raws = {}
-    this[isClean] = false
-    this[my] = true
-
-    for (const name in defaults) {
-      if (name === 'nodes') {
-        this.nodes = []
-        for (const node of defaults[name]) {
-          if (typeof node.clone === 'function') {
-            this.append(node.clone())
-          } else {
-            this.append(node)
-          }
+    constructor(defaults = {}) {
+        this.raws = {};
+        this[isClean] = false;
+        this[my] = true;
+        for (const name in defaults) {
+            if (name === 'nodes') {
+                this.nodes = [];
+                for (const node of defaults[name]) {
+                    if (typeof node.clone === 'function') {
+                        this.append(node.clone());
+                    }
+                    else {
+                        this.append(node);
+                    }
+                }
+            }
+            else {
+                this[name] = defaults[name];
+            }
         }
-      } else {
-        this[name] = defaults[name]
-      }
     }
-  }
-
-  addToError(error) {
-    error.postcssNode = this
-    if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
-      const s = this.source
-      error.stack = error.stack.replace(
-        /\n\s{4}at /,
-        `$&${s.input.from}:${s.start.line}:${s.start.column}$&`
-      )
-    }
-    return error
-  }
-
-  after(add) {
-    this.parent.insertAfter(this, add)
-    return this
-  }
-
-  assign(overrides = {}) {
-    for (const name in overrides) {
-      this[name] = overrides[name]
-    }
-    return this
-  }
-
-  before(add) {
-    this.parent.insertBefore(this, add)
-    return this
-  }
-
-  cleanRaws(keepBetween) {
-    delete this.raws.before
-    delete this.raws.after
-    if (!keepBetween) delete this.raws.between
-  }
-
-  clone(overrides = {}) {
-    const cloned = cloneNode(this)
-    for (const name in overrides) {
-      cloned[name] = overrides[name]
-    }
-    return cloned
-  }
-
-  cloneAfter(overrides = {}) {
-    const cloned = this.clone(overrides)
-    this.parent.insertAfter(this, cloned)
-    return cloned
-  }
-
-  cloneBefore(overrides = {}) {
-    const cloned = this.clone(overrides)
-    this.parent.insertBefore(this, cloned)
-    return cloned
-  }
-
-  error(message, opts = {}) {
-    if (this.source) {
-      const { end, start } = this.rangeBy(opts)
-      return this.source.input.error(
-        message,
-        { column: start.column, line: start.line },
-        { column: end.column, line: end.line },
-        opts
-      )
-    }
-    return new CssSyntaxError(message)
-  }
-
-  getProxyProcessor() {
-    return {
-      get(node, prop) {
-        if (prop === 'proxyOf') {
-          return node
-        } else if (prop === 'root') {
-          return () => node.root().toProxy()
-        } else {
-          return node[prop]
+    addToError(error) {
+        error.postcssNode = this;
+        if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
+            const s = this.source;
+            error.stack = error.stack.replace(/\n\s{4}at /, `$&${s.input.from}:${s.start.line}:${s.start.column}$&`);
         }
-      },
-
-      set(node, prop, value) {
-        if (node[prop] === value) return true
-        node[prop] = value
-        if (
-          prop === 'prop' ||
-          prop === 'value' ||
-          prop === 'name' ||
-          prop === 'params' ||
-          prop === 'important' ||
-          /* c8 ignore next */
-          prop === 'text'
-        ) {
-          node.markDirty()
+        return error;
+    }
+    after(add) {
+        this.parent.insertAfter(this, add);
+        return this;
+    }
+    assign(overrides = {}) {
+        for (const name in overrides) {
+            this[name] = overrides[name];
         }
-        return true
-      }
+        return this;
     }
-  }
-
-  /* c8 ignore next 3 */
-  markClean() {
-    this[isClean] = true
-  }
-
-  markDirty() {
-    if (this[isClean]) {
-      this[isClean] = false
-      let next = this
-      while ((next = next.parent)) {
-        next[isClean] = false
-      }
+    before(add) {
+        this.parent.insertBefore(this, add);
+        return this;
     }
-  }
-
-  next() {
-    if (!this.parent) return undefined
-    const index = this.parent.index(this)
-    return this.parent.nodes[index + 1]
-  }
-
-  positionBy(opts) {
-    let pos = this.source.start
-    if (opts.index) {
-      pos = this.positionInside(opts.index)
-    } else if (opts.word) {
-      const stringRepresentation = this.source.input.css.slice(
-        sourceOffset(this.source.input.css, this.source.start),
-        sourceOffset(this.source.input.css, this.source.end)
-      )
-      const index = stringRepresentation.indexOf(opts.word)
-      if (index !== -1) pos = this.positionInside(index)
+    cleanRaws(keepBetween) {
+        delete this.raws.before;
+        delete this.raws.after;
+        if (!keepBetween)
+            delete this.raws.between;
     }
-    return pos
-  }
-
-  positionInside(index) {
-    let column = this.source.start.column
-    let line = this.source.start.line
-    const offset = sourceOffset(this.source.input.css, this.source.start)
-    const end = offset + index
-
-    for (let i = offset; i < end; i++) {
-      if (this.source.input.css[i] === '\n') {
-        column = 1
-        line += 1
-      } else {
-        column += 1
-      }
-    }
-
-    return { column, line }
-  }
-
-  prev() {
-    if (!this.parent) return undefined
-    const index = this.parent.index(this)
-    return this.parent.nodes[index - 1]
-  }
-
-  rangeBy(opts) {
-    let start = {
-      column: this.source.start.column,
-      line: this.source.start.line
-    }
-    let end = this.source.end
-      ? {
-          column: this.source.end.column + 1,
-          line: this.source.end.line
+    clone(overrides = {}) {
+        const cloned = cloneNode(this);
+        for (const name in overrides) {
+            cloned[name] = overrides[name];
         }
-      : {
-          column: start.column + 1,
-          line: start.line
+        return cloned;
+    }
+    cloneAfter(overrides = {}) {
+        const cloned = this.clone(overrides);
+        this.parent.insertAfter(this, cloned);
+        return cloned;
+    }
+    cloneBefore(overrides = {}) {
+        const cloned = this.clone(overrides);
+        this.parent.insertBefore(this, cloned);
+        return cloned;
+    }
+    error(message, opts = {}) {
+        if (this.source) {
+            const { end, start } = this.rangeBy(opts);
+            return this.source.input.error(message, { column: start.column, line: start.line }, { column: end.column, line: end.line }, opts);
         }
-
-    if (opts.word) {
-      const stringRepresentation = this.source.input.css.slice(
-        sourceOffset(this.source.input.css, this.source.start),
-        sourceOffset(this.source.input.css, this.source.end)
-      )
-      const index = stringRepresentation.indexOf(opts.word)
-      if (index !== -1) {
-        start = this.positionInside(index)
-        end = this.positionInside(
-          index + opts.word.length,
-        )
-      }
-    } else {
-      if (opts.start) {
-        start = {
-          column: opts.start.column,
-          line: opts.start.line
+        return new CssSyntaxError(message);
+    }
+    getProxyProcessor() {
+        return {
+            get(node, prop) {
+                if (prop === 'proxyOf') {
+                    return node;
+                }
+                else if (prop === 'root') {
+                    return () => node.root().toProxy();
+                }
+                else {
+                    return node[prop];
+                }
+            },
+            set(node, prop, value) {
+                if (node[prop] === value)
+                    return true;
+                node[prop] = value;
+                if (prop === 'prop' ||
+                    prop === 'value' ||
+                    prop === 'name' ||
+                    prop === 'params' ||
+                    prop === 'important' ||
+                    /* c8 ignore next */
+                    prop === 'text') {
+                    node.markDirty();
+                }
+                return true;
+            }
+        };
+    }
+    /* c8 ignore next 3 */
+    markClean() {
+        this[isClean] = true;
+    }
+    markDirty() {
+        if (this[isClean]) {
+            this[isClean] = false;
+            let next = this;
+            while ((next = next.parent)) {
+                next[isClean] = false;
+            }
         }
-      } else if (opts.index) {
-        start = this.positionInside(opts.index)
-      }
-
-      if (opts.end) {
-        end = {
-          column: opts.end.column,
-          line: opts.end.line
+    }
+    next() {
+        if (!this.parent)
+            return undefined;
+        const index = this.parent.index(this);
+        return this.parent.nodes[index + 1];
+    }
+    positionBy(opts) {
+        let pos = this.source.start;
+        if (opts.index) {
+            pos = this.positionInside(opts.index);
         }
-      } else if (typeof opts.endIndex === 'number') {
-        end = this.positionInside(opts.endIndex)
-      } else if (opts.index) {
-        end = this.positionInside(opts.index + 1)
-      }
-    }
-
-    if (
-      end.line < start.line ||
-      (end.line === start.line && end.column <= start.column)
-    ) {
-      end = { column: start.column + 1, line: start.line }
-    }
-
-    return { end, start }
-  }
-
-  raw(prop, defaultType) {
-    const str = new Stringifier()
-    return str.raw(this, prop, defaultType)
-  }
-
-  remove() {
-    if (this.parent) {
-      this.parent.removeChild(this)
-    }
-    this.parent = undefined
-    return this
-  }
-
-  replaceWith(...nodes) {
-    if (this.parent) {
-      let bookmark = this
-      let foundSelf = false
-      for (const node of nodes) {
-        if (node === this) {
-          foundSelf = true
-        } else if (foundSelf) {
-          this.parent.insertAfter(bookmark, node)
-          bookmark = node
-        } else {
-          this.parent.insertBefore(bookmark, node)
+        else if (opts.word) {
+            const stringRepresentation = this.source.input.css.slice(sourceOffset(this.source.input.css, this.source.start), sourceOffset(this.source.input.css, this.source.end));
+            const index = stringRepresentation.indexOf(opts.word);
+            if (index !== -1)
+                pos = this.positionInside(index);
         }
-      }
-
-      if (!foundSelf) {
-        this.remove()
-      }
+        return pos;
     }
-
-    return this
-  }
-
-  root() {
-    let result = this
-    while (result.parent && result.parent.type !== 'document') {
-      result = result.parent
-    }
-    return result
-  }
-
-  toJSON(_, inputs) {
-    const fixed = {}
-    const emitInputs = inputs == null
-    inputs = inputs || new Map()
-    let inputsNextIndex = 0
-
-    for (const name in this) {
-      if (!Object.prototype.hasOwnProperty.call(this, name)) {
-        /* c8 ignore next 2 */
-        continue
-      }
-      if (name === 'parent' || name === 'proxyCache') continue
-      const value = this[name]
-
-      if (Array.isArray(value)) {
-        fixed[name] = value.map(i => {
-          if (typeof i === 'object' && i.toJSON) {
-            return i.toJSON(null, inputs)
-          } else {
-            return i
-          }
-        })
-      } else if (typeof value === 'object' && value.toJSON) {
-        fixed[name] = value.toJSON(null, inputs)
-      } else if (name === 'source') {
-        let inputId = inputs.get(value.input)
-        if (inputId == null) {
-          inputId = inputsNextIndex
-          inputs.set(value.input, inputsNextIndex)
-          inputsNextIndex++
+    positionInside(index) {
+        let column = this.source.start.column;
+        let line = this.source.start.line;
+        const offset = sourceOffset(this.source.input.css, this.source.start);
+        const end = offset + index;
+        for (let i = offset; i < end; i++) {
+            if (this.source.input.css[i] === '\n') {
+                column = 1;
+                line += 1;
+            }
+            else {
+                column += 1;
+            }
         }
-        fixed[name] = {
-          end: value.end,
-          inputId,
-          start: value.start
+        return { column, line };
+    }
+    prev() {
+        if (!this.parent)
+            return undefined;
+        const index = this.parent.index(this);
+        return this.parent.nodes[index - 1];
+    }
+    rangeBy(opts) {
+        let start = {
+            column: this.source.start.column,
+            line: this.source.start.line
+        };
+        let end = this.source.end
+            ? {
+                column: this.source.end.column + 1,
+                line: this.source.end.line
+            }
+            : {
+                column: start.column + 1,
+                line: start.line
+            };
+        if (opts.word) {
+            const stringRepresentation = this.source.input.css.slice(sourceOffset(this.source.input.css, this.source.start), sourceOffset(this.source.input.css, this.source.end));
+            const index = stringRepresentation.indexOf(opts.word);
+            if (index !== -1) {
+                start = this.positionInside(index);
+                end = this.positionInside(index + opts.word.length);
+            }
         }
-      } else {
-        fixed[name] = value
-      }
+        else {
+            if (opts.start) {
+                start = {
+                    column: opts.start.column,
+                    line: opts.start.line
+                };
+            }
+            else if (opts.index) {
+                start = this.positionInside(opts.index);
+            }
+            if (opts.end) {
+                end = {
+                    column: opts.end.column,
+                    line: opts.end.line
+                };
+            }
+            else if (typeof opts.endIndex === 'number') {
+                end = this.positionInside(opts.endIndex);
+            }
+            else if (opts.index) {
+                end = this.positionInside(opts.index + 1);
+            }
+        }
+        if (end.line < start.line ||
+            (end.line === start.line && end.column <= start.column)) {
+            end = { column: start.column + 1, line: start.line };
+        }
+        return { end, start };
     }
-
-    if (emitInputs) {
-      fixed.inputs = [...inputs.keys()].map(input => input.toJSON())
+    raw(prop, defaultType) {
+        const str = new Stringifier();
+        return str.raw(this, prop, defaultType);
     }
-
-    return fixed
-  }
-
-  toProxy() {
-    if (!this.proxyCache) {
-      this.proxyCache = new Proxy(this, this.getProxyProcessor())
+    remove() {
+        if (this.parent) {
+            this.parent.removeChild(this);
+        }
+        this.parent = undefined;
+        return this;
     }
-    return this.proxyCache
-  }
-
-  toString(stringifier = stringify) {
-    if (stringifier.stringify) stringifier = stringifier.stringify
-    let result = ''
-    stringifier(this, i => {
-      result += i
-    })
-    return result
-  }
-
-  warn(result, text, opts) {
-    const data = { node: this }
-    for (const i in opts) data[i] = opts[i]
-    return result.warn(text, data)
-  }
-
-  get proxyOf() {
-    return this
-  }
+    replaceWith(...nodes) {
+        if (this.parent) {
+            let bookmark = this;
+            let foundSelf = false;
+            for (const node of nodes) {
+                if (node === this) {
+                    foundSelf = true;
+                }
+                else if (foundSelf) {
+                    this.parent.insertAfter(bookmark, node);
+                    bookmark = node;
+                }
+                else {
+                    this.parent.insertBefore(bookmark, node);
+                }
+            }
+            if (!foundSelf) {
+                this.remove();
+            }
+        }
+        return this;
+    }
+    root() {
+        let result = this;
+        while (result.parent && result.parent.type !== 'document') {
+            result = result.parent;
+        }
+        return result;
+    }
+    toJSON(_, inputs) {
+        const fixed = {};
+        const emitInputs = inputs == null;
+        inputs = inputs || new Map();
+        let inputsNextIndex = 0;
+        for (const name in this) {
+            if (!Object.prototype.hasOwnProperty.call(this, name)) {
+                /* c8 ignore next 2 */
+                continue;
+            }
+            if (name === 'parent' || name === 'proxyCache')
+                continue;
+            const value = this[name];
+            if (Array.isArray(value)) {
+                fixed[name] = value.map(i => {
+                    if (typeof i === 'object' && i.toJSON) {
+                        return i.toJSON(null, inputs);
+                    }
+                    else {
+                        return i;
+                    }
+                });
+            }
+            else if (typeof value === 'object' && value.toJSON) {
+                fixed[name] = value.toJSON(null, inputs);
+            }
+            else if (name === 'source') {
+                let inputId = inputs.get(value.input);
+                if (inputId == null) {
+                    inputId = inputsNextIndex;
+                    inputs.set(value.input, inputsNextIndex);
+                    inputsNextIndex++;
+                }
+                fixed[name] = {
+                    end: value.end,
+                    inputId,
+                    start: value.start
+                };
+            }
+            else {
+                fixed[name] = value;
+            }
+        }
+        if (emitInputs) {
+            fixed.inputs = [...inputs.keys()].map(input => input.toJSON());
+        }
+        return fixed;
+    }
+    toProxy() {
+        if (!this.proxyCache) {
+            this.proxyCache = new Proxy(this, this.getProxyProcessor());
+        }
+        return this.proxyCache;
+    }
+    toString(stringifier = stringify) {
+        if (stringifier.stringify)
+            stringifier = stringifier.stringify;
+        let result = '';
+        stringifier(this, i => {
+            result += i;
+        });
+        return result;
+    }
+    warn(result, text, opts) {
+        const data = { node: this };
+        for (const i in opts)
+            data[i] = opts[i];
+        return result.warn(text, data);
+    }
+    get proxyOf() {
+        return this;
+    }
 }

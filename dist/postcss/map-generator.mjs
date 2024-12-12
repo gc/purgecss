@@ -72,7 +72,8 @@ var Input = class {
     } else {
       this.hasBOM = false;
     }
-    if (this.map) this.map.file = this.from;
+    if (this.map)
+      this.map.file = this.from;
   }
   error(message, line, column, opts = {}) {
     let endColumn, endLine, result;
@@ -102,23 +103,9 @@ var Input = class {
     }
     const origin = this.origin(line, column, endLine, endColumn);
     if (origin) {
-      result = new CssSyntaxError(
-        message,
-        origin.endLine === void 0 ? origin.line : { column: origin.column, line: origin.line },
-        origin.endLine === void 0 ? origin.column : { column: origin.endColumn, line: origin.endLine },
-        origin.source,
-        origin.file,
-        opts.plugin
-      );
+      result = new CssSyntaxError(message, origin.endLine === void 0 ? origin.line : { column: origin.column, line: origin.line }, origin.endLine === void 0 ? origin.column : { column: origin.endColumn, line: origin.endLine }, origin.source, origin.file, opts.plugin);
     } else {
-      result = new CssSyntaxError(
-        message,
-        endLine === void 0 ? line : { column, line },
-        endLine === void 0 ? column : { column: endColumn, line: endLine },
-        this.css,
-        this.file,
-        opts.plugin
-      );
+      result = new CssSyntaxError(message, endLine === void 0 ? line : { column, line }, endLine === void 0 ? column : { column: endColumn, line: endLine }, this.css, this.file, opts.plugin);
     }
     result.input = { column, endColumn, endLine, line, source: this.css };
     if (this.file) {
@@ -165,19 +152,18 @@ var Input = class {
     };
   }
   origin(line, column, endLine, endColumn) {
-    if (!this.map) return false;
+    if (!this.map)
+      return false;
     const consumer = this.map.consumer();
     const from = consumer.originalPositionFor({ column, line });
-    if (!from.source) return false;
+    if (!from.source)
+      return false;
     let to;
     if (typeof endLine === "number") {
       to = consumer.originalPositionFor({ column: endColumn, line: endLine });
     }
     let fromUrl;
-    fromUrl = new URL(
-      from.source,
-      this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile)
-    );
+    fromUrl = new URL(from.source, this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile));
     const result = {
       column: from.column,
       endColumn: to && to.column,
@@ -186,7 +172,8 @@ var Input = class {
       url: fromUrl.toString()
     };
     const source = consumer.sourceContentFor(from.source);
-    if (source) result.source = source;
+    if (source)
+      result.source = source;
     return result;
   }
   toJSON() {
@@ -238,18 +225,21 @@ var MapGenerator = class {
       content = this.outputFile() + ".map";
     }
     let eol = "\n";
-    if (this.css.includes("\r\n")) eol = "\r\n";
+    if (this.css.includes("\r\n"))
+      eol = "\r\n";
     this.css += eol + "/*# sourceMappingURL=" + content + " */";
   }
   applyPrevMaps() {
   }
   clearAnnotation() {
-    if (this.mapOpts.annotation === false) return;
+    if (this.mapOpts.annotation === false)
+      return;
     if (this.root) {
       let node;
       for (let i = this.root.nodes.length - 1; i >= 0; i--) {
         node = this.root.nodes[i];
-        if (node.type !== "comment") continue;
+        if (node.type !== "comment")
+          continue;
         if (node.text.startsWith("# sourceMappingURL=")) {
           this.root.removeChild(i);
         }
@@ -286,9 +276,12 @@ var MapGenerator = class {
         source: this.opts.from ? this.toUrl(this.path(this.opts.from)) : "<no source>"
       });
     }
-    if (this.isSourcesContent()) this.setSourcesContent();
-    if (this.root && this.previous().length > 0) this.applyPrevMaps();
-    if (this.isAnnotation()) this.addAnnotation();
+    if (this.isSourcesContent())
+      this.setSourcesContent();
+    if (this.root && this.previous().length > 0)
+      this.applyPrevMaps();
+    if (this.isAnnotation())
+      this.addAnnotation();
     if (this.isInline()) {
       return [this.css];
     } else {
@@ -424,7 +417,8 @@ var MapGenerator = class {
         });
       } else {
         const input = new Input(this.originalCSS, this.opts);
-        if (input.map) this.previousMaps.push(input.map);
+        if (input.map)
+          this.previousMaps.push(input.map);
       }
     }
     return this.previousMaps;
@@ -450,14 +444,14 @@ var MapGenerator = class {
   }
   toFileUrl(path) {
     const cached = this.memoizedFileURLs.get(path);
-    if (cached) return cached;
-    throw new Error(
-      "`map.absolute` option is not available in this PostCSS build"
-    );
+    if (cached)
+      return cached;
+    throw new Error("`map.absolute` option is not available in this PostCSS build");
   }
   toUrl(path) {
     const cached = this.memoizedURLs.get(path);
-    if (cached) return cached;
+    if (cached)
+      return cached;
     path = path.replace(/\\/g, "/");
     const url = encodeURI(path).replace(/[#?]/g, encodeURIComponent);
     this.memoizedURLs.set(path, url);

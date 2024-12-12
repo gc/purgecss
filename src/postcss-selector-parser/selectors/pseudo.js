@@ -1,13 +1,11 @@
 import Container from './container';
-import {PSEUDO} from './types';
-
+import { PSEUDO } from './types';
 export default class Pseudo extends Container {
-    constructor (opts) {
+    constructor(opts) {
         super(opts);
         this.type = PSEUDO;
     }
-
-    toString () {
+    toString() {
         let params = this.length ? '(' + this.map(String).join(',') + ')' : '';
         return [
             this.rawSpaceBefore,

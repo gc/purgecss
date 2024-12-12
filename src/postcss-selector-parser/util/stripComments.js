@@ -1,4 +1,4 @@
-export default function stripComments (str) {
+export default function stripComments(str) {
     let s = "";
     let commentStart = str.indexOf("/*");
     let lastEnd = 0;

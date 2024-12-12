@@ -1,16 +1,15 @@
-import Attribute  from './attribute';
-import ClassName  from './className';
+import Attribute from './attribute';
+import ClassName from './className';
 import Combinator from './combinator';
-import Comment    from './comment';
-import Id         from './id';
-import Nesting    from './nesting';
-import Pseudo     from './pseudo';
-import Root       from './root';
-import Selector   from './selector';
-import Str        from './string';
-import Tag        from './tag';
-import Universal  from './universal';
-
+import Comment from './comment';
+import Id from './id';
+import Nesting from './nesting';
+import Pseudo from './pseudo';
+import Root from './root';
+import Selector from './selector';
+import Str from './string';
+import Tag from './tag';
+import Universal from './universal';
 export const attribute = opts => new Attribute(opts);
 export const className = opts => new ClassName(opts);
 export const combinator = opts => new Combinator(opts);

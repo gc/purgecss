@@ -622,11 +622,7 @@ var Attribute = class _Attribute extends Namespace {
    */
   set value(v) {
     if (this._constructed) {
-      const {
-        deprecatedUsage,
-        unescaped,
-        quoteMark
-      } = unescapeValue(v);
+      const { deprecatedUsage, unescaped, quoteMark } = unescapeValue(v);
       if (deprecatedUsage) {
         warnOfDeprecatedValueAssignment();
       }

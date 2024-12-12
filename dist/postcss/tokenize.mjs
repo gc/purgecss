@@ -47,8 +47,10 @@ function tokenizer(input, options = {}) {
   }
   __name(endOfFile, "endOfFile");
   function nextToken(opts) {
-    if (returned.length) return returned.pop();
-    if (pos >= length) return;
+    if (returned.length)
+      return returned.pop();
+    if (pos >= length)
+      return;
     const ignoreUnclosed = opts ? opts.ignoreUnclosed : false;
     code = css.charCodeAt(pos);
     switch (code) {

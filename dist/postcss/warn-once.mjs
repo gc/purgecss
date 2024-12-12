@@ -4,7 +4,8 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 // src/postcss/warn-once.js
 var printed = {};
 function warnOnce(message) {
-  if (printed[message]) return;
+  if (printed[message])
+    return;
   printed[message] = true;
   if (typeof console !== "undefined" && console.warn) {
     console.warn(message);

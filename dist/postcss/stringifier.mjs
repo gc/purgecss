@@ -62,7 +62,8 @@ var Stringifier = class {
     if (value.includes("\n")) {
       const indent = this.raw(node, null, "indent");
       if (indent.length) {
-        for (let step = 0; step < depth; step++) value += indent;
+        for (let step = 0; step < depth; step++)
+          value += indent;
       }
     }
     return value;
@@ -77,20 +78,23 @@ var Stringifier = class {
     } else {
       after = this.raw(node, "after", "emptyBody");
     }
-    if (after) this.builder(after);
+    if (after)
+      this.builder(after);
     this.builder("}", node, "end");
   }
   body(node) {
     let last = node.nodes.length - 1;
     while (last > 0) {
-      if (node.nodes[last].type !== "comment") break;
+      if (node.nodes[last].type !== "comment")
+        break;
       last -= 1;
     }
     const semicolon = this.raw(node, "semicolon");
     for (let i = 0; i < node.nodes.length; i++) {
       const child = node.nodes[i];
       const before = this.raw(child, "before");
-      if (before) this.builder(before);
+      if (before)
+        this.builder(before);
       this.stringify(child, last !== i || semicolon);
     }
   }
@@ -105,7 +109,8 @@ var Stringifier = class {
     if (node.important) {
       string += node.raws.important || " !important";
     }
-    if (semicolon) string += ";";
+    if (semicolon)
+      string += ";";
     this.builder(string, node);
   }
   document(node) {
@@ -113,10 +118,12 @@ var Stringifier = class {
   }
   raw(node, own, detect) {
     let value;
-    if (!detect) detect = own;
+    if (!detect)
+      detect = own;
     if (own) {
       value = node.raws[own];
-      if (typeof value !== "undefined") return value;
+      if (typeof value !== "undefined")
+        return value;
     }
     const parent = node.parent;
     if (detect === "before") {
@@ -127,9 +134,11 @@ var Stringifier = class {
         return "";
       }
     }
-    if (!parent) return DEFAULT_RAW[detect];
+    if (!parent)
+      return DEFAULT_RAW[detect];
     const root = node.root();
-    if (!root.rawCache) root.rawCache = {};
+    if (!root.rawCache)
+      root.rawCache = {};
     if (typeof root.rawCache[detect] !== "undefined") {
       return root.rawCache[detect];
     }
@@ -142,11 +151,13 @@ var Stringifier = class {
       } else {
         root.walk((i) => {
           value = i.raws[own];
-          if (typeof value !== "undefined") return false;
+          if (typeof value !== "undefined")
+            return false;
         });
       }
     }
-    if (typeof value === "undefined") value = DEFAULT_RAW[detect];
+    if (typeof value === "undefined")
+      value = DEFAULT_RAW[detect];
     root.rawCache[detect] = value;
     return value;
   }
@@ -163,7 +174,8 @@ var Stringifier = class {
         }
       }
     });
-    if (value) value = value.replace(/\S/g, "");
+    if (value)
+      value = value.replace(/\S/g, "");
     return value;
   }
   rawBeforeComment(root, node) {
@@ -207,7 +219,8 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.type !== "decl") {
         value = i.raws.between;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
@@ -225,7 +238,8 @@ var Stringifier = class {
         }
       }
     });
-    if (value) value = value.replace(/\S/g, "");
+    if (value)
+      value = value.replace(/\S/g, "");
     return value;
   }
   rawColon(root) {
@@ -243,13 +257,15 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.nodes && i.nodes.length === 0) {
         value = i.raws.after;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
   }
   rawIndent(root) {
-    if (root.raws.indent) return root.raws.indent;
+    if (root.raws.indent)
+      return root.raws.indent;
     let value;
     root.walk((i) => {
       const p = i.parent;
@@ -269,7 +285,8 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.nodes && i.nodes.length && i.last.type === "decl") {
         value = i.raws.semicolon;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
@@ -284,7 +301,8 @@ var Stringifier = class {
   }
   root(node) {
     this.body(node);
-    if (node.raws.after) this.builder(node.raws.after);
+    if (node.raws.after)
+      this.builder(node.raws.after);
   }
   rule(node) {
     this.block(node, this.rawValue(node, "selector"));
@@ -294,9 +312,7 @@ var Stringifier = class {
   }
   stringify(node, semicolon) {
     if (!this[node.type]) {
-      throw new Error(
-        "Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier."
-      );
+      throw new Error("Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier.");
     }
     this[node.type](node, semicolon);
   }

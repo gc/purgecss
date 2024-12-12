@@ -385,7 +385,7 @@ var Container = class extends Node {
    * Return the most specific node at the line and column number given.
    * The source location is based on the original parsed location, locations aren't
    * updated as selector nodes are mutated.
-   * 
+   *
    * Note that this location is relative to the location of the first character
    * of the selector, and not the location of the selector in the overall document
    * when used in conjunction with postcss.
@@ -1056,11 +1056,7 @@ var Attribute = class _Attribute extends Namespace {
    */
   set value(v) {
     if (this._constructed) {
-      const {
-        deprecatedUsage,
-        unescaped,
-        quoteMark
-      } = unescapeValue(v);
+      const { deprecatedUsage, unescaped, quoteMark } = unescapeValue(v);
       if (deprecatedUsage) {
         warnOfDeprecatedValueAssignment();
       }
@@ -1545,24 +1541,14 @@ function getSource(startLine, startColumn, endLine, endColumn) {
 }
 __name(getSource, "getSource");
 function getTokenSource(token) {
-  return getSource(
-    token[FIELDS.START_LINE],
-    token[FIELDS.START_COL],
-    token[FIELDS.END_LINE],
-    token[FIELDS.END_COL]
-  );
+  return getSource(token[FIELDS.START_LINE], token[FIELDS.START_COL], token[FIELDS.END_LINE], token[FIELDS.END_COL]);
 }
 __name(getTokenSource, "getTokenSource");
 function getTokenSourceSpan(startToken, endToken) {
   if (!startToken) {
     return void 0;
   }
-  return getSource(
-    startToken[FIELDS.START_LINE],
-    startToken[FIELDS.START_COL],
-    endToken[FIELDS.END_LINE],
-    endToken[FIELDS.END_COL]
-  );
+  return getSource(startToken[FIELDS.START_LINE], startToken[FIELDS.START_COL], endToken[FIELDS.END_LINE], endToken[FIELDS.END_COL]);
 }
 __name(getTokenSourceSpan, "getTokenSourceSpan");
 function unescapeProp(node, prop) {
@@ -1640,12 +1626,7 @@ var Parser = class {
     }
     const len = attr.length;
     const node = {
-      source: getSource(
-        startingToken[1],
-        startingToken[2],
-        this.currToken[3],
-        this.currToken[4]
-      ),
+      source: getSource(startingToken[1], startingToken[2], this.currToken[3], this.currToken[4]),
       sourceIndex: startingToken[FIELDS.START_POS]
     };
     if (len === 1 && !~[word].indexOf(attr[0][FIELDS.TYPE])) {
@@ -1899,12 +1880,7 @@ var Parser = class {
         let lastToken = this.tokens[this.position - 1];
         nodes.push(new String2({
           value: "",
-          source: getSource(
-            firstToken[FIELDS.START_LINE],
-            firstToken[FIELDS.START_COL],
-            lastToken[FIELDS.END_LINE],
-            lastToken[FIELDS.END_COL]
-          ),
+          source: getSource(firstToken[FIELDS.START_LINE], firstToken[FIELDS.START_COL], lastToken[FIELDS.END_LINE], lastToken[FIELDS.END_COL]),
           sourceIndex: firstToken[FIELDS.START_POS],
           spaces: { before: space2, after: "" }
         }));
@@ -1944,12 +1920,7 @@ var Parser = class {
       }
       let node = new Combinator({
         value: `/${name}/`,
-        source: getSource(
-          this.currToken[FIELDS.START_LINE],
-          this.currToken[FIELDS.START_COL],
-          this.tokens[this.position + 2][FIELDS.END_LINE],
-          this.tokens[this.position + 2][FIELDS.END_COL]
-        ),
+        source: getSource(this.currToken[FIELDS.START_LINE], this.currToken[FIELDS.START_COL], this.tokens[this.position + 2][FIELDS.END_LINE], this.tokens[this.position + 2][FIELDS.END_COL]),
         sourceIndex: this.currToken[FIELDS.START_POS],
         raws
       });
@@ -2156,12 +2127,7 @@ var Parser = class {
       } else {
         this.newNode(new String2({
           value: parenValue,
-          source: getSource(
-            parenStart[FIELDS.START_LINE],
-            parenStart[FIELDS.START_COL],
-            parenEnd[FIELDS.END_LINE],
-            parenEnd[FIELDS.END_COL]
-          ),
+          source: getSource(parenStart[FIELDS.START_LINE], parenStart[FIELDS.START_COL], parenEnd[FIELDS.END_LINE], parenEnd[FIELDS.END_COL]),
           sourceIndex: parenStart[FIELDS.START_POS]
         }));
       }
@@ -2269,12 +2235,7 @@ var Parser = class {
       let node;
       const current = this.currToken;
       const sourceIndex = current[FIELDS.START_POS] + indices[i];
-      const source = getSource(
-        current[1],
-        current[2] + ind,
-        current[3],
-        current[2] + (index - 1)
-      );
+      const source = getSource(current[1], current[2] + ind, current[3], current[2] + (index - 1));
       if (~hasClass.indexOf(ind)) {
         let classNameOpts = {
           value: value.slice(1),
@@ -2381,15 +2342,9 @@ var Parser = class {
     }
     const an = /^[aeiou]/.test(description[0]) ? "an" : "a";
     if (!found) {
-      return this.error(
-        `Expected ${an} ${description}.`,
-        { index }
-      );
+      return this.error(`Expected ${an} ${description}.`, { index });
     }
-    return this.error(
-      `Expected ${an} ${description}, found "${found}" instead.`,
-      { index }
-    );
+    return this.error(`Expected ${an} ${description}, found "${found}" instead.`, { index });
   }
   requiredSpace(space2) {
     return this.options.lossy ? " " : space2;

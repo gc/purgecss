@@ -12,7 +12,7 @@ export default [
       cleanup({ comments: 'none', extensions: ['js', 'ts', 'mjs'] }),
     ],
     output: [
-      { dir: `rollup`, format: 'esm', sourcemap: true },
+      { dir: `rollup`, format: 'esm', sourcemap: false },
     ],
   },
   {

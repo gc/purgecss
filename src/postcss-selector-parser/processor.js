@@ -1,42 +1,38 @@
 import Parser from './parser';
-
 export default class Processor {
-    constructor (func, options) {
-        this.func = func || function noop () {};
+    constructor(func, options) {
+        this.func = func || function noop() { };
         this.funcRes = null;
         this.options = options;
     }
-
-    _shouldUpdateSelector (rule, options = {}) {
+    _shouldUpdateSelector(rule, options = {}) {
         let merged = Object.assign({}, this.options, options);
         if (merged.updateSelector === false) {
             return false;
-        } else {
+        }
+        else {
             return typeof rule !== "string";
         }
     }
-
-    _isLossy (options = {}) {
+    _isLossy(options = {}) {
         let merged = Object.assign({}, this.options, options);
         if (merged.lossless === false) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
-    _root (rule, options = {}) {
+    _root(rule, options = {}) {
         let parser = new Parser(rule, this._parseOptions(options));
         return parser.root;
     }
-
-    _parseOptions (options) {
+    _parseOptions(options) {
         return {
             lossy: this._isLossy(options),
         };
     }
-
-    _run (rule, options = {}) {
+    _run(rule, options = {}) {
         return new Promise((resolve, reject) => {
             try {
                 let root = this._root(rule, options);
@@ -46,16 +42,16 @@ export default class Processor {
                         string = root.toString();
                         rule.selector = string;
                     }
-                    return {transform, root, string};
+                    return { transform, root, string };
                 }).then(resolve, reject);
-            } catch (e) {
+            }
+            catch (e) {
                 reject(e);
                 return;
             }
         });
     }
-
-    _runSync (rule, options = {}) {
+    _runSync(rule, options = {}) {
         let root = this._root(rule, options);
         let transform = this.func(root);
         if (transform && typeof transform.then === "function") {
@@ -66,9 +62,8 @@ export default class Processor {
             string = root.toString();
             rule.selector = string;
         }
-        return {transform, root, string};
+        return { transform, root, string };
     }
-
     /**
      * Process rule into a selector AST.
      *
@@ -76,10 +71,9 @@ export default class Processor {
      * @param options The options for processing
      * @returns {Promise<parser.Root>} The AST of the selector after processing it.
      */
-    ast (rule, options) {
+    ast(rule, options) {
         return this._run(rule, options).then(result => result.root);
     }
-
     /**
      * Process rule into a selector AST synchronously.
      *
@@ -87,10 +81,9 @@ export default class Processor {
      * @param options The options for processing
      * @returns {parser.Root} The AST of the selector after processing it.
      */
-    astSync (rule, options) {
+    astSync(rule, options) {
         return this._runSync(rule, options).root;
     }
-
     /**
      * Process a selector into a transformed value asynchronously
      *
@@ -98,10 +91,9 @@ export default class Processor {
      * @param options The options for processing
      * @returns {Promise<any>} The value returned by the processor.
      */
-    transform (rule, options) {
+    transform(rule, options) {
         return this._run(rule, options).then(result => result.transform);
     }
-
     /**
      * Process a selector into a transformed value synchronously.
      *
@@ -109,10 +101,9 @@ export default class Processor {
      * @param options The options for processing
      * @returns {any} The value returned by the processor.
      */
-    transformSync (rule, options) {
+    transformSync(rule, options) {
         return this._runSync(rule, options).transform;
     }
-
     /**
      * Process a selector into a new selector string asynchronously.
      *
@@ -120,11 +111,10 @@ export default class Processor {
      * @param options The options for processing
      * @returns {string} the selector after processing.
      */
-    process (rule, options) {
+    process(rule, options) {
         return this._run(rule, options)
             .then((result) => result.string || result.root.toString());
     }
-
     /**
      * Process a selector into a new selector string synchronously.
      *
@@ -132,7 +122,7 @@ export default class Processor {
      * @param options The options for processing
      * @returns {string} the selector after processing.
      */
-    processSync (rule, options) {
+    processSync(rule, options) {
         let result = this._runSync(rule, options);
         return result.string || result.root.toString();
     }

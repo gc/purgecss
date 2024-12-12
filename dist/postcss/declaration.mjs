@@ -116,7 +116,8 @@ var Stringifier = class {
     if (value.includes("\n")) {
       const indent = this.raw(node, null, "indent");
       if (indent.length) {
-        for (let step = 0; step < depth; step++) value += indent;
+        for (let step = 0; step < depth; step++)
+          value += indent;
       }
     }
     return value;
@@ -131,20 +132,23 @@ var Stringifier = class {
     } else {
       after = this.raw(node, "after", "emptyBody");
     }
-    if (after) this.builder(after);
+    if (after)
+      this.builder(after);
     this.builder("}", node, "end");
   }
   body(node) {
     let last = node.nodes.length - 1;
     while (last > 0) {
-      if (node.nodes[last].type !== "comment") break;
+      if (node.nodes[last].type !== "comment")
+        break;
       last -= 1;
     }
     const semicolon = this.raw(node, "semicolon");
     for (let i = 0; i < node.nodes.length; i++) {
       const child = node.nodes[i];
       const before = this.raw(child, "before");
-      if (before) this.builder(before);
+      if (before)
+        this.builder(before);
       this.stringify(child, last !== i || semicolon);
     }
   }
@@ -159,7 +163,8 @@ var Stringifier = class {
     if (node.important) {
       string += node.raws.important || " !important";
     }
-    if (semicolon) string += ";";
+    if (semicolon)
+      string += ";";
     this.builder(string, node);
   }
   document(node) {
@@ -167,10 +172,12 @@ var Stringifier = class {
   }
   raw(node, own, detect) {
     let value;
-    if (!detect) detect = own;
+    if (!detect)
+      detect = own;
     if (own) {
       value = node.raws[own];
-      if (typeof value !== "undefined") return value;
+      if (typeof value !== "undefined")
+        return value;
     }
     const parent = node.parent;
     if (detect === "before") {
@@ -181,9 +188,11 @@ var Stringifier = class {
         return "";
       }
     }
-    if (!parent) return DEFAULT_RAW[detect];
+    if (!parent)
+      return DEFAULT_RAW[detect];
     const root = node.root();
-    if (!root.rawCache) root.rawCache = {};
+    if (!root.rawCache)
+      root.rawCache = {};
     if (typeof root.rawCache[detect] !== "undefined") {
       return root.rawCache[detect];
     }
@@ -196,11 +205,13 @@ var Stringifier = class {
       } else {
         root.walk((i) => {
           value = i.raws[own];
-          if (typeof value !== "undefined") return false;
+          if (typeof value !== "undefined")
+            return false;
         });
       }
     }
-    if (typeof value === "undefined") value = DEFAULT_RAW[detect];
+    if (typeof value === "undefined")
+      value = DEFAULT_RAW[detect];
     root.rawCache[detect] = value;
     return value;
   }
@@ -217,7 +228,8 @@ var Stringifier = class {
         }
       }
     });
-    if (value) value = value.replace(/\S/g, "");
+    if (value)
+      value = value.replace(/\S/g, "");
     return value;
   }
   rawBeforeComment(root, node) {
@@ -261,7 +273,8 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.type !== "decl") {
         value = i.raws.between;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
@@ -279,7 +292,8 @@ var Stringifier = class {
         }
       }
     });
-    if (value) value = value.replace(/\S/g, "");
+    if (value)
+      value = value.replace(/\S/g, "");
     return value;
   }
   rawColon(root) {
@@ -297,13 +311,15 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.nodes && i.nodes.length === 0) {
         value = i.raws.after;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
   }
   rawIndent(root) {
-    if (root.raws.indent) return root.raws.indent;
+    if (root.raws.indent)
+      return root.raws.indent;
     let value;
     root.walk((i) => {
       const p = i.parent;
@@ -323,7 +339,8 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.nodes && i.nodes.length && i.last.type === "decl") {
         value = i.raws.semicolon;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
@@ -338,7 +355,8 @@ var Stringifier = class {
   }
   root(node) {
     this.body(node);
-    if (node.raws.after) this.builder(node.raws.after);
+    if (node.raws.after)
+      this.builder(node.raws.after);
   }
   rule(node) {
     this.block(node, this.rawValue(node, "selector"));
@@ -348,9 +366,7 @@ var Stringifier = class {
   }
   stringify(node, semicolon) {
     if (!this[node.type]) {
-      throw new Error(
-        "Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier."
-      );
+      throw new Error("Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier.");
     }
     this[node.type](node, semicolon);
   }
@@ -374,17 +390,20 @@ function cloneNode(obj, parent) {
     if (!Object.prototype.hasOwnProperty.call(obj, i)) {
       continue;
     }
-    if (i === "proxyCache") continue;
+    if (i === "proxyCache")
+      continue;
     let value = obj[i];
     const type = typeof value;
     if (i === "parent" && type === "object") {
-      if (parent) cloned[i] = parent;
+      if (parent)
+        cloned[i] = parent;
     } else if (i === "source") {
       cloned[i] = value;
     } else if (Array.isArray(value)) {
       cloned[i] = value.map((j) => cloneNode(j, cloned));
     } else {
-      if (type === "object" && value !== null) value = cloneNode(value);
+      if (type === "object" && value !== null)
+        value = cloneNode(value);
       cloned[i] = value;
     }
   }
@@ -440,10 +459,7 @@ var Node = class {
     error.postcssNode = this;
     if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
       const s = this.source;
-      error.stack = error.stack.replace(
-        /\n\s{4}at /,
-        `$&${s.input.from}:${s.start.line}:${s.start.column}$&`
-      );
+      error.stack = error.stack.replace(/\n\s{4}at /, `$&${s.input.from}:${s.start.line}:${s.start.column}$&`);
     }
     return error;
   }
@@ -464,7 +480,8 @@ var Node = class {
   cleanRaws(keepBetween) {
     delete this.raws.before;
     delete this.raws.after;
-    if (!keepBetween) delete this.raws.between;
+    if (!keepBetween)
+      delete this.raws.between;
   }
   clone(overrides = {}) {
     const cloned = cloneNode(this);
@@ -486,12 +503,7 @@ var Node = class {
   error(message, opts = {}) {
     if (this.source) {
       const { end, start } = this.rangeBy(opts);
-      return this.source.input.error(
-        message,
-        { column: start.column, line: start.line },
-        { column: end.column, line: end.line },
-        opts
-      );
+      return this.source.input.error(message, { column: start.column, line: start.line }, { column: end.column, line: end.line }, opts);
     }
     return new CssSyntaxError(message);
   }
@@ -507,7 +519,8 @@ var Node = class {
         }
       },
       set(node, prop, value) {
-        if (node[prop] === value) return true;
+        if (node[prop] === value)
+          return true;
         node[prop] = value;
         if (prop === "prop" || prop === "value" || prop === "name" || prop === "params" || prop === "important" || /* c8 ignore next */
         prop === "text") {
@@ -531,7 +544,8 @@ var Node = class {
     }
   }
   next() {
-    if (!this.parent) return void 0;
+    if (!this.parent)
+      return void 0;
     const index = this.parent.index(this);
     return this.parent.nodes[index + 1];
   }
@@ -540,12 +554,10 @@ var Node = class {
     if (opts.index) {
       pos = this.positionInside(opts.index);
     } else if (opts.word) {
-      const stringRepresentation = this.source.input.css.slice(
-        sourceOffset(this.source.input.css, this.source.start),
-        sourceOffset(this.source.input.css, this.source.end)
-      );
+      const stringRepresentation = this.source.input.css.slice(sourceOffset(this.source.input.css, this.source.start), sourceOffset(this.source.input.css, this.source.end));
       const index = stringRepresentation.indexOf(opts.word);
-      if (index !== -1) pos = this.positionInside(index);
+      if (index !== -1)
+        pos = this.positionInside(index);
     }
     return pos;
   }
@@ -565,7 +577,8 @@ var Node = class {
     return { column, line };
   }
   prev() {
-    if (!this.parent) return void 0;
+    if (!this.parent)
+      return void 0;
     const index = this.parent.index(this);
     return this.parent.nodes[index - 1];
   }
@@ -582,16 +595,11 @@ var Node = class {
       line: start.line
     };
     if (opts.word) {
-      const stringRepresentation = this.source.input.css.slice(
-        sourceOffset(this.source.input.css, this.source.start),
-        sourceOffset(this.source.input.css, this.source.end)
-      );
+      const stringRepresentation = this.source.input.css.slice(sourceOffset(this.source.input.css, this.source.start), sourceOffset(this.source.input.css, this.source.end));
       const index = stringRepresentation.indexOf(opts.word);
       if (index !== -1) {
         start = this.positionInside(index);
-        end = this.positionInside(
-          index + opts.word.length
-        );
+        end = this.positionInside(index + opts.word.length);
       }
     } else {
       if (opts.start) {
@@ -665,7 +673,8 @@ var Node = class {
       if (!Object.prototype.hasOwnProperty.call(this, name)) {
         continue;
       }
-      if (name === "parent" || name === "proxyCache") continue;
+      if (name === "parent" || name === "proxyCache")
+        continue;
       const value = this[name];
       if (Array.isArray(value)) {
         fixed[name] = value.map((i) => {
@@ -705,7 +714,8 @@ var Node = class {
     return this.proxyCache;
   }
   toString(stringifier = stringify) {
-    if (stringifier.stringify) stringifier = stringifier.stringify;
+    if (stringifier.stringify)
+      stringifier = stringifier.stringify;
     let result = "";
     stringifier(this, (i) => {
       result += i;
@@ -714,7 +724,8 @@ var Node = class {
   }
   warn(result, text, opts) {
     const data = { node: this };
-    for (const i in opts) data[i] = opts[i];
+    for (const i in opts)
+      data[i] = opts[i];
     return result.warn(text, data);
   }
   get proxyOf() {

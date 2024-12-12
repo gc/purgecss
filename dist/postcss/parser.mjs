@@ -116,7 +116,8 @@ var Stringifier = class {
     if (value.includes("\n")) {
       const indent = this.raw(node, null, "indent");
       if (indent.length) {
-        for (let step = 0; step < depth; step++) value += indent;
+        for (let step = 0; step < depth; step++)
+          value += indent;
       }
     }
     return value;
@@ -131,20 +132,23 @@ var Stringifier = class {
     } else {
       after = this.raw(node, "after", "emptyBody");
     }
-    if (after) this.builder(after);
+    if (after)
+      this.builder(after);
     this.builder("}", node, "end");
   }
   body(node) {
     let last = node.nodes.length - 1;
     while (last > 0) {
-      if (node.nodes[last].type !== "comment") break;
+      if (node.nodes[last].type !== "comment")
+        break;
       last -= 1;
     }
     const semicolon = this.raw(node, "semicolon");
     for (let i = 0; i < node.nodes.length; i++) {
       const child = node.nodes[i];
       const before = this.raw(child, "before");
-      if (before) this.builder(before);
+      if (before)
+        this.builder(before);
       this.stringify(child, last !== i || semicolon);
     }
   }
@@ -159,7 +163,8 @@ var Stringifier = class {
     if (node.important) {
       string += node.raws.important || " !important";
     }
-    if (semicolon) string += ";";
+    if (semicolon)
+      string += ";";
     this.builder(string, node);
   }
   document(node) {
@@ -167,10 +172,12 @@ var Stringifier = class {
   }
   raw(node, own, detect) {
     let value;
-    if (!detect) detect = own;
+    if (!detect)
+      detect = own;
     if (own) {
       value = node.raws[own];
-      if (typeof value !== "undefined") return value;
+      if (typeof value !== "undefined")
+        return value;
     }
     const parent = node.parent;
     if (detect === "before") {
@@ -181,9 +188,11 @@ var Stringifier = class {
         return "";
       }
     }
-    if (!parent) return DEFAULT_RAW[detect];
+    if (!parent)
+      return DEFAULT_RAW[detect];
     const root = node.root();
-    if (!root.rawCache) root.rawCache = {};
+    if (!root.rawCache)
+      root.rawCache = {};
     if (typeof root.rawCache[detect] !== "undefined") {
       return root.rawCache[detect];
     }
@@ -196,11 +205,13 @@ var Stringifier = class {
       } else {
         root.walk((i) => {
           value = i.raws[own];
-          if (typeof value !== "undefined") return false;
+          if (typeof value !== "undefined")
+            return false;
         });
       }
     }
-    if (typeof value === "undefined") value = DEFAULT_RAW[detect];
+    if (typeof value === "undefined")
+      value = DEFAULT_RAW[detect];
     root.rawCache[detect] = value;
     return value;
   }
@@ -217,7 +228,8 @@ var Stringifier = class {
         }
       }
     });
-    if (value) value = value.replace(/\S/g, "");
+    if (value)
+      value = value.replace(/\S/g, "");
     return value;
   }
   rawBeforeComment(root, node) {
@@ -261,7 +273,8 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.type !== "decl") {
         value = i.raws.between;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
@@ -279,7 +292,8 @@ var Stringifier = class {
         }
       }
     });
-    if (value) value = value.replace(/\S/g, "");
+    if (value)
+      value = value.replace(/\S/g, "");
     return value;
   }
   rawColon(root) {
@@ -297,13 +311,15 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.nodes && i.nodes.length === 0) {
         value = i.raws.after;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
   }
   rawIndent(root) {
-    if (root.raws.indent) return root.raws.indent;
+    if (root.raws.indent)
+      return root.raws.indent;
     let value;
     root.walk((i) => {
       const p = i.parent;
@@ -323,7 +339,8 @@ var Stringifier = class {
     root.walk((i) => {
       if (i.nodes && i.nodes.length && i.last.type === "decl") {
         value = i.raws.semicolon;
-        if (typeof value !== "undefined") return false;
+        if (typeof value !== "undefined")
+          return false;
       }
     });
     return value;
@@ -338,7 +355,8 @@ var Stringifier = class {
   }
   root(node) {
     this.body(node);
-    if (node.raws.after) this.builder(node.raws.after);
+    if (node.raws.after)
+      this.builder(node.raws.after);
   }
   rule(node) {
     this.block(node, this.rawValue(node, "selector"));
@@ -348,9 +366,7 @@ var Stringifier = class {
   }
   stringify(node, semicolon) {
     if (!this[node.type]) {
-      throw new Error(
-        "Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier."
-      );
+      throw new Error("Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier.");
     }
     this[node.type](node, semicolon);
   }
@@ -374,17 +390,20 @@ function cloneNode(obj, parent) {
     if (!Object.prototype.hasOwnProperty.call(obj, i)) {
       continue;
     }
-    if (i === "proxyCache") continue;
+    if (i === "proxyCache")
+      continue;
     let value = obj[i];
     const type = typeof value;
     if (i === "parent" && type === "object") {
-      if (parent) cloned[i] = parent;
+      if (parent)
+        cloned[i] = parent;
     } else if (i === "source") {
       cloned[i] = value;
     } else if (Array.isArray(value)) {
       cloned[i] = value.map((j) => cloneNode(j, cloned));
     } else {
-      if (type === "object" && value !== null) value = cloneNode(value);
+      if (type === "object" && value !== null)
+        value = cloneNode(value);
       cloned[i] = value;
     }
   }
@@ -440,10 +459,7 @@ var Node = class {
     error.postcssNode = this;
     if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
       const s = this.source;
-      error.stack = error.stack.replace(
-        /\n\s{4}at /,
-        `$&${s.input.from}:${s.start.line}:${s.start.column}$&`
-      );
+      error.stack = error.stack.replace(/\n\s{4}at /, `$&${s.input.from}:${s.start.line}:${s.start.column}$&`);
     }
     return error;
   }
@@ -464,7 +480,8 @@ var Node = class {
   cleanRaws(keepBetween) {
     delete this.raws.before;
     delete this.raws.after;
-    if (!keepBetween) delete this.raws.between;
+    if (!keepBetween)
+      delete this.raws.between;
   }
   clone(overrides = {}) {
     const cloned = cloneNode(this);
@@ -486,12 +503,7 @@ var Node = class {
   error(message, opts = {}) {
     if (this.source) {
       const { end, start } = this.rangeBy(opts);
-      return this.source.input.error(
-        message,
-        { column: start.column, line: start.line },
-        { column: end.column, line: end.line },
-        opts
-      );
+      return this.source.input.error(message, { column: start.column, line: start.line }, { column: end.column, line: end.line }, opts);
     }
     return new CssSyntaxError(message);
   }
@@ -507,7 +519,8 @@ var Node = class {
         }
       },
       set(node, prop, value) {
-        if (node[prop] === value) return true;
+        if (node[prop] === value)
+          return true;
         node[prop] = value;
         if (prop === "prop" || prop === "value" || prop === "name" || prop === "params" || prop === "important" || /* c8 ignore next */
         prop === "text") {
@@ -531,7 +544,8 @@ var Node = class {
     }
   }
   next() {
-    if (!this.parent) return void 0;
+    if (!this.parent)
+      return void 0;
     const index = this.parent.index(this);
     return this.parent.nodes[index + 1];
   }
@@ -540,12 +554,10 @@ var Node = class {
     if (opts.index) {
       pos = this.positionInside(opts.index);
     } else if (opts.word) {
-      const stringRepresentation = this.source.input.css.slice(
-        sourceOffset(this.source.input.css, this.source.start),
-        sourceOffset(this.source.input.css, this.source.end)
-      );
+      const stringRepresentation = this.source.input.css.slice(sourceOffset(this.source.input.css, this.source.start), sourceOffset(this.source.input.css, this.source.end));
       const index = stringRepresentation.indexOf(opts.word);
-      if (index !== -1) pos = this.positionInside(index);
+      if (index !== -1)
+        pos = this.positionInside(index);
     }
     return pos;
   }
@@ -565,7 +577,8 @@ var Node = class {
     return { column, line };
   }
   prev() {
-    if (!this.parent) return void 0;
+    if (!this.parent)
+      return void 0;
     const index = this.parent.index(this);
     return this.parent.nodes[index - 1];
   }
@@ -582,16 +595,11 @@ var Node = class {
       line: start.line
     };
     if (opts.word) {
-      const stringRepresentation = this.source.input.css.slice(
-        sourceOffset(this.source.input.css, this.source.start),
-        sourceOffset(this.source.input.css, this.source.end)
-      );
+      const stringRepresentation = this.source.input.css.slice(sourceOffset(this.source.input.css, this.source.start), sourceOffset(this.source.input.css, this.source.end));
       const index = stringRepresentation.indexOf(opts.word);
       if (index !== -1) {
         start = this.positionInside(index);
-        end = this.positionInside(
-          index + opts.word.length
-        );
+        end = this.positionInside(index + opts.word.length);
       }
     } else {
       if (opts.start) {
@@ -665,7 +673,8 @@ var Node = class {
       if (!Object.prototype.hasOwnProperty.call(this, name)) {
         continue;
       }
-      if (name === "parent" || name === "proxyCache") continue;
+      if (name === "parent" || name === "proxyCache")
+        continue;
       const value = this[name];
       if (Array.isArray(value)) {
         fixed[name] = value.map((i) => {
@@ -705,7 +714,8 @@ var Node = class {
     return this.proxyCache;
   }
   toString(stringifier = stringify) {
-    if (stringifier.stringify) stringifier = stringifier.stringify;
+    if (stringifier.stringify)
+      stringifier = stringifier.stringify;
     let result = "";
     stringifier(this, (i) => {
       result += i;
@@ -714,7 +724,8 @@ var Node = class {
   }
   warn(result, text, opts) {
     const data = { node: this };
-    for (const i in opts) data[i] = opts[i];
+    for (const i in opts)
+      data[i] = opts[i];
     return result.warn(text, data);
   }
   get proxyOf() {
@@ -757,7 +768,8 @@ var Root;
 var Rule;
 function cleanSource(nodes) {
   return nodes.map((i) => {
-    if (i.nodes) i.nodes = cleanSource(i.nodes);
+    if (i.nodes)
+      i.nodes = cleanSource(i.nodes);
     delete i.source;
     return i;
   });
@@ -779,7 +791,8 @@ var Container = class _Container extends Node {
   append(...children) {
     for (const child of children) {
       const nodes = this.normalize(child, this.last);
-      for (const node of nodes) this.proxyOf.nodes.push(node);
+      for (const node of nodes)
+        this.proxyOf.nodes.push(node);
     }
     this.markDirty();
     return this;
@@ -787,17 +800,20 @@ var Container = class _Container extends Node {
   cleanRaws(keepBetween) {
     super.cleanRaws(keepBetween);
     if (this.nodes) {
-      for (const node of this.nodes) node.cleanRaws(keepBetween);
+      for (const node of this.nodes)
+        node.cleanRaws(keepBetween);
     }
   }
   each(callback) {
-    if (!this.proxyOf.nodes) return void 0;
+    if (!this.proxyOf.nodes)
+      return void 0;
     const iterator = this.getIterator();
     let index, result;
     while (this.indexes[iterator] < this.proxyOf.nodes.length) {
       index = this.indexes[iterator];
       result = callback(this.proxyOf.nodes[index], index);
-      if (result === false) break;
+      if (result === false)
+        break;
       this.indexes[iterator] += 1;
     }
     delete this.indexes[iterator];
@@ -807,8 +823,10 @@ var Container = class _Container extends Node {
     return this.nodes.every(condition);
   }
   getIterator() {
-    if (!this.lastEach) this.lastEach = 0;
-    if (!this.indexes) this.indexes = {};
+    if (!this.lastEach)
+      this.lastEach = 0;
+    if (!this.indexes)
+      this.indexes = {};
     this.lastEach += 1;
     const iterator = this.lastEach;
     this.indexes[iterator] = 0;
@@ -823,21 +841,17 @@ var Container = class _Container extends Node {
           return node[prop];
         } else if (prop === "each" || typeof prop === "string" && prop.startsWith("walk")) {
           return (...args) => {
-            return node[prop](
-              ...args.map((i) => {
-                if (typeof i === "function") {
-                  return (child, index) => i(child.toProxy(), index);
-                } else {
-                  return i;
-                }
-              })
-            );
+            return node[prop](...args.map((i) => {
+              if (typeof i === "function") {
+                return (child, index) => i(child.toProxy(), index);
+              } else {
+                return i;
+              }
+            }));
           };
         } else if (prop === "every" || prop === "some") {
           return (cb) => {
-            return node[prop](
-              (child, ...other) => cb(child.toProxy(), ...other)
-            );
+            return node[prop]((child, ...other) => cb(child.toProxy(), ...other));
           };
         } else if (prop === "root") {
           return () => node.root().toProxy();
@@ -850,7 +864,8 @@ var Container = class _Container extends Node {
         }
       },
       set(node, prop, value) {
-        if (node[prop] === value) return true;
+        if (node[prop] === value)
+          return true;
         node[prop] = value;
         if (prop === "name" || prop === "params" || prop === "selector") {
           node.markDirty();
@@ -860,15 +875,18 @@ var Container = class _Container extends Node {
     };
   }
   index(child) {
-    if (typeof child === "number") return child;
-    if (child.proxyOf) child = child.proxyOf;
+    if (typeof child === "number")
+      return child;
+    if (child.proxyOf)
+      child = child.proxyOf;
     return this.proxyOf.nodes.indexOf(child);
   }
   insertAfter(exist, add) {
     let existIndex = this.index(exist);
     const nodes = this.normalize(add, this.proxyOf.nodes[existIndex]).reverse();
     existIndex = this.index(exist);
-    for (const node of nodes) this.proxyOf.nodes.splice(existIndex + 1, 0, node);
+    for (const node of nodes)
+      this.proxyOf.nodes.splice(existIndex + 1, 0, node);
     let index;
     for (const id in this.indexes) {
       index = this.indexes[id];
@@ -882,13 +900,10 @@ var Container = class _Container extends Node {
   insertBefore(exist, add) {
     let existIndex = this.index(exist);
     const type = existIndex === 0 ? "prepend" : false;
-    const nodes = this.normalize(
-      add,
-      this.proxyOf.nodes[existIndex],
-      type
-    ).reverse();
+    const nodes = this.normalize(add, this.proxyOf.nodes[existIndex], type).reverse();
     existIndex = this.index(exist);
-    for (const node of nodes) this.proxyOf.nodes.splice(existIndex, 0, node);
+    for (const node of nodes)
+      this.proxyOf.nodes.splice(existIndex, 0, node);
     let index;
     for (const id in this.indexes) {
       index = this.indexes[id];
@@ -907,12 +922,14 @@ var Container = class _Container extends Node {
     } else if (Array.isArray(nodes)) {
       nodes = nodes.slice(0);
       for (const i of nodes) {
-        if (i.parent) i.parent.removeChild(i, "ignore");
+        if (i.parent)
+          i.parent.removeChild(i, "ignore");
       }
     } else if (nodes.type === "root" && this.type !== "document") {
       nodes = nodes.nodes.slice(0);
       for (const i of nodes) {
-        if (i.parent) i.parent.removeChild(i, "ignore");
+        if (i.parent)
+          i.parent.removeChild(i, "ignore");
       }
     } else if (nodes.type) {
       nodes = [nodes];
@@ -933,11 +950,15 @@ var Container = class _Container extends Node {
       throw new Error("Unknown node type in node creation");
     }
     const processed = nodes.map((i) => {
-      if (!i[my]) _Container.rebuild(i);
+      if (!i[my])
+        _Container.rebuild(i);
       i = i.proxyOf;
-      if (i.parent) i.parent.removeChild(i);
-      if (i[isClean]) markTreeDirty(i);
-      if (!i.raws) i.raws = {};
+      if (i.parent)
+        i.parent.removeChild(i);
+      if (i[isClean])
+        markTreeDirty(i);
+      if (!i.raws)
+        i.raws = {};
       if (typeof i.raws.before === "undefined") {
         if (sample && typeof sample.raws.before !== "undefined") {
           i.raws.before = sample.raws.before.replace(/\S/g, "");
@@ -952,7 +973,8 @@ var Container = class _Container extends Node {
     children = children.reverse();
     for (const child of children) {
       const nodes = this.normalize(child, this.first, "prepend").reverse();
-      for (const node of nodes) this.proxyOf.nodes.unshift(node);
+      for (const node of nodes)
+        this.proxyOf.nodes.unshift(node);
       for (const id in this.indexes) {
         this.indexes[id] = this.indexes[id] + nodes.length;
       }
@@ -966,7 +988,8 @@ var Container = class _Container extends Node {
     return this;
   }
   removeAll() {
-    for (const node of this.proxyOf.nodes) node.parent = void 0;
+    for (const node of this.proxyOf.nodes)
+      node.parent = void 0;
     this.proxyOf.nodes = [];
     this.markDirty();
     return this;
@@ -991,8 +1014,10 @@ var Container = class _Container extends Node {
       opts = {};
     }
     this.walkDecls((decl) => {
-      if (opts.props && !opts.props.includes(decl.prop)) return;
-      if (opts.fast && !decl.value.includes(opts.fast)) return;
+      if (opts.props && !opts.props.includes(decl.prop))
+        return;
+      if (opts.fast && !decl.value.includes(opts.fast))
+        return;
       decl.value = decl.value.replace(pattern, callback);
     });
     this.markDirty();
@@ -1089,11 +1114,13 @@ var Container = class _Container extends Node {
     });
   }
   get first() {
-    if (!this.proxyOf.nodes) return void 0;
+    if (!this.proxyOf.nodes)
+      return void 0;
     return this.proxyOf.nodes[0];
   }
   get last() {
-    if (!this.proxyOf.nodes) return void 0;
+    if (!this.proxyOf.nodes)
+      return void 0;
     return this.proxyOf.nodes[this.proxyOf.nodes.length - 1];
   }
 };
@@ -1139,11 +1166,13 @@ var AtRule2 = class extends Container {
     this.type = "atrule";
   }
   append(...children) {
-    if (!this.proxyOf.nodes) this.nodes = [];
+    if (!this.proxyOf.nodes)
+      this.nodes = [];
     return super.append(...children);
   }
   prepend(...children) {
-    if (!this.proxyOf.nodes) this.nodes = [];
+    if (!this.proxyOf.nodes)
+      this.nodes = [];
     return super.prepend(...children);
   }
 };
@@ -1159,7 +1188,8 @@ var Root2 = class extends Container {
   constructor(defaults) {
     super(defaults);
     this.type = "root";
-    if (!this.nodes) this.nodes = [];
+    if (!this.nodes)
+      this.nodes = [];
   }
   normalize(child, sample, type) {
     const nodes = super.normalize(child);
@@ -1230,19 +1260,23 @@ var list = {
       } else if (letter === "(") {
         func += 1;
       } else if (letter === ")") {
-        if (func > 0) func -= 1;
+        if (func > 0)
+          func -= 1;
       } else if (func === 0) {
-        if (separators.includes(letter)) split = true;
+        if (separators.includes(letter))
+          split = true;
       }
       if (split) {
-        if (current !== "") array.push(current.trim());
+        if (current !== "")
+          array.push(current.trim());
         current = "";
         split = false;
       } else {
         current += letter;
       }
     }
-    if (last || current !== "") array.push(current.trim());
+    if (last || current !== "")
+      array.push(current.trim());
     return array;
   }
 };
@@ -1255,7 +1289,8 @@ var Rule2 = class extends Container {
   constructor(defaults) {
     super(defaults);
     this.type = "rule";
-    if (!this.nodes) this.nodes = [];
+    if (!this.nodes)
+      this.nodes = [];
   }
   get selectors() {
     return list.comma(this.selector);
@@ -1314,8 +1349,10 @@ function tokenizer(input, options = {}) {
   }
   __name(endOfFile, "endOfFile");
   function nextToken(opts) {
-    if (returned.length) return returned.pop();
-    if (pos >= length) return;
+    if (returned.length)
+      return returned.pop();
+    if (pos >= length)
+      return;
     const ignoreUnclosed = opts ? opts.ignoreUnclosed : false;
     code = css.charCodeAt(pos);
     switch (code) {
@@ -1493,7 +1530,8 @@ function findLastWithPosition(tokens) {
   for (let i = tokens.length - 1; i >= 0; i--) {
     const token = tokens[i];
     const pos = token[3] || token[2];
-    if (pos) return pos;
+    if (pos)
+      return pos;
   }
 }
 __name(findLastWithPosition, "findLastWithPosition");
@@ -1590,20 +1628,19 @@ var Parser = class {
   }
   checkMissedSemicolon(tokens) {
     const colon = this.colon(tokens);
-    if (colon === false) return;
+    if (colon === false)
+      return;
     let founded = 0;
     let token;
     for (let j = colon - 1; j >= 0; j--) {
       token = tokens[j];
       if (token[0] !== "space") {
         founded += 1;
-        if (founded === 2) break;
+        if (founded === 2)
+          break;
       }
     }
-    throw this.input.error(
-      "Missed semicolon",
-      token[0] === "word" ? token[3] + 1 : token[2]
-    );
+    throw this.input.error("Missed semicolon", token[0] === "word" ? token[3] + 1 : token[2]);
   }
   colon(tokens) {
     let brackets = 0;
@@ -1658,12 +1695,11 @@ var Parser = class {
       this.semicolon = true;
       tokens.pop();
     }
-    node.source.end = this.getPosition(
-      last[3] || last[2] || findLastWithPosition(tokens)
-    );
+    node.source.end = this.getPosition(last[3] || last[2] || findLastWithPosition(tokens));
     node.source.end.offset++;
     while (tokens[0][0] !== "word") {
-      if (tokens.length === 1) this.unknownWord(tokens);
+      if (tokens.length === 1)
+        this.unknownWord(tokens);
       node.raws.before += tokens.shift()[1];
     }
     node.source.start = this.getPosition(tokens[0][2]);
@@ -1697,7 +1733,8 @@ var Parser = class {
     let next;
     while (tokens.length) {
       next = tokens[0][0];
-      if (next !== "space" && next !== "comment") break;
+      if (next !== "space" && next !== "comment")
+        break;
       firstSpaces.push(tokens.shift());
     }
     this.precheckMissedSemicolon(tokens);
@@ -1707,7 +1744,8 @@ var Parser = class {
         node.important = true;
         let string = this.stringFrom(tokens, i);
         string = this.spacesFromEnd(tokens) + string;
-        if (string !== " !important") node.raws.important = string;
+        if (string !== " !important")
+          node.raws.important = string;
         break;
       } else if (token[1].toLowerCase() === "important") {
         const cache = tokens.slice(0);
@@ -1740,11 +1778,7 @@ var Parser = class {
     }
   }
   doubleColon(token) {
-    throw this.input.error(
-      "Double colon",
-      { offset: token[2] },
-      { offset: token[2] + token[1].length }
-    );
+    throw this.input.error("Double colon", { offset: token[2] }, { offset: token[2] + token[1].length });
   }
   emptyRule(token) {
     const node = new Rule2();
@@ -1769,7 +1803,8 @@ var Parser = class {
     }
   }
   endFile() {
-    if (this.current.parent) this.unclosedBlock();
+    if (this.current.parent)
+      this.unclosedBlock();
     if (this.current.nodes && this.current.nodes.length) {
       this.current.raws.semicolon = this.semicolon;
     }
@@ -1803,7 +1838,8 @@ var Parser = class {
     };
     node.raws.before = this.spaces;
     this.spaces = "";
-    if (node.type !== "comment") this.semicolon = false;
+    if (node.type !== "comment")
+      this.semicolon = false;
   }
   other(start) {
     let end = false;
@@ -1818,10 +1854,12 @@ var Parser = class {
       type = token[0];
       tokens.push(token);
       if (type === "(" || type === "[") {
-        if (!bracket) bracket = token;
+        if (!bracket)
+          bracket = token;
         brackets.push(type === "(" ? ")" : "]");
       } else if (customProperty && colon && type === "{") {
-        if (!bracket) bracket = token;
+        if (!bracket)
+          bracket = token;
         brackets.push("}");
       } else if (brackets.length === 0) {
         if (type === ";") {
@@ -1843,17 +1881,21 @@ var Parser = class {
         }
       } else if (type === brackets[brackets.length - 1]) {
         brackets.pop();
-        if (brackets.length === 0) bracket = null;
+        if (brackets.length === 0)
+          bracket = null;
       }
       token = this.tokenizer.nextToken();
     }
-    if (this.tokenizer.endOfFile()) end = true;
-    if (brackets.length > 0) this.unclosedBracket(bracket);
+    if (this.tokenizer.endOfFile())
+      end = true;
+    if (brackets.length > 0)
+      this.unclosedBracket(bracket);
     if (end && colon) {
       if (!customProperty) {
         while (tokens.length) {
           token = tokens[tokens.length - 1][0];
-          if (token !== "space" && token !== "comment") break;
+          if (token !== "space" && token !== "comment")
+            break;
           this.tokenizer.back(tokens.pop());
         }
       }
@@ -1940,7 +1982,8 @@ var Parser = class {
     let spaces = "";
     while (tokens.length) {
       lastTokenType = tokens[tokens.length - 1][0];
-      if (lastTokenType !== "space" && lastTokenType !== "comment") break;
+      if (lastTokenType !== "space" && lastTokenType !== "comment")
+        break;
       spaces = tokens.pop()[1] + spaces;
     }
     return spaces;
@@ -1951,7 +1994,8 @@ var Parser = class {
     let spaces = "";
     while (tokens.length) {
       next = tokens[0][0];
-      if (next !== "space" && next !== "comment") break;
+      if (next !== "space" && next !== "comment")
+        break;
       spaces += tokens.shift()[1];
     }
     return spaces;
@@ -1961,7 +2005,8 @@ var Parser = class {
     let spaces = "";
     while (tokens.length) {
       lastTokenType = tokens[tokens.length - 1][0];
-      if (lastTokenType !== "space") break;
+      if (lastTokenType !== "space")
+        break;
       spaces = tokens.pop()[1] + spaces;
     }
     return spaces;
@@ -1979,32 +2024,16 @@ var Parser = class {
     throw this.input.error("Unclosed block", pos.line, pos.column);
   }
   unclosedBracket(bracket) {
-    throw this.input.error(
-      "Unclosed bracket",
-      { offset: bracket[2] },
-      { offset: bracket[2] + 1 }
-    );
+    throw this.input.error("Unclosed bracket", { offset: bracket[2] }, { offset: bracket[2] + 1 });
   }
   unexpectedClose(token) {
-    throw this.input.error(
-      "Unexpected }",
-      { offset: token[2] },
-      { offset: token[2] + 1 }
-    );
+    throw this.input.error("Unexpected }", { offset: token[2] }, { offset: token[2] + 1 });
   }
   unknownWord(tokens) {
-    throw this.input.error(
-      "Unknown word",
-      { offset: tokens[0][2] },
-      { offset: tokens[0][2] + tokens[0][1].length }
-    );
+    throw this.input.error("Unknown word", { offset: tokens[0][2] }, { offset: tokens[0][2] + tokens[0][1].length });
   }
   unnamedAtrule(node, token) {
-    throw this.input.error(
-      "At-rule without name",
-      { offset: token[2] },
-      { offset: token[2] + token[1].length }
-    );
+    throw this.input.error("At-rule without name", { offset: token[2] }, { offset: token[2] + token[1].length });
   }
 };
 export {

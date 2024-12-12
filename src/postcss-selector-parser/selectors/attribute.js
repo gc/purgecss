@@ -2,10 +2,8 @@ import cssesc from "../../cssesc";
 import unesc from "../util/unesc";
 import Namespace from './namespace';
 import { ATTRIBUTE } from './types';
-
 const WRAPPED_IN_QUOTES = /^('|")([^]*)\1$/;
-
-export function unescapeValue (value) {
+export function unescapeValue(value) {
     let deprecatedUsage = false;
     let quoteMark = null;
     let unescaped = value;
@@ -24,8 +22,7 @@ export function unescapeValue (value) {
         quoteMark,
     };
 }
-
-function handleDeprecatedContructorOpts (opts) {
+function handleDeprecatedContructorOpts(opts) {
     if (opts.quoteMark !== undefined) {
         return opts;
     }
@@ -33,7 +30,7 @@ function handleDeprecatedContructorOpts (opts) {
         return opts;
     }
     warnOfDeprecatedConstructor();
-    const {quoteMark, unescaped} = unescapeValue(opts.value);
+    const { quoteMark, unescaped } = unescapeValue(opts.value);
     if (!opts.raws) {
         opts.raws = {};
     }
@@ -44,18 +41,16 @@ function handleDeprecatedContructorOpts (opts) {
     opts.quoteMark = quoteMark;
     return opts;
 }
-
 export default class Attribute extends Namespace {
     static NO_QUOTE = null;
     static SINGLE_QUOTE = "'";
     static DOUBLE_QUOTE = '"';
-    constructor (opts = {}) {
+    constructor(opts = {}) {
         super(handleDeprecatedContructorOpts(opts));
         this.type = ATTRIBUTE;
         this.raws = this.raws || {};
         this._constructed = true;
     }
-
     /**
      * Returns the Attribute's value quoted such that it would be legal to use
      * in the value of a css file. The original value's quotation setting
@@ -77,28 +72,25 @@ export default class Attribute extends Namespace {
      *     and the other options specified here. See the `smartQuoteMark()`
      *     method.
      **/
-    getQuotedValue (options = {}) {
+    getQuotedValue(options = {}) {
         const quoteMark = this._determineQuoteMark(options);
         const cssescopts = CSSESC_QUOTE_OPTIONS[quoteMark];
         const escaped = cssesc(this._value, cssescopts);
         return escaped;
     }
-
-    _determineQuoteMark (options) {
+    _determineQuoteMark(options) {
         return (options.smart) ? this.smartQuoteMark(options) : this.preferredQuoteMark(options);
     }
-
     /**
      * Set the unescaped value with the specified quotation options. The value
      * provided must not include any wrapping quote marks -- those quotes will
      * be interpreted as part of the value and escaped accordingly.
      */
-    setValue (value, options = {}) {
+    setValue(value, options = {}) {
         this._value = value;
         this._quoteMark = this._determineQuoteMark(options);
         this._syncRawValue();
     }
-
     /**
      * Intelligently select a quoteMark value based on the value's contents. If
      * the value is a legal CSS ident, it will not be quoted. Otherwise a quote
@@ -111,15 +103,16 @@ export default class Attribute extends Namespace {
      * @param options This takes the quoteMark and preferCurrentQuoteMark options
      * from the quoteValue method.
      */
-    smartQuoteMark (options) {
+    smartQuoteMark(options) {
         const v = this.value;
         const numSingleQuotes = v.replace(/[^']/g, '').length;
         const numDoubleQuotes = v.replace(/[^"]/g, '').length;
         if (numSingleQuotes + numDoubleQuotes === 0) {
-            const escaped = cssesc(v, {isIdentifier: true});
+            const escaped = cssesc(v, { isIdentifier: true });
             if (escaped === v) {
                 return Attribute.NO_QUOTE;
-            } else {
+            }
+            else {
                 const pref = this.preferredQuoteMark(options);
                 if (pref === Attribute.NO_QUOTE) {
                     // pick a quote mark that isn't none and see if it's smaller
@@ -132,53 +125,48 @@ export default class Attribute extends Namespace {
                 }
                 return pref;
             }
-        } else if (numDoubleQuotes === numSingleQuotes) {
+        }
+        else if (numDoubleQuotes === numSingleQuotes) {
             return this.preferredQuoteMark(options);
-        } else if ( numDoubleQuotes < numSingleQuotes) {
+        }
+        else if (numDoubleQuotes < numSingleQuotes) {
             return Attribute.DOUBLE_QUOTE;
-        } else {
+        }
+        else {
             return Attribute.SINGLE_QUOTE;
         }
     }
-
     /**
      * Selects the preferred quote mark based on the options and the current quote mark value.
      * If you want the quote mark to depend on the attribute value, call `smartQuoteMark(opts)`
      * instead.
      */
-    preferredQuoteMark (options) {
+    preferredQuoteMark(options) {
         let quoteMark = (options.preferCurrentQuoteMark) ? this.quoteMark : options.quoteMark;
-
         if (quoteMark === undefined) {
             quoteMark = (options.preferCurrentQuoteMark) ? options.quoteMark : this.quoteMark;
         }
-
         if (quoteMark === undefined) {
             quoteMark = Attribute.DOUBLE_QUOTE;
         }
-
         return quoteMark;
     }
-
-    get quoted () {
+    get quoted() {
         const qm = this.quoteMark;
         return qm === "'" || qm === '"';
     }
-
-    set quoted (value) {
+    set quoted(value) {
         warnOfDeprecatedQuotedAssignment();
     }
-
     /**
      * returns a single (`'`) or double (`"`) quote character if the value is quoted.
      * returns `null` if the value is not quoted.
      * returns `undefined` if the quotation state is unknown (this can happen when
      * the attribute is constructed without specifying a quote mark.)
      */
-    get quoteMark () {
+    get quoteMark() {
         return this._quoteMark;
     }
-
     /**
      * Set the quote mark to be used by this attribute's value.
      * If the quote mark changes, the raw (escaped) value at `attr.raws.value` of the attribute
@@ -186,7 +174,7 @@ export default class Attribute extends Namespace {
      *
      * @param {"'" | '"' | null} quoteMark The quote mark or `null` if the value should be unquoted.
      */
-    set quoteMark (quoteMark) {
+    set quoteMark(quoteMark) {
         if (!this._constructed) {
             this._quoteMark = quoteMark;
             return;
@@ -196,34 +184,29 @@ export default class Attribute extends Namespace {
             this._syncRawValue();
         }
     }
-
-    _syncRawValue () {
+    _syncRawValue() {
         const rawValue = cssesc(this._value, CSSESC_QUOTE_OPTIONS[this.quoteMark]);
         if (rawValue === this._value) {
             if (this.raws) {
                 delete this.raws.value;
             }
-        } else {
+        }
+        else {
             this.raws.value = rawValue;
         }
     }
-
-    get qualifiedAttribute () {
+    get qualifiedAttribute() {
         return this.qualifiedName(this.raws.attribute || this.attribute);
     }
-
-    get insensitiveFlag () {
+    get insensitiveFlag() {
         return this.insensitive ? 'i' : '';
     }
-
-    get value () {
+    get value() {
         return this._value;
     }
-
-    get insensitive () {
+    get insensitive() {
         return this._insensitive;
     }
-
     /**
      * Set the case insensitive flag.
      * If the case insensitive flag changes, the raw (escaped) value at `attr.raws.insensitiveFlag`
@@ -231,20 +214,17 @@ export default class Attribute extends Namespace {
      *
      * @param {true | false} insensitive true if the attribute should match case-insensitively.
      */
-    set insensitive (insensitive) {
+    set insensitive(insensitive) {
         if (!insensitive) {
             this._insensitive = false;
-
             // "i" and "I" can be used in "this.raws.insensitiveFlag" to store the original notation.
             // When setting `attr.insensitive = false` both should be erased to ensure correct serialization.
             if (this.raws && (this.raws.insensitiveFlag === 'I' || this.raws.insensitiveFlag === 'i')) {
                 this.raws.insensitiveFlag = undefined;
             }
         }
-
         this._insensitive = insensitive;
     }
-
     /**
      * Before 3.0, the value had to be set to an escaped value including any wrapped
      * quote marks. In 3.0, the semantics of `Attribute.value` changed so that the value
@@ -257,13 +237,9 @@ export default class Attribute extends Namespace {
      * Instead, you should call `attr.setValue(newValue, opts)` and pass options that describe
      * how the new value is quoted.
      */
-    set value (v) {
+    set value(v) {
         if (this._constructed) {
-            const {
-                deprecatedUsage,
-                unescaped,
-                quoteMark,
-            } = unescapeValue(v);
+            const { deprecatedUsage, unescaped, quoteMark, } = unescapeValue(v);
             if (deprecatedUsage) {
                 warnOfDeprecatedValueAssignment();
             }
@@ -273,43 +249,39 @@ export default class Attribute extends Namespace {
             this._value = unescaped;
             this._quoteMark = quoteMark;
             this._syncRawValue();
-        } else {
+        }
+        else {
             this._value = v;
         }
     }
-
-    get attribute () {
+    get attribute() {
         return this._attribute;
     }
-
-    set attribute (name) {
+    set attribute(name) {
         this._handleEscapes("attribute", name);
         this._attribute = name;
     }
-
-    _handleEscapes (prop, value) {
+    _handleEscapes(prop, value) {
         if (this._constructed) {
-            const escaped = cssesc(value, {isIdentifier: true});
+            const escaped = cssesc(value, { isIdentifier: true });
             if (escaped !== value) {
                 this.raws[prop] = escaped;
-            } else {
+            }
+            else {
                 delete this.raws[prop];
             }
         }
     }
-
-    _spacesFor (name) {
-        const attrSpaces = {before: '', after: ''};
+    _spacesFor(name) {
+        const attrSpaces = { before: '', after: '' };
         const spaces = this.spaces[name] || {};
         const rawSpaces = (this.raws.spaces && this.raws.spaces[name]) || {};
         return Object.assign(attrSpaces, spaces, rawSpaces);
     }
-
-    _stringFor (name, spaceName = name, concat = defaultAttrConcat) {
+    _stringFor(name, spaceName = name, concat = defaultAttrConcat) {
         const attrSpaces = this._spacesFor(spaceName);
         return concat(this.stringifyProperty(name), attrSpaces);
     }
-
     /**
      * returns the offset of the attribute part specified relative to the
      * start of the node of the output string.
@@ -324,7 +296,7 @@ export default class Attribute extends Namespace {
      * @param part One of the possible values inside an attribute.
      * @returns -1 if the name is invalid or the value doesn't exist in this attribute.
      */
-    offsetOf (name) {
+    offsetOf(name) {
         let count = 1;
         const attributeSpaces = this._spacesFor("attribute");
         count += attributeSpaces.before.length;
@@ -334,7 +306,6 @@ export default class Attribute extends Namespace {
         if (name === "attributeNS") {
             return count;
         }
-
         count += this.namespaceString.length;
         if (this.namespace) {
             count += 1;
@@ -342,7 +313,6 @@ export default class Attribute extends Namespace {
         if (name === "attribute") {
             return count;
         }
-
         count += this.stringifyProperty("attribute").length;
         count += attributeSpaces.after.length;
         const operatorSpaces = this._spacesFor("operator");
@@ -351,7 +321,6 @@ export default class Attribute extends Namespace {
         if (name === "operator") {
             return operator ? count : -1;
         }
-
         count += operator.length;
         count += operatorSpaces.after.length;
         const valueSpaces = this._spacesFor("value");
@@ -360,7 +329,6 @@ export default class Attribute extends Namespace {
         if (name === "value") {
             return value ? count : -1;
         }
-
         count += value.length;
         count += valueSpaces.after.length;
         const insensitiveSpaces = this._spacesFor("insensitive");
@@ -370,15 +338,12 @@ export default class Attribute extends Namespace {
         }
         return -1;
     }
-
-    toString () {
+    toString() {
         const selector = [
             this.rawSpaceBefore,
             '[',
         ];
-
         selector.push(this._stringFor('qualifiedAttribute', 'attribute'));
-
         if (this.operator && (this.value || this.value === '')) {
             selector.push(this._stringFor('operator'));
             selector.push(this._stringFor('value'));
@@ -387,25 +352,21 @@ export default class Attribute extends Namespace {
                     && !this.quoted
                     && attrSpaces.before.length === 0
                     && !(this.spaces.value && this.spaces.value.after)) {
-
                     attrSpaces.before = " ";
                 }
                 return defaultAttrConcat(attrValue, attrSpaces);
             }));
         }
-
         selector.push(']');
         selector.push(this.rawSpaceAfter);
         return selector.join('');
     }
 }
-
 const CSSESC_QUOTE_OPTIONS = {
-    "'": {quotes: 'single', wrap: true},
-    '"': {quotes: 'double', wrap: true},
-    [null]: {isIdentifier: true},
+    "'": { quotes: 'single', wrap: true },
+    '"': { quotes: 'double', wrap: true },
+    [null]: { isIdentifier: true },
 };
-
-function defaultAttrConcat (attrValue, attrSpaces) {
+function defaultAttrConcat(attrValue, attrSpaces) {
     return `${attrSpaces.before}${attrValue}${attrSpaces.after}`;
 }

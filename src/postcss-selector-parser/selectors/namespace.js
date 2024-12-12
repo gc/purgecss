@@ -1,12 +1,11 @@
 import cssesc from "../../cssesc";
 import { ensureObject } from '../util';
 import Node from './node';
-
 export default class Namespace extends Node {
-    get namespace () {
+    get namespace() {
         return this._namespace;
     }
-    set namespace (namespace) {
+    set namespace(namespace) {
         if (namespace === true || namespace === "*" || namespace === "&") {
             this._namespace = namespace;
             if (this.raws) {
@@ -14,45 +13,46 @@ export default class Namespace extends Node {
             }
             return;
         }
-
-        const escaped = cssesc(namespace, {isIdentifier: true});
+        const escaped = cssesc(namespace, { isIdentifier: true });
         this._namespace = namespace;
         if (escaped !== namespace) {
             ensureObject(this, "raws");
             this.raws.namespace = escaped;
-        } else if (this.raws) {
+        }
+        else if (this.raws) {
             delete this.raws.namespace;
         }
     }
-    get ns () {
+    get ns() {
         return this._namespace;
     }
-    set ns (namespace) {
+    set ns(namespace) {
         this.namespace = namespace;
     }
-
-    get namespaceString () {
+    get namespaceString() {
         if (this.namespace) {
             const ns = this.stringifyProperty("namespace");
             if (ns === true) {
                 return '';
-            } else {
+            }
+            else {
                 return ns;
             }
-        } else {
+        }
+        else {
             return '';
         }
     }
-
-    qualifiedName (value) {
+    qualifiedName(value) {
         if (this.namespace) {
             return `${this.namespaceString}|${value}`;
-        } else {
+        }
+        else {
             return value;
         }
     }
-
-    valueToString () {
+    valueToString() {
         return this.qualifiedName(super.valueToString());
     }
-};
+}
+;

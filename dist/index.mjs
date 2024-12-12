@@ -1,423 +1,391 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/postcss/css-syntax-error.js
-var CssSyntaxError;
-var init_css_syntax_error = __esm({
-  "src/postcss/css-syntax-error.js"() {
-    "use strict";
-    CssSyntaxError = class _CssSyntaxError extends Error {
-      static {
-        __name(this, "CssSyntaxError");
-      }
-      constructor(message, line, column, source, file, plugin2) {
-        super(message);
-        this.name = "CssSyntaxError";
-        this.reason = message;
-        if (file) {
-          this.file = file;
-        }
-        if (source) {
-          this.source = source;
-        }
-        if (plugin2) {
-          this.plugin = plugin2;
-        }
-        if (typeof line !== "undefined" && typeof column !== "undefined") {
-          if (typeof line === "number") {
-            this.line = line;
-            this.column = column;
-          } else {
-            this.line = line.line;
-            this.column = line.column;
-            this.endLine = column.line;
-            this.endColumn = column.column;
-          }
-        }
-        this.setMessage();
-        if (Error.captureStackTrace) {
-          Error.captureStackTrace(this, _CssSyntaxError);
-        }
-      }
-      setMessage() {
-        this.message = this.plugin ? this.plugin + ": " : "";
-        this.message += this.file ? this.file : "<css input>";
-        if (typeof this.line !== "undefined") {
-          this.message += ":" + this.line + ":" + this.column;
-        }
-        this.message += ": " + this.reason;
-      }
-      showSourceCode() {
-        return "";
-      }
-      toString() {
-        let code = this.showSourceCode();
-        if (code) {
-          code = "\n\n" + code + "\n";
-        }
-        return this.name + ": " + this.message + code;
-      }
-    };
+var CssSyntaxError = class _CssSyntaxError extends Error {
+  static {
+    __name(this, "CssSyntaxError");
   }
-});
+  constructor(message, line, column, source, file, plugin2) {
+    super(message);
+    this.name = "CssSyntaxError";
+    this.reason = message;
+    if (file) {
+      this.file = file;
+    }
+    if (source) {
+      this.source = source;
+    }
+    if (plugin2) {
+      this.plugin = plugin2;
+    }
+    if (typeof line !== "undefined" && typeof column !== "undefined") {
+      if (typeof line === "number") {
+        this.line = line;
+        this.column = column;
+      } else {
+        this.line = line.line;
+        this.column = line.column;
+        this.endLine = column.line;
+        this.endColumn = column.column;
+      }
+    }
+    this.setMessage();
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, _CssSyntaxError);
+    }
+  }
+  setMessage() {
+    this.message = this.plugin ? this.plugin + ": " : "";
+    this.message += this.file ? this.file : "<css input>";
+    if (typeof this.line !== "undefined") {
+      this.message += ":" + this.line + ":" + this.column;
+    }
+    this.message += ": " + this.reason;
+  }
+  showSourceCode() {
+    return "";
+  }
+  toString() {
+    let code = this.showSourceCode();
+    if (code) {
+      code = "\n\n" + code + "\n";
+    }
+    return this.name + ": " + this.message + code;
+  }
+};
 
 // src/postcss/stringifier.js
+var DEFAULT_RAW = {
+  after: "\n",
+  beforeClose: "\n",
+  beforeComment: "\n",
+  beforeDecl: "\n",
+  beforeOpen: " ",
+  beforeRule: "\n",
+  colon: ": ",
+  commentLeft: " ",
+  commentRight: " ",
+  emptyBody: "",
+  indent: "    ",
+  semicolon: false
+};
 function capitalize(str2) {
   return str2[0].toUpperCase() + str2.slice(1);
 }
-var DEFAULT_RAW, Stringifier;
-var init_stringifier = __esm({
-  "src/postcss/stringifier.js"() {
-    "use strict";
-    DEFAULT_RAW = {
-      after: "\n",
-      beforeClose: "\n",
-      beforeComment: "\n",
-      beforeDecl: "\n",
-      beforeOpen: " ",
-      beforeRule: "\n",
-      colon: ": ",
-      commentLeft: " ",
-      commentRight: " ",
-      emptyBody: "",
-      indent: "    ",
-      semicolon: false
-    };
-    __name(capitalize, "capitalize");
-    Stringifier = class {
-      static {
-        __name(this, "Stringifier");
-      }
-      constructor(builder) {
-        this.builder = builder;
-      }
-      atrule(node, semicolon2) {
-        let name = "@" + node.name;
-        const params = node.params ? this.rawValue(node, "params") : "";
-        if (typeof node.raws.afterName !== "undefined") {
-          name += node.raws.afterName;
-        } else if (params) {
-          name += " ";
-        }
-        if (node.nodes) {
-          this.block(node, name + params);
-        } else {
-          const end = (node.raws.between || "") + (semicolon2 ? ";" : "");
-          this.builder(name + params + end, node);
-        }
-      }
-      beforeAfter(node, detect) {
-        let value;
-        if (node.type === "decl") {
-          value = this.raw(node, null, "beforeDecl");
-        } else if (node.type === "comment") {
-          value = this.raw(node, null, "beforeComment");
-        } else if (detect === "before") {
-          value = this.raw(node, null, "beforeRule");
-        } else {
-          value = this.raw(node, null, "beforeClose");
-        }
-        let buf = node.parent;
-        let depth = 0;
-        while (buf && buf.type !== "root") {
-          depth += 1;
-          buf = buf.parent;
-        }
-        if (value.includes("\n")) {
-          const indent = this.raw(node, null, "indent");
-          if (indent.length) {
-            for (let step = 0; step < depth; step++) value += indent;
-          }
-        }
-        return value;
-      }
-      block(node, start) {
-        const between = this.raw(node, "between", "beforeOpen");
-        this.builder(start + between + "{", node, "start");
-        let after;
-        if (node.nodes && node.nodes.length) {
-          this.body(node);
-          after = this.raw(node, "after");
-        } else {
-          after = this.raw(node, "after", "emptyBody");
-        }
-        if (after) this.builder(after);
-        this.builder("}", node, "end");
-      }
-      body(node) {
-        let last = node.nodes.length - 1;
-        while (last > 0) {
-          if (node.nodes[last].type !== "comment") break;
-          last -= 1;
-        }
-        const semicolon2 = this.raw(node, "semicolon");
-        for (let i = 0; i < node.nodes.length; i++) {
-          const child = node.nodes[i];
-          const before = this.raw(child, "before");
-          if (before) this.builder(before);
-          this.stringify(child, last !== i || semicolon2);
-        }
-      }
-      comment(node) {
-        const left = this.raw(node, "left", "commentLeft");
-        const right = this.raw(node, "right", "commentRight");
-        this.builder("/*" + left + node.text + right + "*/", node);
-      }
-      decl(node, semicolon2) {
-        const between = this.raw(node, "between", "colon");
-        let string2 = node.prop + between + this.rawValue(node, "value");
-        if (node.important) {
-          string2 += node.raws.important || " !important";
-        }
-        if (semicolon2) string2 += ";";
-        this.builder(string2, node);
-      }
-      document(node) {
-        this.body(node);
-      }
-      raw(node, own, detect) {
-        let value;
-        if (!detect) detect = own;
-        if (own) {
-          value = node.raws[own];
-          if (typeof value !== "undefined") return value;
-        }
-        const parent = node.parent;
-        if (detect === "before") {
-          if (!parent || parent.type === "root" && parent.first === node) {
-            return "";
-          }
-          if (parent && parent.type === "document") {
-            return "";
-          }
-        }
-        if (!parent) return DEFAULT_RAW[detect];
-        const root2 = node.root();
-        if (!root2.rawCache) root2.rawCache = {};
-        if (typeof root2.rawCache[detect] !== "undefined") {
-          return root2.rawCache[detect];
-        }
-        if (detect === "before" || detect === "after") {
-          return this.beforeAfter(node, detect);
-        } else {
-          const method = "raw" + capitalize(detect);
-          if (this[method]) {
-            value = this[method](root2, node);
-          } else {
-            root2.walk((i) => {
-              value = i.raws[own];
-              if (typeof value !== "undefined") return false;
-            });
-          }
-        }
-        if (typeof value === "undefined") value = DEFAULT_RAW[detect];
-        root2.rawCache[detect] = value;
-        return value;
-      }
-      rawBeforeClose(root2) {
-        let value;
-        root2.walk((i) => {
-          if (i.nodes && i.nodes.length > 0) {
-            if (typeof i.raws.after !== "undefined") {
-              value = i.raws.after;
-              if (value.includes("\n")) {
-                value = value.replace(/[^\n]+$/, "");
-              }
-              return false;
-            }
-          }
-        });
-        if (value) value = value.replace(/\S/g, "");
-        return value;
-      }
-      rawBeforeComment(root2, node) {
-        let value;
-        root2.walkComments((i) => {
-          if (typeof i.raws.before !== "undefined") {
-            value = i.raws.before;
-            if (value.includes("\n")) {
-              value = value.replace(/[^\n]+$/, "");
-            }
-            return false;
-          }
-        });
-        if (typeof value === "undefined") {
-          value = this.raw(node, null, "beforeDecl");
-        } else if (value) {
-          value = value.replace(/\S/g, "");
-        }
-        return value;
-      }
-      rawBeforeDecl(root2, node) {
-        let value;
-        root2.walkDecls((i) => {
-          if (typeof i.raws.before !== "undefined") {
-            value = i.raws.before;
-            if (value.includes("\n")) {
-              value = value.replace(/[^\n]+$/, "");
-            }
-            return false;
-          }
-        });
-        if (typeof value === "undefined") {
-          value = this.raw(node, null, "beforeRule");
-        } else if (value) {
-          value = value.replace(/\S/g, "");
-        }
-        return value;
-      }
-      rawBeforeOpen(root2) {
-        let value;
-        root2.walk((i) => {
-          if (i.type !== "decl") {
-            value = i.raws.between;
-            if (typeof value !== "undefined") return false;
-          }
-        });
-        return value;
-      }
-      rawBeforeRule(root2) {
-        let value;
-        root2.walk((i) => {
-          if (i.nodes && (i.parent !== root2 || root2.first !== i)) {
-            if (typeof i.raws.before !== "undefined") {
-              value = i.raws.before;
-              if (value.includes("\n")) {
-                value = value.replace(/[^\n]+$/, "");
-              }
-              return false;
-            }
-          }
-        });
-        if (value) value = value.replace(/\S/g, "");
-        return value;
-      }
-      rawColon(root2) {
-        let value;
-        root2.walkDecls((i) => {
-          if (typeof i.raws.between !== "undefined") {
-            value = i.raws.between.replace(/[^\s:]/g, "");
-            return false;
-          }
-        });
-        return value;
-      }
-      rawEmptyBody(root2) {
-        let value;
-        root2.walk((i) => {
-          if (i.nodes && i.nodes.length === 0) {
-            value = i.raws.after;
-            if (typeof value !== "undefined") return false;
-          }
-        });
-        return value;
-      }
-      rawIndent(root2) {
-        if (root2.raws.indent) return root2.raws.indent;
-        let value;
-        root2.walk((i) => {
-          const p = i.parent;
-          if (p && p !== root2 && p.parent && p.parent === root2) {
-            if (typeof i.raws.before !== "undefined") {
-              const parts = i.raws.before.split("\n");
-              value = parts[parts.length - 1];
-              value = value.replace(/\S/g, "");
-              return false;
-            }
-          }
-        });
-        return value;
-      }
-      rawSemicolon(root2) {
-        let value;
-        root2.walk((i) => {
-          if (i.nodes && i.nodes.length && i.last.type === "decl") {
-            value = i.raws.semicolon;
-            if (typeof value !== "undefined") return false;
-          }
-        });
-        return value;
-      }
-      rawValue(node, prop) {
-        const value = node[prop];
-        const raw = node.raws[prop];
-        if (raw && raw.value === value) {
-          return raw.raw;
-        }
-        return value;
-      }
-      root(node) {
-        this.body(node);
-        if (node.raws.after) this.builder(node.raws.after);
-      }
-      rule(node) {
-        this.block(node, this.rawValue(node, "selector"));
-        if (node.raws.ownSemicolon) {
-          this.builder(node.raws.ownSemicolon, node, "end");
-        }
-      }
-      stringify(node, semicolon2) {
-        if (!this[node.type]) {
-          throw new Error(
-            "Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier."
-          );
-        }
-        this[node.type](node, semicolon2);
-      }
-    };
+__name(capitalize, "capitalize");
+var Stringifier = class {
+  static {
+    __name(this, "Stringifier");
   }
-});
+  constructor(builder) {
+    this.builder = builder;
+  }
+  atrule(node, semicolon2) {
+    let name = "@" + node.name;
+    const params = node.params ? this.rawValue(node, "params") : "";
+    if (typeof node.raws.afterName !== "undefined") {
+      name += node.raws.afterName;
+    } else if (params) {
+      name += " ";
+    }
+    if (node.nodes) {
+      this.block(node, name + params);
+    } else {
+      const end = (node.raws.between || "") + (semicolon2 ? ";" : "");
+      this.builder(name + params + end, node);
+    }
+  }
+  beforeAfter(node, detect) {
+    let value;
+    if (node.type === "decl") {
+      value = this.raw(node, null, "beforeDecl");
+    } else if (node.type === "comment") {
+      value = this.raw(node, null, "beforeComment");
+    } else if (detect === "before") {
+      value = this.raw(node, null, "beforeRule");
+    } else {
+      value = this.raw(node, null, "beforeClose");
+    }
+    let buf = node.parent;
+    let depth = 0;
+    while (buf && buf.type !== "root") {
+      depth += 1;
+      buf = buf.parent;
+    }
+    if (value.includes("\n")) {
+      const indent = this.raw(node, null, "indent");
+      if (indent.length) {
+        for (let step = 0; step < depth; step++)
+          value += indent;
+      }
+    }
+    return value;
+  }
+  block(node, start) {
+    const between = this.raw(node, "between", "beforeOpen");
+    this.builder(start + between + "{", node, "start");
+    let after;
+    if (node.nodes && node.nodes.length) {
+      this.body(node);
+      after = this.raw(node, "after");
+    } else {
+      after = this.raw(node, "after", "emptyBody");
+    }
+    if (after)
+      this.builder(after);
+    this.builder("}", node, "end");
+  }
+  body(node) {
+    let last = node.nodes.length - 1;
+    while (last > 0) {
+      if (node.nodes[last].type !== "comment")
+        break;
+      last -= 1;
+    }
+    const semicolon2 = this.raw(node, "semicolon");
+    for (let i = 0; i < node.nodes.length; i++) {
+      const child = node.nodes[i];
+      const before = this.raw(child, "before");
+      if (before)
+        this.builder(before);
+      this.stringify(child, last !== i || semicolon2);
+    }
+  }
+  comment(node) {
+    const left = this.raw(node, "left", "commentLeft");
+    const right = this.raw(node, "right", "commentRight");
+    this.builder("/*" + left + node.text + right + "*/", node);
+  }
+  decl(node, semicolon2) {
+    const between = this.raw(node, "between", "colon");
+    let string2 = node.prop + between + this.rawValue(node, "value");
+    if (node.important) {
+      string2 += node.raws.important || " !important";
+    }
+    if (semicolon2)
+      string2 += ";";
+    this.builder(string2, node);
+  }
+  document(node) {
+    this.body(node);
+  }
+  raw(node, own, detect) {
+    let value;
+    if (!detect)
+      detect = own;
+    if (own) {
+      value = node.raws[own];
+      if (typeof value !== "undefined")
+        return value;
+    }
+    const parent = node.parent;
+    if (detect === "before") {
+      if (!parent || parent.type === "root" && parent.first === node) {
+        return "";
+      }
+      if (parent && parent.type === "document") {
+        return "";
+      }
+    }
+    if (!parent)
+      return DEFAULT_RAW[detect];
+    const root2 = node.root();
+    if (!root2.rawCache)
+      root2.rawCache = {};
+    if (typeof root2.rawCache[detect] !== "undefined") {
+      return root2.rawCache[detect];
+    }
+    if (detect === "before" || detect === "after") {
+      return this.beforeAfter(node, detect);
+    } else {
+      const method = "raw" + capitalize(detect);
+      if (this[method]) {
+        value = this[method](root2, node);
+      } else {
+        root2.walk((i) => {
+          value = i.raws[own];
+          if (typeof value !== "undefined")
+            return false;
+        });
+      }
+    }
+    if (typeof value === "undefined")
+      value = DEFAULT_RAW[detect];
+    root2.rawCache[detect] = value;
+    return value;
+  }
+  rawBeforeClose(root2) {
+    let value;
+    root2.walk((i) => {
+      if (i.nodes && i.nodes.length > 0) {
+        if (typeof i.raws.after !== "undefined") {
+          value = i.raws.after;
+          if (value.includes("\n")) {
+            value = value.replace(/[^\n]+$/, "");
+          }
+          return false;
+        }
+      }
+    });
+    if (value)
+      value = value.replace(/\S/g, "");
+    return value;
+  }
+  rawBeforeComment(root2, node) {
+    let value;
+    root2.walkComments((i) => {
+      if (typeof i.raws.before !== "undefined") {
+        value = i.raws.before;
+        if (value.includes("\n")) {
+          value = value.replace(/[^\n]+$/, "");
+        }
+        return false;
+      }
+    });
+    if (typeof value === "undefined") {
+      value = this.raw(node, null, "beforeDecl");
+    } else if (value) {
+      value = value.replace(/\S/g, "");
+    }
+    return value;
+  }
+  rawBeforeDecl(root2, node) {
+    let value;
+    root2.walkDecls((i) => {
+      if (typeof i.raws.before !== "undefined") {
+        value = i.raws.before;
+        if (value.includes("\n")) {
+          value = value.replace(/[^\n]+$/, "");
+        }
+        return false;
+      }
+    });
+    if (typeof value === "undefined") {
+      value = this.raw(node, null, "beforeRule");
+    } else if (value) {
+      value = value.replace(/\S/g, "");
+    }
+    return value;
+  }
+  rawBeforeOpen(root2) {
+    let value;
+    root2.walk((i) => {
+      if (i.type !== "decl") {
+        value = i.raws.between;
+        if (typeof value !== "undefined")
+          return false;
+      }
+    });
+    return value;
+  }
+  rawBeforeRule(root2) {
+    let value;
+    root2.walk((i) => {
+      if (i.nodes && (i.parent !== root2 || root2.first !== i)) {
+        if (typeof i.raws.before !== "undefined") {
+          value = i.raws.before;
+          if (value.includes("\n")) {
+            value = value.replace(/[^\n]+$/, "");
+          }
+          return false;
+        }
+      }
+    });
+    if (value)
+      value = value.replace(/\S/g, "");
+    return value;
+  }
+  rawColon(root2) {
+    let value;
+    root2.walkDecls((i) => {
+      if (typeof i.raws.between !== "undefined") {
+        value = i.raws.between.replace(/[^\s:]/g, "");
+        return false;
+      }
+    });
+    return value;
+  }
+  rawEmptyBody(root2) {
+    let value;
+    root2.walk((i) => {
+      if (i.nodes && i.nodes.length === 0) {
+        value = i.raws.after;
+        if (typeof value !== "undefined")
+          return false;
+      }
+    });
+    return value;
+  }
+  rawIndent(root2) {
+    if (root2.raws.indent)
+      return root2.raws.indent;
+    let value;
+    root2.walk((i) => {
+      const p = i.parent;
+      if (p && p !== root2 && p.parent && p.parent === root2) {
+        if (typeof i.raws.before !== "undefined") {
+          const parts = i.raws.before.split("\n");
+          value = parts[parts.length - 1];
+          value = value.replace(/\S/g, "");
+          return false;
+        }
+      }
+    });
+    return value;
+  }
+  rawSemicolon(root2) {
+    let value;
+    root2.walk((i) => {
+      if (i.nodes && i.nodes.length && i.last.type === "decl") {
+        value = i.raws.semicolon;
+        if (typeof value !== "undefined")
+          return false;
+      }
+    });
+    return value;
+  }
+  rawValue(node, prop) {
+    const value = node[prop];
+    const raw = node.raws[prop];
+    if (raw && raw.value === value) {
+      return raw.raw;
+    }
+    return value;
+  }
+  root(node) {
+    this.body(node);
+    if (node.raws.after)
+      this.builder(node.raws.after);
+  }
+  rule(node) {
+    this.block(node, this.rawValue(node, "selector"));
+    if (node.raws.ownSemicolon) {
+      this.builder(node.raws.ownSemicolon, node, "end");
+    }
+  }
+  stringify(node, semicolon2) {
+    if (!this[node.type]) {
+      throw new Error("Unknown AST node type " + node.type + ". Maybe you need to change PostCSS stringifier.");
+    }
+    this[node.type](node, semicolon2);
+  }
+};
 
 // src/postcss/stringify.js
-var stringify_exports = {};
-__export(stringify_exports, {
-  stringify: () => stringify
-});
 function stringify(node, builder) {
   const str2 = new Stringifier(builder);
   str2.stringify(node);
 }
-var init_stringify = __esm({
-  "src/postcss/stringify.js"() {
-    "use strict";
-    init_stringifier();
-    __name(stringify, "stringify");
-  }
-});
+__name(stringify, "stringify");
 
 // src/postcss/symbols.js
-var symbols_exports = {};
-__export(symbols_exports, {
-  isClean: () => isClean,
-  my: () => my
-});
-var isClean, my;
-var init_symbols = __esm({
-  "src/postcss/symbols.js"() {
-    "use strict";
-    isClean = Symbol("isClean");
-    my = Symbol("my");
-  }
-});
+var isClean = Symbol("isClean");
+var my = Symbol("my");
 
 // src/postcss/node.js
 function cloneNode(obj, parent) {
@@ -426,22 +394,26 @@ function cloneNode(obj, parent) {
     if (!Object.prototype.hasOwnProperty.call(obj, i)) {
       continue;
     }
-    if (i === "proxyCache") continue;
+    if (i === "proxyCache")
+      continue;
     let value = obj[i];
     const type = typeof value;
     if (i === "parent" && type === "object") {
-      if (parent) cloned[i] = parent;
+      if (parent)
+        cloned[i] = parent;
     } else if (i === "source") {
       cloned[i] = value;
     } else if (Array.isArray(value)) {
       cloned[i] = value.map((j) => cloneNode(j, cloned));
     } else {
-      if (type === "object" && value !== null) value = cloneNode(value);
+      if (type === "object" && value !== null)
+        value = cloneNode(value);
       cloned[i] = value;
     }
   }
   return cloned;
 }
+__name(cloneNode, "cloneNode");
 function sourceOffset(inputCSS, position) {
   if (position && typeof position.offset !== "undefined") {
     return position.offset;
@@ -463,381 +435,350 @@ function sourceOffset(inputCSS, position) {
   }
   return offset;
 }
-var Node;
-var init_node = __esm({
-  "src/postcss/node.js"() {
-    "use strict";
-    init_css_syntax_error();
-    init_stringifier();
-    init_stringify();
-    init_symbols();
-    __name(cloneNode, "cloneNode");
-    __name(sourceOffset, "sourceOffset");
-    Node = class {
-      static {
-        __name(this, "Node");
-      }
-      constructor(defaults = {}) {
-        this.raws = {};
-        this[isClean] = false;
-        this[my] = true;
-        for (const name in defaults) {
-          if (name === "nodes") {
-            this.nodes = [];
-            for (const node of defaults[name]) {
-              if (typeof node.clone === "function") {
-                this.append(node.clone());
-              } else {
-                this.append(node);
-              }
-            }
+__name(sourceOffset, "sourceOffset");
+var Node = class {
+  static {
+    __name(this, "Node");
+  }
+  constructor(defaults = {}) {
+    this.raws = {};
+    this[isClean] = false;
+    this[my] = true;
+    for (const name in defaults) {
+      if (name === "nodes") {
+        this.nodes = [];
+        for (const node of defaults[name]) {
+          if (typeof node.clone === "function") {
+            this.append(node.clone());
           } else {
-            this[name] = defaults[name];
+            this.append(node);
           }
         }
+      } else {
+        this[name] = defaults[name];
       }
-      addToError(error) {
-        error.postcssNode = this;
-        if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
-          const s = this.source;
-          error.stack = error.stack.replace(
-            /\n\s{4}at /,
-            `$&${s.input.from}:${s.start.line}:${s.start.column}$&`
-          );
-        }
-        return error;
-      }
-      after(add) {
-        this.parent.insertAfter(this, add);
-        return this;
-      }
-      assign(overrides = {}) {
-        for (const name in overrides) {
-          this[name] = overrides[name];
-        }
-        return this;
-      }
-      before(add) {
-        this.parent.insertBefore(this, add);
-        return this;
-      }
-      cleanRaws(keepBetween) {
-        delete this.raws.before;
-        delete this.raws.after;
-        if (!keepBetween) delete this.raws.between;
-      }
-      clone(overrides = {}) {
-        const cloned = cloneNode(this);
-        for (const name in overrides) {
-          cloned[name] = overrides[name];
-        }
-        return cloned;
-      }
-      cloneAfter(overrides = {}) {
-        const cloned = this.clone(overrides);
-        this.parent.insertAfter(this, cloned);
-        return cloned;
-      }
-      cloneBefore(overrides = {}) {
-        const cloned = this.clone(overrides);
-        this.parent.insertBefore(this, cloned);
-        return cloned;
-      }
-      error(message, opts = {}) {
-        if (this.source) {
-          const { end, start } = this.rangeBy(opts);
-          return this.source.input.error(
-            message,
-            { column: start.column, line: start.line },
-            { column: end.column, line: end.line },
-            opts
-          );
-        }
-        return new CssSyntaxError(message);
-      }
-      getProxyProcessor() {
-        return {
-          get(node, prop) {
-            if (prop === "proxyOf") {
-              return node;
-            } else if (prop === "root") {
-              return () => node.root().toProxy();
-            } else {
-              return node[prop];
-            }
-          },
-          set(node, prop, value) {
-            if (node[prop] === value) return true;
-            node[prop] = value;
-            if (prop === "prop" || prop === "value" || prop === "name" || prop === "params" || prop === "important" || /* c8 ignore next */
-            prop === "text") {
-              node.markDirty();
-            }
-            return true;
-          }
-        };
-      }
-      /* c8 ignore next 3 */
-      markClean() {
-        this[isClean] = true;
-      }
-      markDirty() {
-        if (this[isClean]) {
-          this[isClean] = false;
-          let next = this;
-          while (next = next.parent) {
-            next[isClean] = false;
-          }
-        }
-      }
-      next() {
-        if (!this.parent) return void 0;
-        const index = this.parent.index(this);
-        return this.parent.nodes[index + 1];
-      }
-      positionBy(opts) {
-        let pos = this.source.start;
-        if (opts.index) {
-          pos = this.positionInside(opts.index);
-        } else if (opts.word) {
-          const stringRepresentation = this.source.input.css.slice(
-            sourceOffset(this.source.input.css, this.source.start),
-            sourceOffset(this.source.input.css, this.source.end)
-          );
-          const index = stringRepresentation.indexOf(opts.word);
-          if (index !== -1) pos = this.positionInside(index);
-        }
-        return pos;
-      }
-      positionInside(index) {
-        let column = this.source.start.column;
-        let line = this.source.start.line;
-        const offset = sourceOffset(this.source.input.css, this.source.start);
-        const end = offset + index;
-        for (let i = offset; i < end; i++) {
-          if (this.source.input.css[i] === "\n") {
-            column = 1;
-            line += 1;
-          } else {
-            column += 1;
-          }
-        }
-        return { column, line };
-      }
-      prev() {
-        if (!this.parent) return void 0;
-        const index = this.parent.index(this);
-        return this.parent.nodes[index - 1];
-      }
-      rangeBy(opts) {
-        let start = {
-          column: this.source.start.column,
-          line: this.source.start.line
-        };
-        let end = this.source.end ? {
-          column: this.source.end.column + 1,
-          line: this.source.end.line
-        } : {
-          column: start.column + 1,
-          line: start.line
-        };
-        if (opts.word) {
-          const stringRepresentation = this.source.input.css.slice(
-            sourceOffset(this.source.input.css, this.source.start),
-            sourceOffset(this.source.input.css, this.source.end)
-          );
-          const index = stringRepresentation.indexOf(opts.word);
-          if (index !== -1) {
-            start = this.positionInside(index);
-            end = this.positionInside(
-              index + opts.word.length
-            );
-          }
+    }
+  }
+  addToError(error) {
+    error.postcssNode = this;
+    if (error.stack && this.source && /\n\s{4}at /.test(error.stack)) {
+      const s = this.source;
+      error.stack = error.stack.replace(/\n\s{4}at /, `$&${s.input.from}:${s.start.line}:${s.start.column}$&`);
+    }
+    return error;
+  }
+  after(add) {
+    this.parent.insertAfter(this, add);
+    return this;
+  }
+  assign(overrides = {}) {
+    for (const name in overrides) {
+      this[name] = overrides[name];
+    }
+    return this;
+  }
+  before(add) {
+    this.parent.insertBefore(this, add);
+    return this;
+  }
+  cleanRaws(keepBetween) {
+    delete this.raws.before;
+    delete this.raws.after;
+    if (!keepBetween)
+      delete this.raws.between;
+  }
+  clone(overrides = {}) {
+    const cloned = cloneNode(this);
+    for (const name in overrides) {
+      cloned[name] = overrides[name];
+    }
+    return cloned;
+  }
+  cloneAfter(overrides = {}) {
+    const cloned = this.clone(overrides);
+    this.parent.insertAfter(this, cloned);
+    return cloned;
+  }
+  cloneBefore(overrides = {}) {
+    const cloned = this.clone(overrides);
+    this.parent.insertBefore(this, cloned);
+    return cloned;
+  }
+  error(message, opts = {}) {
+    if (this.source) {
+      const { end, start } = this.rangeBy(opts);
+      return this.source.input.error(message, { column: start.column, line: start.line }, { column: end.column, line: end.line }, opts);
+    }
+    return new CssSyntaxError(message);
+  }
+  getProxyProcessor() {
+    return {
+      get(node, prop) {
+        if (prop === "proxyOf") {
+          return node;
+        } else if (prop === "root") {
+          return () => node.root().toProxy();
         } else {
-          if (opts.start) {
-            start = {
-              column: opts.start.column,
-              line: opts.start.line
-            };
-          } else if (opts.index) {
-            start = this.positionInside(opts.index);
-          }
-          if (opts.end) {
-            end = {
-              column: opts.end.column,
-              line: opts.end.line
-            };
-          } else if (typeof opts.endIndex === "number") {
-            end = this.positionInside(opts.endIndex);
-          } else if (opts.index) {
-            end = this.positionInside(opts.index + 1);
-          }
+          return node[prop];
         }
-        if (end.line < start.line || end.line === start.line && end.column <= start.column) {
-          end = { column: start.column + 1, line: start.line };
+      },
+      set(node, prop, value) {
+        if (node[prop] === value)
+          return true;
+        node[prop] = value;
+        if (prop === "prop" || prop === "value" || prop === "name" || prop === "params" || prop === "important" || /* c8 ignore next */
+        prop === "text") {
+          node.markDirty();
         }
-        return { end, start };
-      }
-      raw(prop, defaultType) {
-        const str2 = new Stringifier();
-        return str2.raw(this, prop, defaultType);
-      }
-      remove() {
-        if (this.parent) {
-          this.parent.removeChild(this);
-        }
-        this.parent = void 0;
-        return this;
-      }
-      replaceWith(...nodes) {
-        if (this.parent) {
-          let bookmark = this;
-          let foundSelf = false;
-          for (const node of nodes) {
-            if (node === this) {
-              foundSelf = true;
-            } else if (foundSelf) {
-              this.parent.insertAfter(bookmark, node);
-              bookmark = node;
-            } else {
-              this.parent.insertBefore(bookmark, node);
-            }
-          }
-          if (!foundSelf) {
-            this.remove();
-          }
-        }
-        return this;
-      }
-      root() {
-        let result = this;
-        while (result.parent && result.parent.type !== "document") {
-          result = result.parent;
-        }
-        return result;
-      }
-      toJSON(_, inputs) {
-        const fixed = {};
-        const emitInputs = inputs == null;
-        inputs = inputs || /* @__PURE__ */ new Map();
-        let inputsNextIndex = 0;
-        for (const name in this) {
-          if (!Object.prototype.hasOwnProperty.call(this, name)) {
-            continue;
-          }
-          if (name === "parent" || name === "proxyCache") continue;
-          const value = this[name];
-          if (Array.isArray(value)) {
-            fixed[name] = value.map((i) => {
-              if (typeof i === "object" && i.toJSON) {
-                return i.toJSON(null, inputs);
-              } else {
-                return i;
-              }
-            });
-          } else if (typeof value === "object" && value.toJSON) {
-            fixed[name] = value.toJSON(null, inputs);
-          } else if (name === "source") {
-            let inputId = inputs.get(value.input);
-            if (inputId == null) {
-              inputId = inputsNextIndex;
-              inputs.set(value.input, inputsNextIndex);
-              inputsNextIndex++;
-            }
-            fixed[name] = {
-              end: value.end,
-              inputId,
-              start: value.start
-            };
-          } else {
-            fixed[name] = value;
-          }
-        }
-        if (emitInputs) {
-          fixed.inputs = [...inputs.keys()].map((input) => input.toJSON());
-        }
-        return fixed;
-      }
-      toProxy() {
-        if (!this.proxyCache) {
-          this.proxyCache = new Proxy(this, this.getProxyProcessor());
-        }
-        return this.proxyCache;
-      }
-      toString(stringifier = stringify) {
-        if (stringifier.stringify) stringifier = stringifier.stringify;
-        let result = "";
-        stringifier(this, (i) => {
-          result += i;
-        });
-        return result;
-      }
-      warn(result, text, opts) {
-        const data = { node: this };
-        for (const i in opts) data[i] = opts[i];
-        return result.warn(text, data);
-      }
-      get proxyOf() {
-        return this;
+        return true;
       }
     };
   }
-});
+  /* c8 ignore next 3 */
+  markClean() {
+    this[isClean] = true;
+  }
+  markDirty() {
+    if (this[isClean]) {
+      this[isClean] = false;
+      let next = this;
+      while (next = next.parent) {
+        next[isClean] = false;
+      }
+    }
+  }
+  next() {
+    if (!this.parent)
+      return void 0;
+    const index = this.parent.index(this);
+    return this.parent.nodes[index + 1];
+  }
+  positionBy(opts) {
+    let pos = this.source.start;
+    if (opts.index) {
+      pos = this.positionInside(opts.index);
+    } else if (opts.word) {
+      const stringRepresentation = this.source.input.css.slice(sourceOffset(this.source.input.css, this.source.start), sourceOffset(this.source.input.css, this.source.end));
+      const index = stringRepresentation.indexOf(opts.word);
+      if (index !== -1)
+        pos = this.positionInside(index);
+    }
+    return pos;
+  }
+  positionInside(index) {
+    let column = this.source.start.column;
+    let line = this.source.start.line;
+    const offset = sourceOffset(this.source.input.css, this.source.start);
+    const end = offset + index;
+    for (let i = offset; i < end; i++) {
+      if (this.source.input.css[i] === "\n") {
+        column = 1;
+        line += 1;
+      } else {
+        column += 1;
+      }
+    }
+    return { column, line };
+  }
+  prev() {
+    if (!this.parent)
+      return void 0;
+    const index = this.parent.index(this);
+    return this.parent.nodes[index - 1];
+  }
+  rangeBy(opts) {
+    let start = {
+      column: this.source.start.column,
+      line: this.source.start.line
+    };
+    let end = this.source.end ? {
+      column: this.source.end.column + 1,
+      line: this.source.end.line
+    } : {
+      column: start.column + 1,
+      line: start.line
+    };
+    if (opts.word) {
+      const stringRepresentation = this.source.input.css.slice(sourceOffset(this.source.input.css, this.source.start), sourceOffset(this.source.input.css, this.source.end));
+      const index = stringRepresentation.indexOf(opts.word);
+      if (index !== -1) {
+        start = this.positionInside(index);
+        end = this.positionInside(index + opts.word.length);
+      }
+    } else {
+      if (opts.start) {
+        start = {
+          column: opts.start.column,
+          line: opts.start.line
+        };
+      } else if (opts.index) {
+        start = this.positionInside(opts.index);
+      }
+      if (opts.end) {
+        end = {
+          column: opts.end.column,
+          line: opts.end.line
+        };
+      } else if (typeof opts.endIndex === "number") {
+        end = this.positionInside(opts.endIndex);
+      } else if (opts.index) {
+        end = this.positionInside(opts.index + 1);
+      }
+    }
+    if (end.line < start.line || end.line === start.line && end.column <= start.column) {
+      end = { column: start.column + 1, line: start.line };
+    }
+    return { end, start };
+  }
+  raw(prop, defaultType) {
+    const str2 = new Stringifier();
+    return str2.raw(this, prop, defaultType);
+  }
+  remove() {
+    if (this.parent) {
+      this.parent.removeChild(this);
+    }
+    this.parent = void 0;
+    return this;
+  }
+  replaceWith(...nodes) {
+    if (this.parent) {
+      let bookmark = this;
+      let foundSelf = false;
+      for (const node of nodes) {
+        if (node === this) {
+          foundSelf = true;
+        } else if (foundSelf) {
+          this.parent.insertAfter(bookmark, node);
+          bookmark = node;
+        } else {
+          this.parent.insertBefore(bookmark, node);
+        }
+      }
+      if (!foundSelf) {
+        this.remove();
+      }
+    }
+    return this;
+  }
+  root() {
+    let result = this;
+    while (result.parent && result.parent.type !== "document") {
+      result = result.parent;
+    }
+    return result;
+  }
+  toJSON(_, inputs) {
+    const fixed = {};
+    const emitInputs = inputs == null;
+    inputs = inputs || /* @__PURE__ */ new Map();
+    let inputsNextIndex = 0;
+    for (const name in this) {
+      if (!Object.prototype.hasOwnProperty.call(this, name)) {
+        continue;
+      }
+      if (name === "parent" || name === "proxyCache")
+        continue;
+      const value = this[name];
+      if (Array.isArray(value)) {
+        fixed[name] = value.map((i) => {
+          if (typeof i === "object" && i.toJSON) {
+            return i.toJSON(null, inputs);
+          } else {
+            return i;
+          }
+        });
+      } else if (typeof value === "object" && value.toJSON) {
+        fixed[name] = value.toJSON(null, inputs);
+      } else if (name === "source") {
+        let inputId = inputs.get(value.input);
+        if (inputId == null) {
+          inputId = inputsNextIndex;
+          inputs.set(value.input, inputsNextIndex);
+          inputsNextIndex++;
+        }
+        fixed[name] = {
+          end: value.end,
+          inputId,
+          start: value.start
+        };
+      } else {
+        fixed[name] = value;
+      }
+    }
+    if (emitInputs) {
+      fixed.inputs = [...inputs.keys()].map((input) => input.toJSON());
+    }
+    return fixed;
+  }
+  toProxy() {
+    if (!this.proxyCache) {
+      this.proxyCache = new Proxy(this, this.getProxyProcessor());
+    }
+    return this.proxyCache;
+  }
+  toString(stringifier = stringify) {
+    if (stringifier.stringify)
+      stringifier = stringifier.stringify;
+    let result = "";
+    stringifier(this, (i) => {
+      result += i;
+    });
+    return result;
+  }
+  warn(result, text, opts) {
+    const data = { node: this };
+    for (const i in opts)
+      data[i] = opts[i];
+    return result.warn(text, data);
+  }
+  get proxyOf() {
+    return this;
+  }
+};
 
 // src/postcss/comment.js
-var Comment;
-var init_comment = __esm({
-  "src/postcss/comment.js"() {
-    "use strict";
-    init_node();
-    Comment = class extends Node {
-      static {
-        __name(this, "Comment");
-      }
-      constructor(defaults) {
-        super(defaults);
-        this.type = "comment";
-      }
-    };
+var Comment = class extends Node {
+  static {
+    __name(this, "Comment");
   }
-});
+  constructor(defaults) {
+    super(defaults);
+    this.type = "comment";
+  }
+};
 
 // src/postcss/declaration.js
-var Declaration;
-var init_declaration = __esm({
-  "src/postcss/declaration.js"() {
-    "use strict";
-    init_node();
-    Declaration = class extends Node {
-      static {
-        __name(this, "Declaration");
-      }
-      constructor(defaults) {
-        if (defaults && typeof defaults.value !== "undefined" && typeof defaults.value !== "string") {
-          defaults = { ...defaults, value: String(defaults.value) };
-        }
-        super(defaults);
-        this.type = "decl";
-      }
-      get variable() {
-        return this.prop.startsWith("--") || this.prop[0] === "$";
-      }
-    };
+var Declaration = class extends Node {
+  static {
+    __name(this, "Declaration");
   }
-});
+  constructor(defaults) {
+    if (defaults && typeof defaults.value !== "undefined" && typeof defaults.value !== "string") {
+      defaults = { ...defaults, value: String(defaults.value) };
+    }
+    super(defaults);
+    this.type = "decl";
+  }
+  get variable() {
+    return this.prop.startsWith("--") || this.prop[0] === "$";
+  }
+};
 
 // src/postcss/container.js
-var container_exports = {};
-__export(container_exports, {
-  Container: () => Container
-});
+var AtRule;
+var parse;
+var Root;
+var Rule;
 function cleanSource(nodes) {
   return nodes.map((i) => {
-    if (i.nodes) i.nodes = cleanSource(i.nodes);
+    if (i.nodes)
+      i.nodes = cleanSource(i.nodes);
     delete i.source;
     return i;
   });
 }
+__name(cleanSource, "cleanSource");
 function markTreeDirty(node) {
   node[isClean] = false;
   if (node.proxyOf.nodes) {
@@ -846,702 +787,691 @@ function markTreeDirty(node) {
     }
   }
 }
-var AtRule, parse, Root, Rule, Container;
-var init_container = __esm({
-  "src/postcss/container.js"() {
-    "use strict";
-    init_comment();
-    init_declaration();
-    init_symbols();
-    init_node();
-    __name(cleanSource, "cleanSource");
-    __name(markTreeDirty, "markTreeDirty");
-    Container = class _Container extends Node {
-      static {
-        __name(this, "Container");
-      }
-      append(...children) {
-        for (const child of children) {
-          const nodes = this.normalize(child, this.last);
-          for (const node of nodes) this.proxyOf.nodes.push(node);
-        }
-        this.markDirty();
-        return this;
-      }
-      cleanRaws(keepBetween) {
-        super.cleanRaws(keepBetween);
-        if (this.nodes) {
-          for (const node of this.nodes) node.cleanRaws(keepBetween);
-        }
-      }
-      each(callback) {
-        if (!this.proxyOf.nodes) return void 0;
-        const iterator = this.getIterator();
-        let index, result;
-        while (this.indexes[iterator] < this.proxyOf.nodes.length) {
-          index = this.indexes[iterator];
-          result = callback(this.proxyOf.nodes[index], index);
-          if (result === false) break;
-          this.indexes[iterator] += 1;
-        }
-        delete this.indexes[iterator];
-        return result;
-      }
-      every(condition) {
-        return this.nodes.every(condition);
-      }
-      getIterator() {
-        if (!this.lastEach) this.lastEach = 0;
-        if (!this.indexes) this.indexes = {};
-        this.lastEach += 1;
-        const iterator = this.lastEach;
-        this.indexes[iterator] = 0;
-        return iterator;
-      }
-      getProxyProcessor() {
-        return {
-          get(node, prop) {
-            if (prop === "proxyOf") {
-              return node;
-            } else if (!node[prop]) {
-              return node[prop];
-            } else if (prop === "each" || typeof prop === "string" && prop.startsWith("walk")) {
-              return (...args) => {
-                return node[prop](
-                  ...args.map((i) => {
-                    if (typeof i === "function") {
-                      return (child, index) => i(child.toProxy(), index);
-                    } else {
-                      return i;
-                    }
-                  })
-                );
-              };
-            } else if (prop === "every" || prop === "some") {
-              return (cb) => {
-                return node[prop](
-                  (child, ...other) => cb(child.toProxy(), ...other)
-                );
-              };
-            } else if (prop === "root") {
-              return () => node.root().toProxy();
-            } else if (prop === "nodes") {
-              return node.nodes.map((i) => i.toProxy());
-            } else if (prop === "first" || prop === "last") {
-              return node[prop].toProxy();
-            } else {
-              return node[prop];
-            }
-          },
-          set(node, prop, value) {
-            if (node[prop] === value) return true;
-            node[prop] = value;
-            if (prop === "name" || prop === "params" || prop === "selector") {
-              node.markDirty();
-            }
-            return true;
-          }
-        };
-      }
-      index(child) {
-        if (typeof child === "number") return child;
-        if (child.proxyOf) child = child.proxyOf;
-        return this.proxyOf.nodes.indexOf(child);
-      }
-      insertAfter(exist, add) {
-        let existIndex = this.index(exist);
-        const nodes = this.normalize(add, this.proxyOf.nodes[existIndex]).reverse();
-        existIndex = this.index(exist);
-        for (const node of nodes) this.proxyOf.nodes.splice(existIndex + 1, 0, node);
-        let index;
-        for (const id2 in this.indexes) {
-          index = this.indexes[id2];
-          if (existIndex < index) {
-            this.indexes[id2] = index + nodes.length;
-          }
-        }
-        this.markDirty();
-        return this;
-      }
-      insertBefore(exist, add) {
-        let existIndex = this.index(exist);
-        const type = existIndex === 0 ? "prepend" : false;
-        const nodes = this.normalize(
-          add,
-          this.proxyOf.nodes[existIndex],
-          type
-        ).reverse();
-        existIndex = this.index(exist);
-        for (const node of nodes) this.proxyOf.nodes.splice(existIndex, 0, node);
-        let index;
-        for (const id2 in this.indexes) {
-          index = this.indexes[id2];
-          if (existIndex <= index) {
-            this.indexes[id2] = index + nodes.length;
-          }
-        }
-        this.markDirty();
-        return this;
-      }
-      normalize(nodes, sample) {
-        if (typeof nodes === "string") {
-          nodes = cleanSource(parse(nodes).nodes);
-        } else if (typeof nodes === "undefined") {
-          nodes = [];
-        } else if (Array.isArray(nodes)) {
-          nodes = nodes.slice(0);
-          for (const i of nodes) {
-            if (i.parent) i.parent.removeChild(i, "ignore");
-          }
-        } else if (nodes.type === "root" && this.type !== "document") {
-          nodes = nodes.nodes.slice(0);
-          for (const i of nodes) {
-            if (i.parent) i.parent.removeChild(i, "ignore");
-          }
-        } else if (nodes.type) {
-          nodes = [nodes];
-        } else if (nodes.prop) {
-          if (typeof nodes.value === "undefined") {
-            throw new Error("Value field is missed in node creation");
-          } else if (typeof nodes.value !== "string") {
-            nodes.value = String(nodes.value);
-          }
-          nodes = [new Declaration(nodes)];
-        } else if (nodes.selector || nodes.selectors) {
-          nodes = [new Rule(nodes)];
-        } else if (nodes.name) {
-          nodes = [new AtRule(nodes)];
-        } else if (nodes.text) {
-          nodes = [new Comment(nodes)];
+__name(markTreeDirty, "markTreeDirty");
+var Container = class _Container extends Node {
+  static {
+    __name(this, "Container");
+  }
+  append(...children) {
+    for (const child of children) {
+      const nodes = this.normalize(child, this.last);
+      for (const node of nodes)
+        this.proxyOf.nodes.push(node);
+    }
+    this.markDirty();
+    return this;
+  }
+  cleanRaws(keepBetween) {
+    super.cleanRaws(keepBetween);
+    if (this.nodes) {
+      for (const node of this.nodes)
+        node.cleanRaws(keepBetween);
+    }
+  }
+  each(callback) {
+    if (!this.proxyOf.nodes)
+      return void 0;
+    const iterator = this.getIterator();
+    let index, result;
+    while (this.indexes[iterator] < this.proxyOf.nodes.length) {
+      index = this.indexes[iterator];
+      result = callback(this.proxyOf.nodes[index], index);
+      if (result === false)
+        break;
+      this.indexes[iterator] += 1;
+    }
+    delete this.indexes[iterator];
+    return result;
+  }
+  every(condition) {
+    return this.nodes.every(condition);
+  }
+  getIterator() {
+    if (!this.lastEach)
+      this.lastEach = 0;
+    if (!this.indexes)
+      this.indexes = {};
+    this.lastEach += 1;
+    const iterator = this.lastEach;
+    this.indexes[iterator] = 0;
+    return iterator;
+  }
+  getProxyProcessor() {
+    return {
+      get(node, prop) {
+        if (prop === "proxyOf") {
+          return node;
+        } else if (!node[prop]) {
+          return node[prop];
+        } else if (prop === "each" || typeof prop === "string" && prop.startsWith("walk")) {
+          return (...args) => {
+            return node[prop](...args.map((i) => {
+              if (typeof i === "function") {
+                return (child, index) => i(child.toProxy(), index);
+              } else {
+                return i;
+              }
+            }));
+          };
+        } else if (prop === "every" || prop === "some") {
+          return (cb) => {
+            return node[prop]((child, ...other) => cb(child.toProxy(), ...other));
+          };
+        } else if (prop === "root") {
+          return () => node.root().toProxy();
+        } else if (prop === "nodes") {
+          return node.nodes.map((i) => i.toProxy());
+        } else if (prop === "first" || prop === "last") {
+          return node[prop].toProxy();
         } else {
-          throw new Error("Unknown node type in node creation");
+          return node[prop];
         }
-        const processed = nodes.map((i) => {
-          if (!i[my]) _Container.rebuild(i);
-          i = i.proxyOf;
-          if (i.parent) i.parent.removeChild(i);
-          if (i[isClean]) markTreeDirty(i);
-          if (!i.raws) i.raws = {};
-          if (typeof i.raws.before === "undefined") {
-            if (sample && typeof sample.raws.before !== "undefined") {
-              i.raws.before = sample.raws.before.replace(/\S/g, "");
-            }
-          }
-          i.parent = this.proxyOf;
-          return i;
-        });
-        return processed;
-      }
-      prepend(...children) {
-        children = children.reverse();
-        for (const child of children) {
-          const nodes = this.normalize(child, this.first, "prepend").reverse();
-          for (const node of nodes) this.proxyOf.nodes.unshift(node);
-          for (const id2 in this.indexes) {
-            this.indexes[id2] = this.indexes[id2] + nodes.length;
-          }
+      },
+      set(node, prop, value) {
+        if (node[prop] === value)
+          return true;
+        node[prop] = value;
+        if (prop === "name" || prop === "params" || prop === "selector") {
+          node.markDirty();
         }
-        this.markDirty();
-        return this;
-      }
-      push(child) {
-        child.parent = this;
-        this.proxyOf.nodes.push(child);
-        return this;
-      }
-      removeAll() {
-        for (const node of this.proxyOf.nodes) node.parent = void 0;
-        this.proxyOf.nodes = [];
-        this.markDirty();
-        return this;
-      }
-      removeChild(child) {
-        child = this.index(child);
-        this.proxyOf.nodes[child].parent = void 0;
-        this.proxyOf.nodes.splice(child, 1);
-        let index;
-        for (const id2 in this.indexes) {
-          index = this.indexes[id2];
-          if (index >= child) {
-            this.indexes[id2] = index - 1;
-          }
-        }
-        this.markDirty();
-        return this;
-      }
-      replaceValues(pattern, opts, callback) {
-        if (!callback) {
-          callback = opts;
-          opts = {};
-        }
-        this.walkDecls((decl) => {
-          if (opts.props && !opts.props.includes(decl.prop)) return;
-          if (opts.fast && !decl.value.includes(opts.fast)) return;
-          decl.value = decl.value.replace(pattern, callback);
-        });
-        this.markDirty();
-        return this;
-      }
-      some(condition) {
-        return this.nodes.some(condition);
-      }
-      walk(callback) {
-        return this.each((child, i) => {
-          let result;
-          try {
-            result = callback(child, i);
-          } catch (e) {
-            throw child.addToError(e);
-          }
-          if (result !== false && child.walk) {
-            result = child.walk(callback);
-          }
-          return result;
-        });
-      }
-      walkAtRules(name, callback) {
-        if (!callback) {
-          callback = name;
-          return this.walk((child, i) => {
-            if (child.type === "atrule") {
-              return callback(child, i);
-            }
-          });
-        }
-        if (name instanceof RegExp) {
-          return this.walk((child, i) => {
-            if (child.type === "atrule" && name.test(child.name)) {
-              return callback(child, i);
-            }
-          });
-        }
-        return this.walk((child, i) => {
-          if (child.type === "atrule" && child.name === name) {
-            return callback(child, i);
-          }
-        });
-      }
-      walkComments(callback) {
-        return this.walk((child, i) => {
-          if (child.type === "comment") {
-            return callback(child, i);
-          }
-        });
-      }
-      walkDecls(prop, callback) {
-        if (!callback) {
-          callback = prop;
-          return this.walk((child, i) => {
-            if (child.type === "decl") {
-              return callback(child, i);
-            }
-          });
-        }
-        if (prop instanceof RegExp) {
-          return this.walk((child, i) => {
-            if (child.type === "decl" && prop.test(child.prop)) {
-              return callback(child, i);
-            }
-          });
-        }
-        return this.walk((child, i) => {
-          if (child.type === "decl" && child.prop === prop) {
-            return callback(child, i);
-          }
-        });
-      }
-      walkRules(selector2, callback) {
-        if (!callback) {
-          callback = selector2;
-          return this.walk((child, i) => {
-            if (child.type === "rule") {
-              return callback(child, i);
-            }
-          });
-        }
-        if (selector2 instanceof RegExp) {
-          return this.walk((child, i) => {
-            if (child.type === "rule" && selector2.test(child.selector)) {
-              return callback(child, i);
-            }
-          });
-        }
-        return this.walk((child, i) => {
-          if (child.type === "rule" && child.selector === selector2) {
-            return callback(child, i);
-          }
-        });
-      }
-      get first() {
-        if (!this.proxyOf.nodes) return void 0;
-        return this.proxyOf.nodes[0];
-      }
-      get last() {
-        if (!this.proxyOf.nodes) return void 0;
-        return this.proxyOf.nodes[this.proxyOf.nodes.length - 1];
-      }
-    };
-    Container.registerParse = (dependant) => {
-      parse = dependant;
-    };
-    Container.registerRule = (dependant) => {
-      Rule = dependant;
-    };
-    Container.registerAtRule = (dependant) => {
-      AtRule = dependant;
-    };
-    Container.registerRoot = (dependant) => {
-      Root = dependant;
-    };
-    Container.rebuild = (node) => {
-      if (node.type === "atrule") {
-        Object.setPrototypeOf(node, AtRule.prototype);
-      } else if (node.type === "rule") {
-        Object.setPrototypeOf(node, Rule.prototype);
-      } else if (node.type === "decl") {
-        Object.setPrototypeOf(node, Declaration.prototype);
-      } else if (node.type === "comment") {
-        Object.setPrototypeOf(node, Comment.prototype);
-      } else if (node.type === "root") {
-        Object.setPrototypeOf(node, Root.prototype);
-      }
-      node[my] = true;
-      if (node.nodes) {
-        node.nodes.forEach((child) => {
-          Container.rebuild(child);
-        });
+        return true;
       }
     };
   }
-});
+  index(child) {
+    if (typeof child === "number")
+      return child;
+    if (child.proxyOf)
+      child = child.proxyOf;
+    return this.proxyOf.nodes.indexOf(child);
+  }
+  insertAfter(exist, add) {
+    let existIndex = this.index(exist);
+    const nodes = this.normalize(add, this.proxyOf.nodes[existIndex]).reverse();
+    existIndex = this.index(exist);
+    for (const node of nodes)
+      this.proxyOf.nodes.splice(existIndex + 1, 0, node);
+    let index;
+    for (const id2 in this.indexes) {
+      index = this.indexes[id2];
+      if (existIndex < index) {
+        this.indexes[id2] = index + nodes.length;
+      }
+    }
+    this.markDirty();
+    return this;
+  }
+  insertBefore(exist, add) {
+    let existIndex = this.index(exist);
+    const type = existIndex === 0 ? "prepend" : false;
+    const nodes = this.normalize(add, this.proxyOf.nodes[existIndex], type).reverse();
+    existIndex = this.index(exist);
+    for (const node of nodes)
+      this.proxyOf.nodes.splice(existIndex, 0, node);
+    let index;
+    for (const id2 in this.indexes) {
+      index = this.indexes[id2];
+      if (existIndex <= index) {
+        this.indexes[id2] = index + nodes.length;
+      }
+    }
+    this.markDirty();
+    return this;
+  }
+  normalize(nodes, sample) {
+    if (typeof nodes === "string") {
+      nodes = cleanSource(parse(nodes).nodes);
+    } else if (typeof nodes === "undefined") {
+      nodes = [];
+    } else if (Array.isArray(nodes)) {
+      nodes = nodes.slice(0);
+      for (const i of nodes) {
+        if (i.parent)
+          i.parent.removeChild(i, "ignore");
+      }
+    } else if (nodes.type === "root" && this.type !== "document") {
+      nodes = nodes.nodes.slice(0);
+      for (const i of nodes) {
+        if (i.parent)
+          i.parent.removeChild(i, "ignore");
+      }
+    } else if (nodes.type) {
+      nodes = [nodes];
+    } else if (nodes.prop) {
+      if (typeof nodes.value === "undefined") {
+        throw new Error("Value field is missed in node creation");
+      } else if (typeof nodes.value !== "string") {
+        nodes.value = String(nodes.value);
+      }
+      nodes = [new Declaration(nodes)];
+    } else if (nodes.selector || nodes.selectors) {
+      nodes = [new Rule(nodes)];
+    } else if (nodes.name) {
+      nodes = [new AtRule(nodes)];
+    } else if (nodes.text) {
+      nodes = [new Comment(nodes)];
+    } else {
+      throw new Error("Unknown node type in node creation");
+    }
+    const processed = nodes.map((i) => {
+      if (!i[my])
+        _Container.rebuild(i);
+      i = i.proxyOf;
+      if (i.parent)
+        i.parent.removeChild(i);
+      if (i[isClean])
+        markTreeDirty(i);
+      if (!i.raws)
+        i.raws = {};
+      if (typeof i.raws.before === "undefined") {
+        if (sample && typeof sample.raws.before !== "undefined") {
+          i.raws.before = sample.raws.before.replace(/\S/g, "");
+        }
+      }
+      i.parent = this.proxyOf;
+      return i;
+    });
+    return processed;
+  }
+  prepend(...children) {
+    children = children.reverse();
+    for (const child of children) {
+      const nodes = this.normalize(child, this.first, "prepend").reverse();
+      for (const node of nodes)
+        this.proxyOf.nodes.unshift(node);
+      for (const id2 in this.indexes) {
+        this.indexes[id2] = this.indexes[id2] + nodes.length;
+      }
+    }
+    this.markDirty();
+    return this;
+  }
+  push(child) {
+    child.parent = this;
+    this.proxyOf.nodes.push(child);
+    return this;
+  }
+  removeAll() {
+    for (const node of this.proxyOf.nodes)
+      node.parent = void 0;
+    this.proxyOf.nodes = [];
+    this.markDirty();
+    return this;
+  }
+  removeChild(child) {
+    child = this.index(child);
+    this.proxyOf.nodes[child].parent = void 0;
+    this.proxyOf.nodes.splice(child, 1);
+    let index;
+    for (const id2 in this.indexes) {
+      index = this.indexes[id2];
+      if (index >= child) {
+        this.indexes[id2] = index - 1;
+      }
+    }
+    this.markDirty();
+    return this;
+  }
+  replaceValues(pattern, opts, callback) {
+    if (!callback) {
+      callback = opts;
+      opts = {};
+    }
+    this.walkDecls((decl) => {
+      if (opts.props && !opts.props.includes(decl.prop))
+        return;
+      if (opts.fast && !decl.value.includes(opts.fast))
+        return;
+      decl.value = decl.value.replace(pattern, callback);
+    });
+    this.markDirty();
+    return this;
+  }
+  some(condition) {
+    return this.nodes.some(condition);
+  }
+  walk(callback) {
+    return this.each((child, i) => {
+      let result;
+      try {
+        result = callback(child, i);
+      } catch (e) {
+        throw child.addToError(e);
+      }
+      if (result !== false && child.walk) {
+        result = child.walk(callback);
+      }
+      return result;
+    });
+  }
+  walkAtRules(name, callback) {
+    if (!callback) {
+      callback = name;
+      return this.walk((child, i) => {
+        if (child.type === "atrule") {
+          return callback(child, i);
+        }
+      });
+    }
+    if (name instanceof RegExp) {
+      return this.walk((child, i) => {
+        if (child.type === "atrule" && name.test(child.name)) {
+          return callback(child, i);
+        }
+      });
+    }
+    return this.walk((child, i) => {
+      if (child.type === "atrule" && child.name === name) {
+        return callback(child, i);
+      }
+    });
+  }
+  walkComments(callback) {
+    return this.walk((child, i) => {
+      if (child.type === "comment") {
+        return callback(child, i);
+      }
+    });
+  }
+  walkDecls(prop, callback) {
+    if (!callback) {
+      callback = prop;
+      return this.walk((child, i) => {
+        if (child.type === "decl") {
+          return callback(child, i);
+        }
+      });
+    }
+    if (prop instanceof RegExp) {
+      return this.walk((child, i) => {
+        if (child.type === "decl" && prop.test(child.prop)) {
+          return callback(child, i);
+        }
+      });
+    }
+    return this.walk((child, i) => {
+      if (child.type === "decl" && child.prop === prop) {
+        return callback(child, i);
+      }
+    });
+  }
+  walkRules(selector2, callback) {
+    if (!callback) {
+      callback = selector2;
+      return this.walk((child, i) => {
+        if (child.type === "rule") {
+          return callback(child, i);
+        }
+      });
+    }
+    if (selector2 instanceof RegExp) {
+      return this.walk((child, i) => {
+        if (child.type === "rule" && selector2.test(child.selector)) {
+          return callback(child, i);
+        }
+      });
+    }
+    return this.walk((child, i) => {
+      if (child.type === "rule" && child.selector === selector2) {
+        return callback(child, i);
+      }
+    });
+  }
+  get first() {
+    if (!this.proxyOf.nodes)
+      return void 0;
+    return this.proxyOf.nodes[0];
+  }
+  get last() {
+    if (!this.proxyOf.nodes)
+      return void 0;
+    return this.proxyOf.nodes[this.proxyOf.nodes.length - 1];
+  }
+};
+Container.registerParse = (dependant) => {
+  parse = dependant;
+};
+Container.registerRule = (dependant) => {
+  Rule = dependant;
+};
+Container.registerAtRule = (dependant) => {
+  AtRule = dependant;
+};
+Container.registerRoot = (dependant) => {
+  Root = dependant;
+};
+Container.rebuild = (node) => {
+  if (node.type === "atrule") {
+    Object.setPrototypeOf(node, AtRule.prototype);
+  } else if (node.type === "rule") {
+    Object.setPrototypeOf(node, Rule.prototype);
+  } else if (node.type === "decl") {
+    Object.setPrototypeOf(node, Declaration.prototype);
+  } else if (node.type === "comment") {
+    Object.setPrototypeOf(node, Comment.prototype);
+  } else if (node.type === "root") {
+    Object.setPrototypeOf(node, Root.prototype);
+  }
+  node[my] = true;
+  if (node.nodes) {
+    node.nodes.forEach((child) => {
+      Container.rebuild(child);
+    });
+  }
+};
 
 // src/postcss/at-rule.js
-var AtRule2;
-var init_at_rule = __esm({
-  "src/postcss/at-rule.js"() {
-    "use strict";
-    init_container();
-    AtRule2 = class extends Container {
-      static {
-        __name(this, "AtRule");
-      }
-      constructor(defaults) {
-        super(defaults);
-        this.type = "atrule";
-      }
-      append(...children) {
-        if (!this.proxyOf.nodes) this.nodes = [];
-        return super.append(...children);
-      }
-      prepend(...children) {
-        if (!this.proxyOf.nodes) this.nodes = [];
-        return super.prepend(...children);
-      }
-    };
-    Container.registerAtRule(AtRule2);
+var AtRule2 = class extends Container {
+  static {
+    __name(this, "AtRule");
   }
-});
+  constructor(defaults) {
+    super(defaults);
+    this.type = "atrule";
+  }
+  append(...children) {
+    if (!this.proxyOf.nodes)
+      this.nodes = [];
+    return super.append(...children);
+  }
+  prepend(...children) {
+    if (!this.proxyOf.nodes)
+      this.nodes = [];
+    return super.prepend(...children);
+  }
+};
+Container.registerAtRule(AtRule2);
 
 // src/postcss/root.js
-var LazyResult, Processor, Root2;
-var init_root = __esm({
-  "src/postcss/root.js"() {
-    "use strict";
-    init_container();
-    Root2 = class extends Container {
-      static {
-        __name(this, "Root");
-      }
-      constructor(defaults) {
-        super(defaults);
-        this.type = "root";
-        if (!this.nodes) this.nodes = [];
-      }
-      normalize(child, sample, type) {
-        const nodes = super.normalize(child);
-        if (sample) {
-          if (type === "prepend") {
-            if (this.nodes.length > 1) {
-              sample.raws.before = this.nodes[1].raws.before;
-            } else {
-              delete sample.raws.before;
-            }
-          } else if (this.first !== sample) {
-            for (const node of nodes) {
-              node.raws.before = sample.raws.before;
-            }
-          }
-        }
-        return nodes;
-      }
-      removeChild(child, ignore) {
-        const index = this.index(child);
-        if (!ignore && index === 0 && this.nodes.length > 1) {
-          this.nodes[1].raws.before = this.nodes[index].raws.before;
-        }
-        return super.removeChild(child);
-      }
-      toResult(opts = {}) {
-        const lazy = new LazyResult(new Processor(), this, opts);
-        return lazy.stringify();
-      }
-      static registerLazyResult = /* @__PURE__ */ __name((dependant) => {
-        LazyResult = dependant;
-      }, "registerLazyResult");
-      static registerProcessor = /* @__PURE__ */ __name((dependant) => {
-        Processor = dependant;
-      }, "registerProcessor");
-    };
-    Container.registerRoot(Root2);
+var LazyResult;
+var Processor;
+var Root2 = class extends Container {
+  static {
+    __name(this, "Root");
   }
-});
+  constructor(defaults) {
+    super(defaults);
+    this.type = "root";
+    if (!this.nodes)
+      this.nodes = [];
+  }
+  normalize(child, sample, type) {
+    const nodes = super.normalize(child);
+    if (sample) {
+      if (type === "prepend") {
+        if (this.nodes.length > 1) {
+          sample.raws.before = this.nodes[1].raws.before;
+        } else {
+          delete sample.raws.before;
+        }
+      } else if (this.first !== sample) {
+        for (const node of nodes) {
+          node.raws.before = sample.raws.before;
+        }
+      }
+    }
+    return nodes;
+  }
+  removeChild(child, ignore) {
+    const index = this.index(child);
+    if (!ignore && index === 0 && this.nodes.length > 1) {
+      this.nodes[1].raws.before = this.nodes[index].raws.before;
+    }
+    return super.removeChild(child);
+  }
+  toResult(opts = {}) {
+    const lazy = new LazyResult(new Processor(), this, opts);
+    return lazy.stringify();
+  }
+  static registerLazyResult = /* @__PURE__ */ __name((dependant) => {
+    LazyResult = dependant;
+  }, "registerLazyResult");
+  static registerProcessor = /* @__PURE__ */ __name((dependant) => {
+    Processor = dependant;
+  }, "registerProcessor");
+};
+Container.registerRoot(Root2);
 
 // src/postcss/list.js
-var list;
-var init_list = __esm({
-  "src/postcss/list.js"() {
-    "use strict";
-    list = {
-      comma(string2) {
-        return list.split(string2, [","], true);
-      },
-      space(string2) {
-        const spaces = [" ", "\n", "	"];
-        return list.split(string2, spaces);
-      },
-      split(string2, separators, last) {
-        const array = [];
-        let current = "";
-        let split = false;
-        let func = 0;
-        let inQuote = false;
-        let prevQuote = "";
-        let escape = false;
-        for (const letter of string2) {
-          if (escape) {
-            escape = false;
-          } else if (letter === "\\") {
-            escape = true;
-          } else if (inQuote) {
-            if (letter === prevQuote) {
-              inQuote = false;
-            }
-          } else if (letter === '"' || letter === "'") {
-            inQuote = true;
-            prevQuote = letter;
-          } else if (letter === "(") {
-            func += 1;
-          } else if (letter === ")") {
-            if (func > 0) func -= 1;
-          } else if (func === 0) {
-            if (separators.includes(letter)) split = true;
-          }
-          if (split) {
-            if (current !== "") array.push(current.trim());
-            current = "";
-            split = false;
-          } else {
-            current += letter;
-          }
+var list = {
+  comma(string2) {
+    return list.split(string2, [","], true);
+  },
+  space(string2) {
+    const spaces = [" ", "\n", "	"];
+    return list.split(string2, spaces);
+  },
+  split(string2, separators, last) {
+    const array = [];
+    let current = "";
+    let split = false;
+    let func = 0;
+    let inQuote = false;
+    let prevQuote = "";
+    let escape = false;
+    for (const letter of string2) {
+      if (escape) {
+        escape = false;
+      } else if (letter === "\\") {
+        escape = true;
+      } else if (inQuote) {
+        if (letter === prevQuote) {
+          inQuote = false;
         }
-        if (last || current !== "") array.push(current.trim());
-        return array;
+      } else if (letter === '"' || letter === "'") {
+        inQuote = true;
+        prevQuote = letter;
+      } else if (letter === "(") {
+        func += 1;
+      } else if (letter === ")") {
+        if (func > 0)
+          func -= 1;
+      } else if (func === 0) {
+        if (separators.includes(letter))
+          split = true;
       }
-    };
+      if (split) {
+        if (current !== "")
+          array.push(current.trim());
+        current = "";
+        split = false;
+      } else {
+        current += letter;
+      }
+    }
+    if (last || current !== "")
+      array.push(current.trim());
+    return array;
   }
-});
+};
 
 // src/postcss/rule.js
-var Rule2;
-var init_rule = __esm({
-  "src/postcss/rule.js"() {
-    "use strict";
-    init_container();
-    init_list();
-    Rule2 = class extends Container {
-      static {
-        __name(this, "Rule");
-      }
-      constructor(defaults) {
-        super(defaults);
-        this.type = "rule";
-        if (!this.nodes) this.nodes = [];
-      }
-      get selectors() {
-        return list.comma(this.selector);
-      }
-      set selectors(values) {
-        const match = this.selector ? this.selector.match(/,\s*/) : null;
-        const sep = match ? match[0] : "," + this.raw("between", "beforeOpen");
-        this.selector = values.join(sep);
-      }
-    };
-    Container.registerRule(Rule2);
+var Rule2 = class extends Container {
+  static {
+    __name(this, "Rule");
   }
-});
+  constructor(defaults) {
+    super(defaults);
+    this.type = "rule";
+    if (!this.nodes)
+      this.nodes = [];
+  }
+  get selectors() {
+    return list.comma(this.selector);
+  }
+  set selectors(values) {
+    const match = this.selector ? this.selector.match(/,\s*/) : null;
+    const sep = match ? match[0] : "," + this.raw("between", "beforeOpen");
+    this.selector = values.join(sep);
+  }
+};
+Container.registerRule(Rule2);
 
 // src/postcss/input.js
-var fromOffsetCache, Input;
-var init_input = __esm({
-  "src/postcss/input.js"() {
-    "use strict";
-    init_css_syntax_error();
-    fromOffsetCache = Symbol("fromOffsetCache");
-    Input = class {
-      static {
-        __name(this, "Input");
+var fromOffsetCache = Symbol("fromOffsetCache");
+var Input = class {
+  static {
+    __name(this, "Input");
+  }
+  constructor(css, opts = {}) {
+    if (css === null || typeof css === "undefined" || typeof css === "object" && !css.toString) {
+      throw new Error(`PostCSS received ${css} instead of CSS string`);
+    }
+    this.css = css.toString();
+    if (this.css[0] === "\uFEFF" || this.css[0] === "\uFFFE") {
+      this.hasBOM = true;
+      this.css = this.css.slice(1);
+    } else {
+      this.hasBOM = false;
+    }
+    if (this.map)
+      this.map.file = this.from;
+  }
+  error(message, line, column, opts = {}) {
+    let endColumn, endLine, result;
+    if (line && typeof line === "object") {
+      const start = line;
+      const end = column;
+      if (typeof start.offset === "number") {
+        const pos = this.fromOffset(start.offset);
+        line = pos.line;
+        column = pos.col;
+      } else {
+        line = start.line;
+        column = start.column;
       }
-      constructor(css, opts = {}) {
-        if (css === null || typeof css === "undefined" || typeof css === "object" && !css.toString) {
-          throw new Error(`PostCSS received ${css} instead of CSS string`);
-        }
-        this.css = css.toString();
-        if (this.css[0] === "\uFEFF" || this.css[0] === "\uFFFE") {
-          this.hasBOM = true;
-          this.css = this.css.slice(1);
+      if (typeof end.offset === "number") {
+        const pos = this.fromOffset(end.offset);
+        endLine = pos.line;
+        endColumn = pos.col;
+      } else {
+        endLine = end.line;
+        endColumn = end.column;
+      }
+    } else if (!column) {
+      const pos = this.fromOffset(line);
+      line = pos.line;
+      column = pos.col;
+    }
+    const origin = this.origin(line, column, endLine, endColumn);
+    if (origin) {
+      result = new CssSyntaxError(message, origin.endLine === void 0 ? origin.line : { column: origin.column, line: origin.line }, origin.endLine === void 0 ? origin.column : { column: origin.endColumn, line: origin.endLine }, origin.source, origin.file, opts.plugin);
+    } else {
+      result = new CssSyntaxError(message, endLine === void 0 ? line : { column, line }, endLine === void 0 ? column : { column: endColumn, line: endLine }, this.css, this.file, opts.plugin);
+    }
+    result.input = { column, endColumn, endLine, line, source: this.css };
+    if (this.file) {
+      result.input.file = this.file;
+    }
+    return result;
+  }
+  fromOffset(offset) {
+    let lastLine, lineToIndex;
+    if (!this[fromOffsetCache]) {
+      const lines = this.css.split("\n");
+      lineToIndex = new Array(lines.length);
+      let prevIndex = 0;
+      for (let i = 0, l = lines.length; i < l; i++) {
+        lineToIndex[i] = prevIndex;
+        prevIndex += lines[i].length + 1;
+      }
+      this[fromOffsetCache] = lineToIndex;
+    } else {
+      lineToIndex = this[fromOffsetCache];
+    }
+    lastLine = lineToIndex[lineToIndex.length - 1];
+    let min = 0;
+    if (offset >= lastLine) {
+      min = lineToIndex.length - 1;
+    } else {
+      let max = lineToIndex.length - 2;
+      let mid;
+      while (min < max) {
+        mid = min + (max - min >> 1);
+        if (offset < lineToIndex[mid]) {
+          max = mid - 1;
+        } else if (offset >= lineToIndex[mid + 1]) {
+          min = mid + 1;
         } else {
-          this.hasBOM = false;
+          min = mid;
+          break;
         }
-        if (this.map) this.map.file = this.from;
       }
-      error(message, line, column, opts = {}) {
-        let endColumn, endLine, result;
-        if (line && typeof line === "object") {
-          const start = line;
-          const end = column;
-          if (typeof start.offset === "number") {
-            const pos = this.fromOffset(start.offset);
-            line = pos.line;
-            column = pos.col;
-          } else {
-            line = start.line;
-            column = start.column;
-          }
-          if (typeof end.offset === "number") {
-            const pos = this.fromOffset(end.offset);
-            endLine = pos.line;
-            endColumn = pos.col;
-          } else {
-            endLine = end.line;
-            endColumn = end.column;
-          }
-        } else if (!column) {
-          const pos = this.fromOffset(line);
-          line = pos.line;
-          column = pos.col;
-        }
-        const origin = this.origin(line, column, endLine, endColumn);
-        if (origin) {
-          result = new CssSyntaxError(
-            message,
-            origin.endLine === void 0 ? origin.line : { column: origin.column, line: origin.line },
-            origin.endLine === void 0 ? origin.column : { column: origin.endColumn, line: origin.endLine },
-            origin.source,
-            origin.file,
-            opts.plugin
-          );
-        } else {
-          result = new CssSyntaxError(
-            message,
-            endLine === void 0 ? line : { column, line },
-            endLine === void 0 ? column : { column: endColumn, line: endLine },
-            this.css,
-            this.file,
-            opts.plugin
-          );
-        }
-        result.input = { column, endColumn, endLine, line, source: this.css };
-        if (this.file) {
-          result.input.file = this.file;
-        }
-        return result;
-      }
-      fromOffset(offset) {
-        let lastLine, lineToIndex;
-        if (!this[fromOffsetCache]) {
-          const lines = this.css.split("\n");
-          lineToIndex = new Array(lines.length);
-          let prevIndex = 0;
-          for (let i = 0, l = lines.length; i < l; i++) {
-            lineToIndex[i] = prevIndex;
-            prevIndex += lines[i].length + 1;
-          }
-          this[fromOffsetCache] = lineToIndex;
-        } else {
-          lineToIndex = this[fromOffsetCache];
-        }
-        lastLine = lineToIndex[lineToIndex.length - 1];
-        let min = 0;
-        if (offset >= lastLine) {
-          min = lineToIndex.length - 1;
-        } else {
-          let max = lineToIndex.length - 2;
-          let mid;
-          while (min < max) {
-            mid = min + (max - min >> 1);
-            if (offset < lineToIndex[mid]) {
-              max = mid - 1;
-            } else if (offset >= lineToIndex[mid + 1]) {
-              min = mid + 1;
-            } else {
-              min = mid;
-              break;
-            }
-          }
-        }
-        return {
-          col: offset - lineToIndex[min] + 1,
-          line: min + 1
-        };
-      }
-      origin(line, column, endLine, endColumn) {
-        if (!this.map) return false;
-        const consumer = this.map.consumer();
-        const from = consumer.originalPositionFor({ column, line });
-        if (!from.source) return false;
-        let to;
-        if (typeof endLine === "number") {
-          to = consumer.originalPositionFor({ column: endColumn, line: endLine });
-        }
-        let fromUrl;
-        fromUrl = new URL(
-          from.source,
-          this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile)
-        );
-        const result = {
-          column: from.column,
-          endColumn: to && to.column,
-          endLine: to && to.line,
-          line: from.line,
-          url: fromUrl.toString()
-        };
-        const source = consumer.sourceContentFor(from.source);
-        if (source) result.source = source;
-        return result;
-      }
-      toJSON() {
-        const json = {};
-        for (const name of ["hasBOM", "css", "file", "id"]) {
-          if (this[name] != null) {
-            json[name] = this[name];
-          }
-        }
-        if (this.map) {
-          json.map = { ...this.map };
-          if (json.map.consumerCache) {
-            json.map.consumerCache = void 0;
-          }
-        }
-        return json;
-      }
-      get from() {
-        return this.file || this.id;
-      }
+    }
+    return {
+      col: offset - lineToIndex[min] + 1,
+      line: min + 1
     };
   }
-});
+  origin(line, column, endLine, endColumn) {
+    if (!this.map)
+      return false;
+    const consumer = this.map.consumer();
+    const from = consumer.originalPositionFor({ column, line });
+    if (!from.source)
+      return false;
+    let to;
+    if (typeof endLine === "number") {
+      to = consumer.originalPositionFor({ column: endColumn, line: endLine });
+    }
+    let fromUrl;
+    fromUrl = new URL(from.source, this.map.consumer().sourceRoot || pathToFileURL(this.map.mapFile));
+    const result = {
+      column: from.column,
+      endColumn: to && to.column,
+      endLine: to && to.line,
+      line: from.line,
+      url: fromUrl.toString()
+    };
+    const source = consumer.sourceContentFor(from.source);
+    if (source)
+      result.source = source;
+    return result;
+  }
+  toJSON() {
+    const json = {};
+    for (const name of ["hasBOM", "css", "file", "id"]) {
+      if (this[name] != null) {
+        json[name] = this[name];
+      }
+    }
+    if (this.map) {
+      json.map = { ...this.map };
+      if (json.map.consumerCache) {
+        json.map.consumerCache = void 0;
+      }
+    }
+    return json;
+  }
+  get from() {
+    return this.file || this.id;
+  }
+};
 
 // src/postcss/tokenize.js
+var SINGLE_QUOTE = "'".charCodeAt(0);
+var DOUBLE_QUOTE = '"'.charCodeAt(0);
+var BACKSLASH = "\\".charCodeAt(0);
+var SLASH = "/".charCodeAt(0);
+var NEWLINE = "\n".charCodeAt(0);
+var SPACE = " ".charCodeAt(0);
+var FEED = "\f".charCodeAt(0);
+var TAB = "	".charCodeAt(0);
+var CR = "\r".charCodeAt(0);
+var OPEN_SQUARE = "[".charCodeAt(0);
+var CLOSE_SQUARE = "]".charCodeAt(0);
+var OPEN_PARENTHESES = "(".charCodeAt(0);
+var CLOSE_PARENTHESES = ")".charCodeAt(0);
+var OPEN_CURLY = "{".charCodeAt(0);
+var CLOSE_CURLY = "}".charCodeAt(0);
+var SEMICOLON = ";".charCodeAt(0);
+var ASTERISK = "*".charCodeAt(0);
+var COLON = ":".charCodeAt(0);
+var AT = "@".charCodeAt(0);
+var RE_AT_END = /[\t\n\f\r "#'()/;[\\\]{}]/g;
+var RE_WORD_END = /[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g;
+var RE_BAD_BRACKET = /.[\r\n"'(/\\]/;
+var RE_HEX_ESCAPE = /[\da-f]/i;
 function tokenizer(input, options = {}) {
   const css = input.css.valueOf();
   const ignore = options.ignoreErrors;
@@ -1564,8 +1494,10 @@ function tokenizer(input, options = {}) {
   }
   __name(endOfFile, "endOfFile");
   function nextToken(opts) {
-    if (returned.length) return returned.pop();
-    if (pos >= length) return;
+    if (returned.length)
+      return returned.pop();
+    if (pos >= length)
+      return;
     const ignoreUnclosed = opts ? opts.ignoreUnclosed : false;
     code = css.charCodeAt(pos);
     switch (code) {
@@ -1732,578 +1664,525 @@ function tokenizer(input, options = {}) {
     position
   };
 }
-var SINGLE_QUOTE, DOUBLE_QUOTE, BACKSLASH, SLASH, NEWLINE, SPACE, FEED, TAB, CR, OPEN_SQUARE, CLOSE_SQUARE, OPEN_PARENTHESES, CLOSE_PARENTHESES, OPEN_CURLY, CLOSE_CURLY, SEMICOLON, ASTERISK, COLON, AT, RE_AT_END, RE_WORD_END, RE_BAD_BRACKET, RE_HEX_ESCAPE;
-var init_tokenize = __esm({
-  "src/postcss/tokenize.js"() {
-    "use strict";
-    SINGLE_QUOTE = "'".charCodeAt(0);
-    DOUBLE_QUOTE = '"'.charCodeAt(0);
-    BACKSLASH = "\\".charCodeAt(0);
-    SLASH = "/".charCodeAt(0);
-    NEWLINE = "\n".charCodeAt(0);
-    SPACE = " ".charCodeAt(0);
-    FEED = "\f".charCodeAt(0);
-    TAB = "	".charCodeAt(0);
-    CR = "\r".charCodeAt(0);
-    OPEN_SQUARE = "[".charCodeAt(0);
-    CLOSE_SQUARE = "]".charCodeAt(0);
-    OPEN_PARENTHESES = "(".charCodeAt(0);
-    CLOSE_PARENTHESES = ")".charCodeAt(0);
-    OPEN_CURLY = "{".charCodeAt(0);
-    CLOSE_CURLY = "}".charCodeAt(0);
-    SEMICOLON = ";".charCodeAt(0);
-    ASTERISK = "*".charCodeAt(0);
-    COLON = ":".charCodeAt(0);
-    AT = "@".charCodeAt(0);
-    RE_AT_END = /[\t\n\f\r "#'()/;[\\\]{}]/g;
-    RE_WORD_END = /[\t\n\f\r !"#'():;@[\\\]{}]|\/(?=\*)/g;
-    RE_BAD_BRACKET = /.[\r\n"'(/\\]/;
-    RE_HEX_ESCAPE = /[\da-f]/i;
-    __name(tokenizer, "tokenizer");
-  }
-});
+__name(tokenizer, "tokenizer");
 
 // src/postcss/parser.js
+var SAFE_COMMENT_NEIGHBOR = {
+  empty: true,
+  space: true
+};
 function findLastWithPosition(tokens) {
   for (let i = tokens.length - 1; i >= 0; i--) {
     const token = tokens[i];
     const pos = token[3] || token[2];
-    if (pos) return pos;
+    if (pos)
+      return pos;
   }
 }
-var SAFE_COMMENT_NEIGHBOR, Parser;
-var init_parser = __esm({
-  "src/postcss/parser.js"() {
-    "use strict";
-    init_at_rule();
-    init_comment();
-    init_declaration();
-    init_root();
-    init_rule();
-    init_tokenize();
-    SAFE_COMMENT_NEIGHBOR = {
-      empty: true,
-      space: true
-    };
-    __name(findLastWithPosition, "findLastWithPosition");
-    Parser = class {
-      static {
-        __name(this, "Parser");
+__name(findLastWithPosition, "findLastWithPosition");
+var Parser = class {
+  static {
+    __name(this, "Parser");
+  }
+  constructor(input) {
+    this.input = input;
+    this.root = new Root2();
+    this.current = this.root;
+    this.spaces = "";
+    this.semicolon = false;
+    this.createTokenizer();
+    this.root.source = { input, start: { column: 1, line: 1, offset: 0 } };
+  }
+  atrule(token) {
+    const node = new AtRule2();
+    node.name = token[1].slice(1);
+    if (node.name === "") {
+      this.unnamedAtrule(node, token);
+    }
+    this.init(node, token[2]);
+    let type;
+    let prev;
+    let shift;
+    let last = false;
+    let open = false;
+    const params = [];
+    const brackets = [];
+    while (!this.tokenizer.endOfFile()) {
+      token = this.tokenizer.nextToken();
+      type = token[0];
+      if (type === "(" || type === "[") {
+        brackets.push(type === "(" ? ")" : "]");
+      } else if (type === "{" && brackets.length > 0) {
+        brackets.push("}");
+      } else if (type === brackets[brackets.length - 1]) {
+        brackets.pop();
       }
-      constructor(input) {
-        this.input = input;
-        this.root = new Root2();
-        this.current = this.root;
-        this.spaces = "";
-        this.semicolon = false;
-        this.createTokenizer();
-        this.root.source = { input, start: { column: 1, line: 1, offset: 0 } };
-      }
-      atrule(token) {
-        const node = new AtRule2();
-        node.name = token[1].slice(1);
-        if (node.name === "") {
-          this.unnamedAtrule(node, token);
-        }
-        this.init(node, token[2]);
-        let type;
-        let prev;
-        let shift;
-        let last = false;
-        let open = false;
-        const params = [];
-        const brackets = [];
-        while (!this.tokenizer.endOfFile()) {
-          token = this.tokenizer.nextToken();
-          type = token[0];
-          if (type === "(" || type === "[") {
-            brackets.push(type === "(" ? ")" : "]");
-          } else if (type === "{" && brackets.length > 0) {
-            brackets.push("}");
-          } else if (type === brackets[brackets.length - 1]) {
-            brackets.pop();
-          }
-          if (brackets.length === 0) {
-            if (type === ";") {
-              node.source.end = this.getPosition(token[2]);
+      if (brackets.length === 0) {
+        if (type === ";") {
+          node.source.end = this.getPosition(token[2]);
+          node.source.end.offset++;
+          this.semicolon = true;
+          break;
+        } else if (type === "{") {
+          open = true;
+          break;
+        } else if (type === "}") {
+          if (params.length > 0) {
+            shift = params.length - 1;
+            prev = params[shift];
+            while (prev && prev[0] === "space") {
+              prev = params[--shift];
+            }
+            if (prev) {
+              node.source.end = this.getPosition(prev[3] || prev[2]);
               node.source.end.offset++;
-              this.semicolon = true;
-              break;
-            } else if (type === "{") {
-              open = true;
-              break;
-            } else if (type === "}") {
-              if (params.length > 0) {
-                shift = params.length - 1;
-                prev = params[shift];
-                while (prev && prev[0] === "space") {
-                  prev = params[--shift];
-                }
-                if (prev) {
-                  node.source.end = this.getPosition(prev[3] || prev[2]);
-                  node.source.end.offset++;
-                }
-              }
-              this.end(token);
-              break;
-            } else {
-              params.push(token);
             }
-          } else {
-            params.push(token);
           }
-          if (this.tokenizer.endOfFile()) {
-            last = true;
-            break;
-          }
-        }
-        node.raws.between = this.spacesAndCommentsFromEnd(params);
-        if (params.length) {
-          node.raws.afterName = this.spacesAndCommentsFromStart(params);
-          this.raw(node, "params", params);
-          if (last) {
-            token = params[params.length - 1];
-            node.source.end = this.getPosition(token[3] || token[2]);
-            node.source.end.offset++;
-            this.spaces = node.raws.between;
-            node.raws.between = "";
-          }
+          this.end(token);
+          break;
         } else {
-          node.raws.afterName = "";
-          node.params = "";
+          params.push(token);
         }
-        if (open) {
-          node.nodes = [];
-          this.current = node;
-        }
+      } else {
+        params.push(token);
       }
-      checkMissedSemicolon(tokens) {
-        const colon2 = this.colon(tokens);
-        if (colon2 === false) return;
-        let founded = 0;
-        let token;
-        for (let j = colon2 - 1; j >= 0; j--) {
-          token = tokens[j];
-          if (token[0] !== "space") {
-            founded += 1;
-            if (founded === 2) break;
-          }
-        }
-        throw this.input.error(
-          "Missed semicolon",
-          token[0] === "word" ? token[3] + 1 : token[2]
-        );
+      if (this.tokenizer.endOfFile()) {
+        last = true;
+        break;
       }
-      colon(tokens) {
-        let brackets = 0;
-        let prev, token, type;
-        for (const [i, element] of tokens.entries()) {
-          token = element;
-          type = token[0];
-          if (type === "(") {
-            brackets += 1;
-          }
-          if (type === ")") {
-            brackets -= 1;
-          }
-          if (brackets === 0 && type === ":") {
-            if (!prev) {
-              this.doubleColon(token);
-            } else if (prev[0] === "word" && prev[1] === "progid") {
-              continue;
-            } else {
-              return i;
-            }
-          }
-          prev = token;
-        }
-        return false;
-      }
-      comment(token) {
-        const node = new Comment();
-        this.init(node, token[2]);
+    }
+    node.raws.between = this.spacesAndCommentsFromEnd(params);
+    if (params.length) {
+      node.raws.afterName = this.spacesAndCommentsFromStart(params);
+      this.raw(node, "params", params);
+      if (last) {
+        token = params[params.length - 1];
         node.source.end = this.getPosition(token[3] || token[2]);
         node.source.end.offset++;
-        const text = token[1].slice(2, -2);
-        if (/^\s*$/.test(text)) {
-          node.text = "";
-          node.raws.left = text;
-          node.raws.right = "";
+        this.spaces = node.raws.between;
+        node.raws.between = "";
+      }
+    } else {
+      node.raws.afterName = "";
+      node.params = "";
+    }
+    if (open) {
+      node.nodes = [];
+      this.current = node;
+    }
+  }
+  checkMissedSemicolon(tokens) {
+    const colon2 = this.colon(tokens);
+    if (colon2 === false)
+      return;
+    let founded = 0;
+    let token;
+    for (let j = colon2 - 1; j >= 0; j--) {
+      token = tokens[j];
+      if (token[0] !== "space") {
+        founded += 1;
+        if (founded === 2)
+          break;
+      }
+    }
+    throw this.input.error("Missed semicolon", token[0] === "word" ? token[3] + 1 : token[2]);
+  }
+  colon(tokens) {
+    let brackets = 0;
+    let prev, token, type;
+    for (const [i, element] of tokens.entries()) {
+      token = element;
+      type = token[0];
+      if (type === "(") {
+        brackets += 1;
+      }
+      if (type === ")") {
+        brackets -= 1;
+      }
+      if (brackets === 0 && type === ":") {
+        if (!prev) {
+          this.doubleColon(token);
+        } else if (prev[0] === "word" && prev[1] === "progid") {
+          continue;
         } else {
-          const match = text.match(/^(\s*)([^]*\S)(\s*)$/);
-          node.text = match[2];
-          node.raws.left = match[1];
-          node.raws.right = match[3];
+          return i;
         }
       }
-      createTokenizer() {
-        this.tokenizer = tokenizer(this.input);
+      prev = token;
+    }
+    return false;
+  }
+  comment(token) {
+    const node = new Comment();
+    this.init(node, token[2]);
+    node.source.end = this.getPosition(token[3] || token[2]);
+    node.source.end.offset++;
+    const text = token[1].slice(2, -2);
+    if (/^\s*$/.test(text)) {
+      node.text = "";
+      node.raws.left = text;
+      node.raws.right = "";
+    } else {
+      const match = text.match(/^(\s*)([^]*\S)(\s*)$/);
+      node.text = match[2];
+      node.raws.left = match[1];
+      node.raws.right = match[3];
+    }
+  }
+  createTokenizer() {
+    this.tokenizer = tokenizer(this.input);
+  }
+  decl(tokens, customProperty) {
+    const node = new Declaration();
+    this.init(node, tokens[0][2]);
+    const last = tokens[tokens.length - 1];
+    if (last[0] === ";") {
+      this.semicolon = true;
+      tokens.pop();
+    }
+    node.source.end = this.getPosition(last[3] || last[2] || findLastWithPosition(tokens));
+    node.source.end.offset++;
+    while (tokens[0][0] !== "word") {
+      if (tokens.length === 1)
+        this.unknownWord(tokens);
+      node.raws.before += tokens.shift()[1];
+    }
+    node.source.start = this.getPosition(tokens[0][2]);
+    node.prop = "";
+    while (tokens.length) {
+      const type = tokens[0][0];
+      if (type === ":" || type === "space" || type === "comment") {
+        break;
       }
-      decl(tokens, customProperty) {
-        const node = new Declaration();
-        this.init(node, tokens[0][2]);
-        const last = tokens[tokens.length - 1];
-        if (last[0] === ";") {
-          this.semicolon = true;
-          tokens.pop();
+      node.prop += tokens.shift()[1];
+    }
+    node.raws.between = "";
+    let token;
+    while (tokens.length) {
+      token = tokens.shift();
+      if (token[0] === ":") {
+        node.raws.between += token[1];
+        break;
+      } else {
+        if (token[0] === "word" && /\w/.test(token[1])) {
+          this.unknownWord([token]);
         }
-        node.source.end = this.getPosition(
-          last[3] || last[2] || findLastWithPosition(tokens)
-        );
-        node.source.end.offset++;
-        while (tokens[0][0] !== "word") {
-          if (tokens.length === 1) this.unknownWord(tokens);
-          node.raws.before += tokens.shift()[1];
-        }
-        node.source.start = this.getPosition(tokens[0][2]);
-        node.prop = "";
-        while (tokens.length) {
-          const type = tokens[0][0];
-          if (type === ":" || type === "space" || type === "comment") {
+        node.raws.between += token[1];
+      }
+    }
+    if (node.prop[0] === "_" || node.prop[0] === "*") {
+      node.raws.before += node.prop[0];
+      node.prop = node.prop.slice(1);
+    }
+    let firstSpaces = [];
+    let next;
+    while (tokens.length) {
+      next = tokens[0][0];
+      if (next !== "space" && next !== "comment")
+        break;
+      firstSpaces.push(tokens.shift());
+    }
+    this.precheckMissedSemicolon(tokens);
+    for (let i = tokens.length - 1; i >= 0; i--) {
+      token = tokens[i];
+      if (token[1].toLowerCase() === "!important") {
+        node.important = true;
+        let string2 = this.stringFrom(tokens, i);
+        string2 = this.spacesFromEnd(tokens) + string2;
+        if (string2 !== " !important")
+          node.raws.important = string2;
+        break;
+      } else if (token[1].toLowerCase() === "important") {
+        const cache = tokens.slice(0);
+        let str2 = "";
+        for (let j = i; j > 0; j--) {
+          const type = cache[j][0];
+          if (str2.trim().startsWith("!") && type !== "space") {
             break;
           }
-          node.prop += tokens.shift()[1];
+          str2 = cache.pop()[1] + str2;
         }
-        node.raws.between = "";
-        let token;
-        while (tokens.length) {
-          token = tokens.shift();
-          if (token[0] === ":") {
-            node.raws.between += token[1];
-            break;
+        if (str2.trim().startsWith("!")) {
+          node.important = true;
+          node.raws.important = str2;
+          tokens = cache;
+        }
+      }
+      if (token[0] !== "space" && token[0] !== "comment") {
+        break;
+      }
+    }
+    const hasWord = tokens.some((i) => i[0] !== "space" && i[0] !== "comment");
+    if (hasWord) {
+      node.raws.between += firstSpaces.map((i) => i[1]).join("");
+      firstSpaces = [];
+    }
+    this.raw(node, "value", firstSpaces.concat(tokens), customProperty);
+    if (node.value.includes(":") && !customProperty) {
+      this.checkMissedSemicolon(tokens);
+    }
+  }
+  doubleColon(token) {
+    throw this.input.error("Double colon", { offset: token[2] }, { offset: token[2] + token[1].length });
+  }
+  emptyRule(token) {
+    const node = new Rule2();
+    this.init(node, token[2]);
+    node.selector = "";
+    node.raws.between = "";
+    this.current = node;
+  }
+  end(token) {
+    if (this.current.nodes && this.current.nodes.length) {
+      this.current.raws.semicolon = this.semicolon;
+    }
+    this.semicolon = false;
+    this.current.raws.after = (this.current.raws.after || "") + this.spaces;
+    this.spaces = "";
+    if (this.current.parent) {
+      this.current.source.end = this.getPosition(token[2]);
+      this.current.source.end.offset++;
+      this.current = this.current.parent;
+    } else {
+      this.unexpectedClose(token);
+    }
+  }
+  endFile() {
+    if (this.current.parent)
+      this.unclosedBlock();
+    if (this.current.nodes && this.current.nodes.length) {
+      this.current.raws.semicolon = this.semicolon;
+    }
+    this.current.raws.after = (this.current.raws.after || "") + this.spaces;
+    this.root.source.end = this.getPosition(this.tokenizer.position());
+  }
+  freeSemicolon(token) {
+    this.spaces += token[1];
+    if (this.current.nodes) {
+      const prev = this.current.nodes[this.current.nodes.length - 1];
+      if (prev && prev.type === "rule" && !prev.raws.ownSemicolon) {
+        prev.raws.ownSemicolon = this.spaces;
+        this.spaces = "";
+      }
+    }
+  }
+  // Helpers
+  getPosition(offset) {
+    const pos = this.input.fromOffset(offset);
+    return {
+      column: pos.col,
+      line: pos.line,
+      offset
+    };
+  }
+  init(node, offset) {
+    this.current.push(node);
+    node.source = {
+      input: this.input,
+      start: this.getPosition(offset)
+    };
+    node.raws.before = this.spaces;
+    this.spaces = "";
+    if (node.type !== "comment")
+      this.semicolon = false;
+  }
+  other(start) {
+    let end = false;
+    let type = null;
+    let colon2 = false;
+    let bracket = null;
+    const brackets = [];
+    const customProperty = start[1].startsWith("--");
+    const tokens = [];
+    let token = start;
+    while (token) {
+      type = token[0];
+      tokens.push(token);
+      if (type === "(" || type === "[") {
+        if (!bracket)
+          bracket = token;
+        brackets.push(type === "(" ? ")" : "]");
+      } else if (customProperty && colon2 && type === "{") {
+        if (!bracket)
+          bracket = token;
+        brackets.push("}");
+      } else if (brackets.length === 0) {
+        if (type === ";") {
+          if (colon2) {
+            this.decl(tokens, customProperty);
+            return;
           } else {
-            if (token[0] === "word" && /\w/.test(token[1])) {
-              this.unknownWord([token]);
-            }
-            node.raws.between += token[1];
+            break;
           }
+        } else if (type === "{") {
+          this.rule(tokens);
+          return;
+        } else if (type === "}") {
+          this.tokenizer.back(tokens.pop());
+          end = true;
+          break;
+        } else if (type === ":") {
+          colon2 = true;
         }
-        if (node.prop[0] === "_" || node.prop[0] === "*") {
-          node.raws.before += node.prop[0];
-          node.prop = node.prop.slice(1);
-        }
-        let firstSpaces = [];
-        let next;
+      } else if (type === brackets[brackets.length - 1]) {
+        brackets.pop();
+        if (brackets.length === 0)
+          bracket = null;
+      }
+      token = this.tokenizer.nextToken();
+    }
+    if (this.tokenizer.endOfFile())
+      end = true;
+    if (brackets.length > 0)
+      this.unclosedBracket(bracket);
+    if (end && colon2) {
+      if (!customProperty) {
         while (tokens.length) {
-          next = tokens[0][0];
-          if (next !== "space" && next !== "comment") break;
-          firstSpaces.push(tokens.shift());
-        }
-        this.precheckMissedSemicolon(tokens);
-        for (let i = tokens.length - 1; i >= 0; i--) {
-          token = tokens[i];
-          if (token[1].toLowerCase() === "!important") {
-            node.important = true;
-            let string2 = this.stringFrom(tokens, i);
-            string2 = this.spacesFromEnd(tokens) + string2;
-            if (string2 !== " !important") node.raws.important = string2;
+          token = tokens[tokens.length - 1][0];
+          if (token !== "space" && token !== "comment")
             break;
-          } else if (token[1].toLowerCase() === "important") {
-            const cache = tokens.slice(0);
-            let str2 = "";
-            for (let j = i; j > 0; j--) {
-              const type = cache[j][0];
-              if (str2.trim().startsWith("!") && type !== "space") {
-                break;
-              }
-              str2 = cache.pop()[1] + str2;
-            }
-            if (str2.trim().startsWith("!")) {
-              node.important = true;
-              node.raws.important = str2;
-              tokens = cache;
-            }
-          }
-          if (token[0] !== "space" && token[0] !== "comment") {
-            break;
-          }
-        }
-        const hasWord = tokens.some((i) => i[0] !== "space" && i[0] !== "comment");
-        if (hasWord) {
-          node.raws.between += firstSpaces.map((i) => i[1]).join("");
-          firstSpaces = [];
-        }
-        this.raw(node, "value", firstSpaces.concat(tokens), customProperty);
-        if (node.value.includes(":") && !customProperty) {
-          this.checkMissedSemicolon(tokens);
+          this.tokenizer.back(tokens.pop());
         }
       }
-      doubleColon(token) {
-        throw this.input.error(
-          "Double colon",
-          { offset: token[2] },
-          { offset: token[2] + token[1].length }
-        );
+      this.decl(tokens, customProperty);
+    } else {
+      this.unknownWord(tokens);
+    }
+  }
+  parse() {
+    let token;
+    while (!this.tokenizer.endOfFile()) {
+      token = this.tokenizer.nextToken();
+      switch (token[0]) {
+        case "space":
+          this.spaces += token[1];
+          break;
+        case ";":
+          this.freeSemicolon(token);
+          break;
+        case "}":
+          this.end(token);
+          break;
+        case "comment":
+          this.comment(token);
+          break;
+        case "at-word":
+          this.atrule(token);
+          break;
+        case "{":
+          this.emptyRule(token);
+          break;
+        default:
+          this.other(token);
+          break;
       }
-      emptyRule(token) {
-        const node = new Rule2();
-        this.init(node, token[2]);
-        node.selector = "";
-        node.raws.between = "";
-        this.current = node;
-      }
-      end(token) {
-        if (this.current.nodes && this.current.nodes.length) {
-          this.current.raws.semicolon = this.semicolon;
-        }
-        this.semicolon = false;
-        this.current.raws.after = (this.current.raws.after || "") + this.spaces;
-        this.spaces = "";
-        if (this.current.parent) {
-          this.current.source.end = this.getPosition(token[2]);
-          this.current.source.end.offset++;
-          this.current = this.current.parent;
-        } else {
-          this.unexpectedClose(token);
-        }
-      }
-      endFile() {
-        if (this.current.parent) this.unclosedBlock();
-        if (this.current.nodes && this.current.nodes.length) {
-          this.current.raws.semicolon = this.semicolon;
-        }
-        this.current.raws.after = (this.current.raws.after || "") + this.spaces;
-        this.root.source.end = this.getPosition(this.tokenizer.position());
-      }
-      freeSemicolon(token) {
-        this.spaces += token[1];
-        if (this.current.nodes) {
-          const prev = this.current.nodes[this.current.nodes.length - 1];
-          if (prev && prev.type === "rule" && !prev.raws.ownSemicolon) {
-            prev.raws.ownSemicolon = this.spaces;
-            this.spaces = "";
-          }
-        }
-      }
-      // Helpers
-      getPosition(offset) {
-        const pos = this.input.fromOffset(offset);
-        return {
-          column: pos.col,
-          line: pos.line,
-          offset
-        };
-      }
-      init(node, offset) {
-        this.current.push(node);
-        node.source = {
-          input: this.input,
-          start: this.getPosition(offset)
-        };
-        node.raws.before = this.spaces;
-        this.spaces = "";
-        if (node.type !== "comment") this.semicolon = false;
-      }
-      other(start) {
-        let end = false;
-        let type = null;
-        let colon2 = false;
-        let bracket = null;
-        const brackets = [];
-        const customProperty = start[1].startsWith("--");
-        const tokens = [];
-        let token = start;
-        while (token) {
-          type = token[0];
-          tokens.push(token);
-          if (type === "(" || type === "[") {
-            if (!bracket) bracket = token;
-            brackets.push(type === "(" ? ")" : "]");
-          } else if (customProperty && colon2 && type === "{") {
-            if (!bracket) bracket = token;
-            brackets.push("}");
-          } else if (brackets.length === 0) {
-            if (type === ";") {
-              if (colon2) {
-                this.decl(tokens, customProperty);
-                return;
-              } else {
-                break;
-              }
-            } else if (type === "{") {
-              this.rule(tokens);
-              return;
-            } else if (type === "}") {
-              this.tokenizer.back(tokens.pop());
-              end = true;
-              break;
-            } else if (type === ":") {
-              colon2 = true;
-            }
-          } else if (type === brackets[brackets.length - 1]) {
-            brackets.pop();
-            if (brackets.length === 0) bracket = null;
-          }
-          token = this.tokenizer.nextToken();
-        }
-        if (this.tokenizer.endOfFile()) end = true;
-        if (brackets.length > 0) this.unclosedBracket(bracket);
-        if (end && colon2) {
-          if (!customProperty) {
-            while (tokens.length) {
-              token = tokens[tokens.length - 1][0];
-              if (token !== "space" && token !== "comment") break;
-              this.tokenizer.back(tokens.pop());
-            }
-          }
-          this.decl(tokens, customProperty);
-        } else {
-          this.unknownWord(tokens);
-        }
-      }
-      parse() {
-        let token;
-        while (!this.tokenizer.endOfFile()) {
-          token = this.tokenizer.nextToken();
-          switch (token[0]) {
-            case "space":
-              this.spaces += token[1];
-              break;
-            case ";":
-              this.freeSemicolon(token);
-              break;
-            case "}":
-              this.end(token);
-              break;
-            case "comment":
-              this.comment(token);
-              break;
-            case "at-word":
-              this.atrule(token);
-              break;
-            case "{":
-              this.emptyRule(token);
-              break;
-            default:
-              this.other(token);
-              break;
-          }
-        }
-        this.endFile();
-      }
-      precheckMissedSemicolon() {
-      }
-      raw(node, prop, tokens, customProperty) {
-        let token, type;
-        const length = tokens.length;
-        let value = "";
-        let clean = true;
-        let next, prev;
-        for (let i = 0; i < length; i += 1) {
-          token = tokens[i];
-          type = token[0];
-          if (type === "space" && i === length - 1 && !customProperty) {
+    }
+    this.endFile();
+  }
+  precheckMissedSemicolon() {
+  }
+  raw(node, prop, tokens, customProperty) {
+    let token, type;
+    const length = tokens.length;
+    let value = "";
+    let clean = true;
+    let next, prev;
+    for (let i = 0; i < length; i += 1) {
+      token = tokens[i];
+      type = token[0];
+      if (type === "space" && i === length - 1 && !customProperty) {
+        clean = false;
+      } else if (type === "comment") {
+        prev = tokens[i - 1] ? tokens[i - 1][0] : "empty";
+        next = tokens[i + 1] ? tokens[i + 1][0] : "empty";
+        if (!SAFE_COMMENT_NEIGHBOR[prev] && !SAFE_COMMENT_NEIGHBOR[next]) {
+          if (value.slice(-1) === ",") {
             clean = false;
-          } else if (type === "comment") {
-            prev = tokens[i - 1] ? tokens[i - 1][0] : "empty";
-            next = tokens[i + 1] ? tokens[i + 1][0] : "empty";
-            if (!SAFE_COMMENT_NEIGHBOR[prev] && !SAFE_COMMENT_NEIGHBOR[next]) {
-              if (value.slice(-1) === ",") {
-                clean = false;
-              } else {
-                value += token[1];
-              }
-            } else {
-              clean = false;
-            }
           } else {
             value += token[1];
           }
+        } else {
+          clean = false;
         }
-        if (!clean) {
-          const raw = tokens.reduce((all, i) => all + i[1], "");
-          node.raws[prop] = { raw, value };
-        }
-        node[prop] = value;
+      } else {
+        value += token[1];
       }
-      rule(tokens) {
-        tokens.pop();
-        const node = new Rule2();
-        this.init(node, tokens[0][2]);
-        node.raws.between = this.spacesAndCommentsFromEnd(tokens);
-        this.raw(node, "selector", tokens);
-        this.current = node;
-      }
-      spacesAndCommentsFromEnd(tokens) {
-        let lastTokenType;
-        let spaces = "";
-        while (tokens.length) {
-          lastTokenType = tokens[tokens.length - 1][0];
-          if (lastTokenType !== "space" && lastTokenType !== "comment") break;
-          spaces = tokens.pop()[1] + spaces;
-        }
-        return spaces;
-      }
-      // Errors
-      spacesAndCommentsFromStart(tokens) {
-        let next;
-        let spaces = "";
-        while (tokens.length) {
-          next = tokens[0][0];
-          if (next !== "space" && next !== "comment") break;
-          spaces += tokens.shift()[1];
-        }
-        return spaces;
-      }
-      spacesFromEnd(tokens) {
-        let lastTokenType;
-        let spaces = "";
-        while (tokens.length) {
-          lastTokenType = tokens[tokens.length - 1][0];
-          if (lastTokenType !== "space") break;
-          spaces = tokens.pop()[1] + spaces;
-        }
-        return spaces;
-      }
-      stringFrom(tokens, from) {
-        let result = "";
-        for (let i = from; i < tokens.length; i++) {
-          result += tokens[i][1];
-        }
-        tokens.splice(from, tokens.length - from);
-        return result;
-      }
-      unclosedBlock() {
-        const pos = this.current.source.start;
-        throw this.input.error("Unclosed block", pos.line, pos.column);
-      }
-      unclosedBracket(bracket) {
-        throw this.input.error(
-          "Unclosed bracket",
-          { offset: bracket[2] },
-          { offset: bracket[2] + 1 }
-        );
-      }
-      unexpectedClose(token) {
-        throw this.input.error(
-          "Unexpected }",
-          { offset: token[2] },
-          { offset: token[2] + 1 }
-        );
-      }
-      unknownWord(tokens) {
-        throw this.input.error(
-          "Unknown word",
-          { offset: tokens[0][2] },
-          { offset: tokens[0][2] + tokens[0][1].length }
-        );
-      }
-      unnamedAtrule(node, token) {
-        throw this.input.error(
-          "At-rule without name",
-          { offset: token[2] },
-          { offset: token[2] + token[1].length }
-        );
-      }
-    };
+    }
+    if (!clean) {
+      const raw = tokens.reduce((all, i) => all + i[1], "");
+      node.raws[prop] = { raw, value };
+    }
+    node[prop] = value;
   }
-});
+  rule(tokens) {
+    tokens.pop();
+    const node = new Rule2();
+    this.init(node, tokens[0][2]);
+    node.raws.between = this.spacesAndCommentsFromEnd(tokens);
+    this.raw(node, "selector", tokens);
+    this.current = node;
+  }
+  spacesAndCommentsFromEnd(tokens) {
+    let lastTokenType;
+    let spaces = "";
+    while (tokens.length) {
+      lastTokenType = tokens[tokens.length - 1][0];
+      if (lastTokenType !== "space" && lastTokenType !== "comment")
+        break;
+      spaces = tokens.pop()[1] + spaces;
+    }
+    return spaces;
+  }
+  // Errors
+  spacesAndCommentsFromStart(tokens) {
+    let next;
+    let spaces = "";
+    while (tokens.length) {
+      next = tokens[0][0];
+      if (next !== "space" && next !== "comment")
+        break;
+      spaces += tokens.shift()[1];
+    }
+    return spaces;
+  }
+  spacesFromEnd(tokens) {
+    let lastTokenType;
+    let spaces = "";
+    while (tokens.length) {
+      lastTokenType = tokens[tokens.length - 1][0];
+      if (lastTokenType !== "space")
+        break;
+      spaces = tokens.pop()[1] + spaces;
+    }
+    return spaces;
+  }
+  stringFrom(tokens, from) {
+    let result = "";
+    for (let i = from; i < tokens.length; i++) {
+      result += tokens[i][1];
+    }
+    tokens.splice(from, tokens.length - from);
+    return result;
+  }
+  unclosedBlock() {
+    const pos = this.current.source.start;
+    throw this.input.error("Unclosed block", pos.line, pos.column);
+  }
+  unclosedBracket(bracket) {
+    throw this.input.error("Unclosed bracket", { offset: bracket[2] }, { offset: bracket[2] + 1 });
+  }
+  unexpectedClose(token) {
+    throw this.input.error("Unexpected }", { offset: token[2] }, { offset: token[2] + 1 });
+  }
+  unknownWord(tokens) {
+    throw this.input.error("Unknown word", { offset: tokens[0][2] }, { offset: tokens[0][2] + tokens[0][1].length });
+  }
+  unnamedAtrule(node, token) {
+    throw this.input.error("At-rule without name", { offset: token[2] }, { offset: token[2] + token[1].length });
+  }
+};
 
 // src/postcss/parse.js
-var parse_exports = {};
-__export(parse_exports, {
-  parse: () => parse2
-});
 function parse2(css, opts) {
   const input = new Input(css, opts);
   const parser2 = new Parser(input);
@@ -2325,446 +2204,38 @@ function parse2(css, opts) {
   }
   return parser2.root;
 }
-var init_parse = __esm({
-  "src/postcss/parse.js"() {
-    "use strict";
-    init_container();
-    init_input();
-    init_parser();
-    __name(parse2, "parse");
-    Container.registerParse(parse2);
-  }
-});
+__name(parse2, "parse");
+Container.registerParse(parse2);
 
 // src/postcss/document.js
-var document_exports = {};
-__export(document_exports, {
-  Document: () => Document
-});
-var LazyResult2, Processor2, Document;
-var init_document = __esm({
-  "src/postcss/document.js"() {
-    "use strict";
-    init_container();
-    Document = class extends Container {
-      static {
-        __name(this, "Document");
-      }
-      constructor(defaults) {
-        super({ type: "document", ...defaults });
-        if (!this.nodes) {
-          this.nodes = [];
-        }
-      }
-      toResult(opts = {}) {
-        const lazy = new LazyResult2(new Processor2(), this, opts);
-        return lazy.stringify();
-      }
-    };
-    Document.registerLazyResult = (dependant) => {
-      LazyResult2 = dependant;
-    };
-    Document.registerProcessor = (dependant) => {
-      Processor2 = dependant;
-    };
+var LazyResult2;
+var Processor2;
+var Document = class extends Container {
+  static {
+    __name(this, "Document");
   }
-});
-
-// src/postcss/map-generator.js
-var map_generator_exports = {};
-__export(map_generator_exports, {
-  MapGenerator: () => MapGenerator
-});
-var MapGenerator;
-var init_map_generator = __esm({
-  "src/postcss/map-generator.js"() {
-    "use strict";
-    init_input();
-    MapGenerator = class {
-      static {
-        __name(this, "MapGenerator");
-      }
-      constructor(stringify3, root2, opts, cssString) {
-        this.stringify = stringify3;
-        this.mapOpts = opts.map || {};
-        this.root = root2;
-        this.opts = opts;
-        this.css = cssString;
-        this.originalCSS = cssString;
-        this.usesFileUrls = !this.mapOpts.from && this.mapOpts.absolute;
-        this.memoizedFileURLs = /* @__PURE__ */ new Map();
-        this.memoizedPaths = /* @__PURE__ */ new Map();
-        this.memoizedURLs = /* @__PURE__ */ new Map();
-      }
-      addAnnotation() {
-        let content;
-        if (this.isInline()) {
-          content = "data:application/json;base64," + this.toBase64(this.map.toString());
-        } else if (typeof this.mapOpts.annotation === "string") {
-          content = this.mapOpts.annotation;
-        } else if (typeof this.mapOpts.annotation === "function") {
-          content = this.mapOpts.annotation(this.opts.to, this.root);
-        } else {
-          content = this.outputFile() + ".map";
-        }
-        let eol = "\n";
-        if (this.css.includes("\r\n")) eol = "\r\n";
-        this.css += eol + "/*# sourceMappingURL=" + content + " */";
-      }
-      applyPrevMaps() {
-      }
-      clearAnnotation() {
-        if (this.mapOpts.annotation === false) return;
-        if (this.root) {
-          let node;
-          for (let i = this.root.nodes.length - 1; i >= 0; i--) {
-            node = this.root.nodes[i];
-            if (node.type !== "comment") continue;
-            if (node.text.startsWith("# sourceMappingURL=")) {
-              this.root.removeChild(i);
-            }
-          }
-        } else if (this.css) {
-          this.css = this.css.replace(/\n*\/\*#[\S\s]*?\*\/$/gm, "");
-        }
-      }
-      generate() {
-        this.clearAnnotation();
-        let result = "";
-        this.stringify(this.root, (i) => {
-          result += i;
-        });
-        return [result];
-      }
-      generateMap() {
-        if (this.root) {
-          this.generateString();
-        } else if (this.previous().length === 1) {
-          const prev = this.previous()[0].consumer();
-          prev.file = this.outputFile();
-          this.map = SourceMapGenerator.fromSourceMap(prev, {
-            ignoreInvalidMapping: true
-          });
-        } else {
-          this.map = new SourceMapGenerator({
-            file: this.outputFile(),
-            ignoreInvalidMapping: true
-          });
-          this.map.addMapping({
-            generated: { column: 0, line: 1 },
-            original: { column: 0, line: 1 },
-            source: this.opts.from ? this.toUrl(this.path(this.opts.from)) : "<no source>"
-          });
-        }
-        if (this.isSourcesContent()) this.setSourcesContent();
-        if (this.root && this.previous().length > 0) this.applyPrevMaps();
-        if (this.isAnnotation()) this.addAnnotation();
-        if (this.isInline()) {
-          return [this.css];
-        } else {
-          return [this.css, this.map];
-        }
-      }
-      generateString() {
-        this.css = "";
-        this.map = new SourceMapGenerator({
-          file: this.outputFile(),
-          ignoreInvalidMapping: true
-        });
-        let line = 1;
-        let column = 1;
-        const noSource = "<no source>";
-        const mapping = {
-          generated: { column: 0, line: 0 },
-          original: { column: 0, line: 0 },
-          source: ""
-        };
-        let last, lines;
-        this.stringify(this.root, (str2, node, type) => {
-          this.css += str2;
-          if (node && type !== "end") {
-            mapping.generated.line = line;
-            mapping.generated.column = column - 1;
-            if (node.source && node.source.start) {
-              mapping.source = this.sourcePath(node);
-              mapping.original.line = node.source.start.line;
-              mapping.original.column = node.source.start.column - 1;
-              this.map.addMapping(mapping);
-            } else {
-              mapping.source = noSource;
-              mapping.original.line = 1;
-              mapping.original.column = 0;
-              this.map.addMapping(mapping);
-            }
-          }
-          lines = str2.match(/\n/g);
-          if (lines) {
-            line += lines.length;
-            last = str2.lastIndexOf("\n");
-            column = str2.length - last;
-          } else {
-            column += str2.length;
-          }
-          if (node && type !== "start") {
-            const p = node.parent || { raws: {} };
-            const childless = node.type === "decl" || node.type === "atrule" && !node.nodes;
-            if (!childless || node !== p.last || p.raws.semicolon) {
-              if (node.source && node.source.end) {
-                mapping.source = this.sourcePath(node);
-                mapping.original.line = node.source.end.line;
-                mapping.original.column = node.source.end.column - 1;
-                mapping.generated.line = line;
-                mapping.generated.column = column - 2;
-                this.map.addMapping(mapping);
-              } else {
-                mapping.source = noSource;
-                mapping.original.line = 1;
-                mapping.original.column = 0;
-                mapping.generated.line = line;
-                mapping.generated.column = column - 1;
-                this.map.addMapping(mapping);
-              }
-            }
-          }
-        });
-      }
-      isAnnotation() {
-        if (this.isInline()) {
-          return true;
-        }
-        if (typeof this.mapOpts.annotation !== "undefined") {
-          return this.mapOpts.annotation;
-        }
-        if (this.previous().length) {
-          return this.previous().some((i) => i.annotation);
-        }
-        return true;
-      }
-      isInline() {
-        if (typeof this.mapOpts.inline !== "undefined") {
-          return this.mapOpts.inline;
-        }
-        const annotation = this.mapOpts.annotation;
-        if (typeof annotation !== "undefined" && annotation !== true) {
-          return false;
-        }
-        if (this.previous().length) {
-          return this.previous().some((i) => i.inline);
-        }
-        return true;
-      }
-      isMap() {
-        if (typeof this.opts.map !== "undefined") {
-          return !!this.opts.map;
-        }
-        return this.previous().length > 0;
-      }
-      isSourcesContent() {
-        if (typeof this.mapOpts.sourcesContent !== "undefined") {
-          return this.mapOpts.sourcesContent;
-        }
-        if (this.previous().length) {
-          return this.previous().some((i) => i.withContent());
-        }
-        return true;
-      }
-      outputFile() {
-        if (this.opts.to) {
-          return this.path(this.opts.to);
-        } else if (this.opts.from) {
-          return this.path(this.opts.from);
-        } else {
-          return "to.css";
-        }
-      }
-      path(file) {
-        return file;
-      }
-      previous() {
-        if (!this.previousMaps) {
-          this.previousMaps = [];
-          if (this.root) {
-            this.root.walk((node) => {
-              if (node.source && node.source.input.map) {
-                const map = node.source.input.map;
-                if (!this.previousMaps.includes(map)) {
-                  this.previousMaps.push(map);
-                }
-              }
-            });
-          } else {
-            const input = new Input(this.originalCSS, this.opts);
-            if (input.map) this.previousMaps.push(input.map);
-          }
-        }
-        return this.previousMaps;
-      }
-      setSourcesContent() {
-        throw new Error(`setSourcesContent isnt implemented`);
-      }
-      sourcePath(node) {
-        if (this.mapOpts.from) {
-          return this.toUrl(this.mapOpts.from);
-        } else if (this.usesFileUrls) {
-          return this.toFileUrl(node.source.input.from);
-        } else {
-          return this.toUrl(this.path(node.source.input.from));
-        }
-      }
-      toBase64(str2) {
-        if (Buffer) {
-          return Buffer.from(str2).toString("base64");
-        } else {
-          return window.btoa(unescape(encodeURIComponent(str2)));
-        }
-      }
-      toFileUrl(path) {
-        const cached = this.memoizedFileURLs.get(path);
-        if (cached) return cached;
-        throw new Error(
-          "`map.absolute` option is not available in this PostCSS build"
-        );
-      }
-      toUrl(path) {
-        const cached = this.memoizedURLs.get(path);
-        if (cached) return cached;
-        path = path.replace(/\\/g, "/");
-        const url = encodeURI(path).replace(/[#?]/g, encodeURIComponent);
-        this.memoizedURLs.set(path, url);
-        return url;
-      }
-    };
+  constructor(defaults) {
+    super({ type: "document", ...defaults });
+    if (!this.nodes) {
+      this.nodes = [];
+    }
   }
-});
-
-// src/postcss/warn-once.js
-var warn_once_exports = {};
-__export(warn_once_exports, {
-  warnOnce: () => warnOnce
-});
-function warnOnce(message) {
-  if (printed[message]) return;
-  printed[message] = true;
-  if (typeof console !== "undefined" && console.warn) {
-    console.warn(message);
+  toResult(opts = {}) {
+    const lazy = new LazyResult2(new Processor2(), this, opts);
+    return lazy.stringify();
   }
-}
-var printed;
-var init_warn_once = __esm({
-  "src/postcss/warn-once.js"() {
-    "use strict";
-    printed = {};
-    __name(warnOnce, "warnOnce");
-  }
-});
-
-// src/postcss/warning.js
-var Warning;
-var init_warning = __esm({
-  "src/postcss/warning.js"() {
-    "use strict";
-    Warning = class {
-      static {
-        __name(this, "Warning");
-      }
-      constructor(text, opts = {}) {
-        this.type = "warning";
-        this.text = text;
-        if (opts.node && opts.node.source) {
-          const range = opts.node.rangeBy(opts);
-          this.line = range.start.line;
-          this.column = range.start.column;
-          this.endLine = range.end.line;
-          this.endColumn = range.end.column;
-        }
-        for (const opt in opts) this[opt] = opts[opt];
-      }
-      toString() {
-        if (this.node) {
-          return this.node.error(this.text, {
-            index: this.index,
-            plugin: this.plugin,
-            word: this.word
-          }).message;
-        }
-        if (this.plugin) {
-          return this.plugin + ": " + this.text;
-        }
-        return this.text;
-      }
-    };
-  }
-});
-
-// src/postcss/result.js
-var result_exports = {};
-__export(result_exports, {
-  Result: () => Result
-});
-var Result;
-var init_result = __esm({
-  "src/postcss/result.js"() {
-    "use strict";
-    init_warning();
-    Result = class {
-      static {
-        __name(this, "Result");
-      }
-      constructor(processor, root2, opts) {
-        this.processor = processor;
-        this.messages = [];
-        this.root = root2;
-        this.opts = opts;
-        this.css = void 0;
-        this.map = void 0;
-      }
-      toString() {
-        return this.css;
-      }
-      warn(text, opts = {}) {
-        if (!opts.plugin) {
-          if (this.lastPlugin && this.lastPlugin.postcssPlugin) {
-            opts.plugin = this.lastPlugin.postcssPlugin;
-          }
-        }
-        const warning = new Warning(text, opts);
-        this.messages.push(warning);
-        return warning;
-      }
-      warnings() {
-        return this.messages.filter((i) => i.type === "warning");
-      }
-      get content() {
-        return this.css;
-      }
-    };
-  }
-});
-
-// src/postcss/postcss.js
-init_at_rule();
-init_comment();
-init_declaration();
-init_root();
-init_rule();
-init_parse();
-init_list();
-init_input();
-init_stringify();
-init_css_syntax_error();
-init_container();
-init_document();
-init_node();
+};
+Document.registerLazyResult = (dependant) => {
+  LazyResult2 = dependant;
+};
+Document.registerProcessor = (dependant) => {
+  Processor2 = dependant;
+};
 
 // src/postcss/fromJSON.js
-init_at_rule();
-init_comment();
-init_declaration();
-init_root();
-init_rule();
-init_input();
 function fromJSON(json, inputs) {
-  if (Array.isArray(json)) return json.map((n) => fromJSON(n));
+  if (Array.isArray(json))
+    return json.map((n) => fromJSON(n));
   const { inputs: ownInputs, ...defaults } = json;
   if (ownInputs) {
     inputs = [];
@@ -2804,16 +2275,349 @@ function fromJSON(json, inputs) {
 }
 __name(fromJSON, "fromJSON");
 
-// src/postcss/processor.js
-init_document();
-init_root();
+// src/postcss/map-generator.js
+var MapGenerator = class {
+  static {
+    __name(this, "MapGenerator");
+  }
+  constructor(stringify2, root2, opts, cssString) {
+    this.stringify = stringify2;
+    this.mapOpts = opts.map || {};
+    this.root = root2;
+    this.opts = opts;
+    this.css = cssString;
+    this.originalCSS = cssString;
+    this.usesFileUrls = !this.mapOpts.from && this.mapOpts.absolute;
+    this.memoizedFileURLs = /* @__PURE__ */ new Map();
+    this.memoizedPaths = /* @__PURE__ */ new Map();
+    this.memoizedURLs = /* @__PURE__ */ new Map();
+  }
+  addAnnotation() {
+    let content;
+    if (this.isInline()) {
+      content = "data:application/json;base64," + this.toBase64(this.map.toString());
+    } else if (typeof this.mapOpts.annotation === "string") {
+      content = this.mapOpts.annotation;
+    } else if (typeof this.mapOpts.annotation === "function") {
+      content = this.mapOpts.annotation(this.opts.to, this.root);
+    } else {
+      content = this.outputFile() + ".map";
+    }
+    let eol = "\n";
+    if (this.css.includes("\r\n"))
+      eol = "\r\n";
+    this.css += eol + "/*# sourceMappingURL=" + content + " */";
+  }
+  applyPrevMaps() {
+  }
+  clearAnnotation() {
+    if (this.mapOpts.annotation === false)
+      return;
+    if (this.root) {
+      let node;
+      for (let i = this.root.nodes.length - 1; i >= 0; i--) {
+        node = this.root.nodes[i];
+        if (node.type !== "comment")
+          continue;
+        if (node.text.startsWith("# sourceMappingURL=")) {
+          this.root.removeChild(i);
+        }
+      }
+    } else if (this.css) {
+      this.css = this.css.replace(/\n*\/\*#[\S\s]*?\*\/$/gm, "");
+    }
+  }
+  generate() {
+    this.clearAnnotation();
+    let result = "";
+    this.stringify(this.root, (i) => {
+      result += i;
+    });
+    return [result];
+  }
+  generateMap() {
+    if (this.root) {
+      this.generateString();
+    } else if (this.previous().length === 1) {
+      const prev = this.previous()[0].consumer();
+      prev.file = this.outputFile();
+      this.map = SourceMapGenerator.fromSourceMap(prev, {
+        ignoreInvalidMapping: true
+      });
+    } else {
+      this.map = new SourceMapGenerator({
+        file: this.outputFile(),
+        ignoreInvalidMapping: true
+      });
+      this.map.addMapping({
+        generated: { column: 0, line: 1 },
+        original: { column: 0, line: 1 },
+        source: this.opts.from ? this.toUrl(this.path(this.opts.from)) : "<no source>"
+      });
+    }
+    if (this.isSourcesContent())
+      this.setSourcesContent();
+    if (this.root && this.previous().length > 0)
+      this.applyPrevMaps();
+    if (this.isAnnotation())
+      this.addAnnotation();
+    if (this.isInline()) {
+      return [this.css];
+    } else {
+      return [this.css, this.map];
+    }
+  }
+  generateString() {
+    this.css = "";
+    this.map = new SourceMapGenerator({
+      file: this.outputFile(),
+      ignoreInvalidMapping: true
+    });
+    let line = 1;
+    let column = 1;
+    const noSource = "<no source>";
+    const mapping = {
+      generated: { column: 0, line: 0 },
+      original: { column: 0, line: 0 },
+      source: ""
+    };
+    let last, lines;
+    this.stringify(this.root, (str2, node, type) => {
+      this.css += str2;
+      if (node && type !== "end") {
+        mapping.generated.line = line;
+        mapping.generated.column = column - 1;
+        if (node.source && node.source.start) {
+          mapping.source = this.sourcePath(node);
+          mapping.original.line = node.source.start.line;
+          mapping.original.column = node.source.start.column - 1;
+          this.map.addMapping(mapping);
+        } else {
+          mapping.source = noSource;
+          mapping.original.line = 1;
+          mapping.original.column = 0;
+          this.map.addMapping(mapping);
+        }
+      }
+      lines = str2.match(/\n/g);
+      if (lines) {
+        line += lines.length;
+        last = str2.lastIndexOf("\n");
+        column = str2.length - last;
+      } else {
+        column += str2.length;
+      }
+      if (node && type !== "start") {
+        const p = node.parent || { raws: {} };
+        const childless = node.type === "decl" || node.type === "atrule" && !node.nodes;
+        if (!childless || node !== p.last || p.raws.semicolon) {
+          if (node.source && node.source.end) {
+            mapping.source = this.sourcePath(node);
+            mapping.original.line = node.source.end.line;
+            mapping.original.column = node.source.end.column - 1;
+            mapping.generated.line = line;
+            mapping.generated.column = column - 2;
+            this.map.addMapping(mapping);
+          } else {
+            mapping.source = noSource;
+            mapping.original.line = 1;
+            mapping.original.column = 0;
+            mapping.generated.line = line;
+            mapping.generated.column = column - 1;
+            this.map.addMapping(mapping);
+          }
+        }
+      }
+    });
+  }
+  isAnnotation() {
+    if (this.isInline()) {
+      return true;
+    }
+    if (typeof this.mapOpts.annotation !== "undefined") {
+      return this.mapOpts.annotation;
+    }
+    if (this.previous().length) {
+      return this.previous().some((i) => i.annotation);
+    }
+    return true;
+  }
+  isInline() {
+    if (typeof this.mapOpts.inline !== "undefined") {
+      return this.mapOpts.inline;
+    }
+    const annotation = this.mapOpts.annotation;
+    if (typeof annotation !== "undefined" && annotation !== true) {
+      return false;
+    }
+    if (this.previous().length) {
+      return this.previous().some((i) => i.inline);
+    }
+    return true;
+  }
+  isMap() {
+    if (typeof this.opts.map !== "undefined") {
+      return !!this.opts.map;
+    }
+    return this.previous().length > 0;
+  }
+  isSourcesContent() {
+    if (typeof this.mapOpts.sourcesContent !== "undefined") {
+      return this.mapOpts.sourcesContent;
+    }
+    if (this.previous().length) {
+      return this.previous().some((i) => i.withContent());
+    }
+    return true;
+  }
+  outputFile() {
+    if (this.opts.to) {
+      return this.path(this.opts.to);
+    } else if (this.opts.from) {
+      return this.path(this.opts.from);
+    } else {
+      return "to.css";
+    }
+  }
+  path(file) {
+    return file;
+  }
+  previous() {
+    if (!this.previousMaps) {
+      this.previousMaps = [];
+      if (this.root) {
+        this.root.walk((node) => {
+          if (node.source && node.source.input.map) {
+            const map = node.source.input.map;
+            if (!this.previousMaps.includes(map)) {
+              this.previousMaps.push(map);
+            }
+          }
+        });
+      } else {
+        const input = new Input(this.originalCSS, this.opts);
+        if (input.map)
+          this.previousMaps.push(input.map);
+      }
+    }
+    return this.previousMaps;
+  }
+  setSourcesContent() {
+    throw new Error(`setSourcesContent isnt implemented`);
+  }
+  sourcePath(node) {
+    if (this.mapOpts.from) {
+      return this.toUrl(this.mapOpts.from);
+    } else if (this.usesFileUrls) {
+      return this.toFileUrl(node.source.input.from);
+    } else {
+      return this.toUrl(this.path(node.source.input.from));
+    }
+  }
+  toBase64(str2) {
+    if (Buffer) {
+      return Buffer.from(str2).toString("base64");
+    } else {
+      return window.btoa(unescape(encodeURIComponent(str2)));
+    }
+  }
+  toFileUrl(path) {
+    const cached = this.memoizedFileURLs.get(path);
+    if (cached)
+      return cached;
+    throw new Error("`map.absolute` option is not available in this PostCSS build");
+  }
+  toUrl(path) {
+    const cached = this.memoizedURLs.get(path);
+    if (cached)
+      return cached;
+    path = path.replace(/\\/g, "/");
+    const url = encodeURI(path).replace(/[#?]/g, encodeURIComponent);
+    this.memoizedURLs.set(path, url);
+    return url;
+  }
+};
+
+// src/postcss/warn-once.js
+var printed = {};
+function warnOnce(message) {
+  if (printed[message])
+    return;
+  printed[message] = true;
+  if (typeof console !== "undefined" && console.warn) {
+    console.warn(message);
+  }
+}
+__name(warnOnce, "warnOnce");
+
+// src/postcss/warning.js
+var Warning = class {
+  static {
+    __name(this, "Warning");
+  }
+  constructor(text, opts = {}) {
+    this.type = "warning";
+    this.text = text;
+    if (opts.node && opts.node.source) {
+      const range = opts.node.rangeBy(opts);
+      this.line = range.start.line;
+      this.column = range.start.column;
+      this.endLine = range.end.line;
+      this.endColumn = range.end.column;
+    }
+    for (const opt in opts)
+      this[opt] = opts[opt];
+  }
+  toString() {
+    if (this.node) {
+      return this.node.error(this.text, {
+        index: this.index,
+        plugin: this.plugin,
+        word: this.word
+      }).message;
+    }
+    if (this.plugin) {
+      return this.plugin + ": " + this.text;
+    }
+    return this.text;
+  }
+};
+
+// src/postcss/result.js
+var Result = class {
+  static {
+    __name(this, "Result");
+  }
+  constructor(processor, root2, opts) {
+    this.processor = processor;
+    this.messages = [];
+    this.root = root2;
+    this.opts = opts;
+    this.css = void 0;
+    this.map = void 0;
+  }
+  toString() {
+    return this.css;
+  }
+  warn(text, opts = {}) {
+    if (!opts.plugin) {
+      if (this.lastPlugin && this.lastPlugin.postcssPlugin) {
+        opts.plugin = this.lastPlugin.postcssPlugin;
+      }
+    }
+    const warning = new Warning(text, opts);
+    this.messages.push(warning);
+    return warning;
+  }
+  warnings() {
+    return this.messages.filter((i) => i.type === "warning");
+  }
+  get content() {
+    return this.css;
+  }
+};
 
 // src/postcss/no-work-result.js
-init_map_generator();
-init_warn_once();
-init_parse();
-init_result();
-init_stringify();
 var NoWorkResult = class {
   static {
     __name(this, "NoWorkResult");
@@ -2850,7 +2654,8 @@ var NoWorkResult = class {
     }
   }
   async() {
-    if (this.error) return Promise.reject(this.error);
+    if (this.error)
+      return Promise.reject(this.error);
     return Promise.resolve(this.result);
   }
   catch(onRejected) {
@@ -2860,15 +2665,14 @@ var NoWorkResult = class {
     return this.async().then(onFinally, onFinally);
   }
   sync() {
-    if (this.error) throw this.error;
+    if (this.error)
+      throw this.error;
     return this.result;
   }
   then(onFulfilled, onRejected) {
     if (process.env.NODE_ENV !== "production") {
       if (!("from" in this._opts)) {
-        warnOnce(
-          "Without `from` option PostCSS could generate wrong source map and will not find Browserslist config. Set it to CSS file path or to `undefined` to prevent this warning."
-        );
+        warnOnce("Without `from` option PostCSS could generate wrong source map and will not find Browserslist config. Set it to CSS file path or to `undefined` to prevent this warning.");
       }
     }
     return this.async().then(onFulfilled, onRejected);
@@ -2921,15 +2725,6 @@ var NoWorkResult = class {
 };
 
 // src/postcss/lazy-result.js
-init_root();
-var { Container: Container2 } = (init_container(), __toCommonJS(container_exports));
-var { Document: Document2 } = (init_document(), __toCommonJS(document_exports));
-var { MapGenerator: MapGenerator2 } = (init_map_generator(), __toCommonJS(map_generator_exports));
-var { parse: parse3 } = (init_parse(), __toCommonJS(parse_exports));
-var { Result: Result2 } = (init_result(), __toCommonJS(result_exports));
-var { stringify: stringify2 } = (init_stringify(), __toCommonJS(stringify_exports));
-var { isClean: isClean2, my: my2 } = (init_symbols(), __toCommonJS(symbols_exports));
-var { warnOnce: warnOnce2 } = (init_warn_once(), __toCommonJS(warn_once_exports));
 var TYPE_TO_CLASS_NAME = {
   atrule: "AtRule",
   comment: "Comment",
@@ -3011,8 +2806,9 @@ function toStack(node) {
 }
 __name(toStack, "toStack");
 function cleanMarks(node) {
-  node[isClean2] = false;
-  if (node.nodes) node.nodes.forEach((i) => cleanMarks(i));
+  node[isClean] = false;
+  if (node.nodes)
+    node.nodes.forEach((i) => cleanMarks(i));
   return node;
 }
 __name(cleanMarks, "cleanMarks");
@@ -3027,29 +2823,34 @@ var LazyResult3 = class _LazyResult {
     let root2;
     if (typeof css === "object" && css !== null && (css.type === "root" || css.type === "document")) {
       root2 = cleanMarks(css);
-    } else if (css instanceof _LazyResult || css instanceof Result2) {
+    } else if (css instanceof _LazyResult || css instanceof Result) {
       root2 = cleanMarks(css.root);
       if (css.map) {
-        if (typeof opts.map === "undefined") opts.map = {};
-        if (!opts.map.inline) opts.map.inline = false;
+        if (typeof opts.map === "undefined")
+          opts.map = {};
+        if (!opts.map.inline)
+          opts.map.inline = false;
         opts.map.prev = css.map;
       }
     } else {
-      let parser2 = parse3;
-      if (opts.syntax) parser2 = opts.syntax.parse;
-      if (opts.parser) parser2 = opts.parser;
-      if (parser2.parse) parser2 = parser2.parse;
+      let parser2 = parse2;
+      if (opts.syntax)
+        parser2 = opts.syntax.parse;
+      if (opts.parser)
+        parser2 = opts.parser;
+      if (parser2.parse)
+        parser2 = parser2.parse;
       try {
         root2 = parser2(css, opts);
       } catch (error) {
         this.processed = true;
         this.error = error;
       }
-      if (root2 && !root2[my2]) {
-        Container2.rebuild(root2);
+      if (root2 && !root2[my]) {
+        Container.rebuild(root2);
       }
     }
-    this.result = new Result2(processor, root2, opts);
+    this.result = new Result(processor, root2, opts);
     this.helpers = { ...postcss, postcss, result: this.result };
     this.plugins = this.processor.plugins.map((plugin2) => {
       if (typeof plugin2 === "object" && plugin2.prepare) {
@@ -3060,8 +2861,10 @@ var LazyResult3 = class _LazyResult {
     });
   }
   async() {
-    if (this.error) return Promise.reject(this.error);
-    if (this.processed) return Promise.resolve(this.result);
+    if (this.error)
+      return Promise.reject(this.error);
+    if (this.processed)
+      return Promise.resolve(this.result);
     if (!this.processing) {
       this.processing = this.runAsync();
     }
@@ -3079,7 +2882,8 @@ var LazyResult3 = class _LazyResult {
   handleError(error, node) {
     const plugin2 = this.result.lastPlugin;
     try {
-      if (node) node.addToError(error);
+      if (node)
+        node.addToError(error);
       this.error = error;
       if (error.name === "CssSyntaxError" && !error.plugin) {
         error.plugin = plugin2.postcssPlugin;
@@ -3092,30 +2896,28 @@ var LazyResult3 = class _LazyResult {
           const a = pluginVer.split(".");
           const b = runtimeVer.split(".");
           if (a[0] !== b[0] || Number.parseInt(a[1]) > Number.parseInt(b[1])) {
-            console.error(
-              "Unknown error from PostCSS plugin. Your current PostCSS version is " + runtimeVer + ", but " + pluginName + " uses " + pluginVer + ". Perhaps this is the source of the error below."
-            );
+            console.error("Unknown error from PostCSS plugin. Your current PostCSS version is " + runtimeVer + ", but " + pluginName + " uses " + pluginVer + ". Perhaps this is the source of the error below.");
           }
         }
       }
     } catch (err) {
-      if (console && console.error) console.error(err);
+      if (console && console.error)
+        console.error(err);
     }
     return error;
   }
   prepareVisitors() {
     this.listeners = {};
     const add = /* @__PURE__ */ __name((plugin2, type, cb) => {
-      if (!this.listeners[type]) this.listeners[type] = [];
+      if (!this.listeners[type])
+        this.listeners[type] = [];
       this.listeners[type].push([plugin2, cb]);
     }, "add");
     for (const plugin2 of this.plugins) {
       if (typeof plugin2 === "object") {
         for (const event in plugin2) {
           if (!PLUGIN_PROPS[event] && /^[A-Z]/.test(event)) {
-            throw new Error(
-              `Unknown event ${event} in ${plugin2.postcssPlugin}. Try to update PostCSS (${this.processor.version} now).`
-            );
+            throw new Error(`Unknown event ${event} in ${plugin2.postcssPlugin}. Try to update PostCSS (${this.processor.version} now).`);
           }
           if (!NOT_VISITORS[event]) {
             if (typeof plugin2[event] === "object") {
@@ -3123,11 +2925,7 @@ var LazyResult3 = class _LazyResult {
                 if (filter === "*") {
                   add(plugin2, event, plugin2[event][filter]);
                 } else {
-                  add(
-                    plugin2,
-                    event + "-" + filter.toLowerCase(),
-                    plugin2[event][filter]
-                  );
+                  add(plugin2, event + "-" + filter.toLowerCase(), plugin2[event][filter]);
                 }
               }
             } else if (typeof plugin2[event] === "function") {
@@ -3155,8 +2953,8 @@ var LazyResult3 = class _LazyResult {
     this.prepareVisitors();
     if (this.hasListener) {
       const root2 = this.result.root;
-      while (!root2[isClean2]) {
-        root2[isClean2] = true;
+      while (!root2[isClean]) {
+        root2[isClean] = true;
         const stack = [toStack(root2)];
         while (stack.length > 0) {
           const promise = this.visitTick(stack);
@@ -3175,9 +2973,7 @@ var LazyResult3 = class _LazyResult {
           this.result.lastPlugin = plugin2;
           try {
             if (root2.type === "document") {
-              const roots = root2.nodes.map(
-                (subRoot) => visitor(subRoot, this.helpers)
-              );
+              const roots = root2.nodes.map((subRoot) => visitor(subRoot, this.helpers));
               await Promise.all(roots);
             } else {
               await visitor(root2, this.helpers);
@@ -3196,9 +2992,7 @@ var LazyResult3 = class _LazyResult {
     try {
       if (typeof plugin2 === "object" && plugin2.Once) {
         if (this.result.root.type === "document") {
-          const roots = this.result.root.nodes.map(
-            (root2) => plugin2.Once(root2, this.helpers)
-          );
+          const roots = this.result.root.nodes.map((root2) => plugin2.Once(root2, this.helpers));
           if (isPromise(roots[0])) {
             return Promise.all(roots);
           }
@@ -3213,24 +3007,31 @@ var LazyResult3 = class _LazyResult {
     }
   }
   stringify() {
-    if (this.error) throw this.error;
-    if (this.stringified) return this.result;
+    if (this.error)
+      throw this.error;
+    if (this.stringified)
+      return this.result;
     this.stringified = true;
     this.sync();
     const opts = this.result.opts;
-    let str2 = stringify2;
-    if (opts.syntax) str2 = opts.syntax.stringify;
-    if (opts.stringifier) str2 = opts.stringifier;
-    if (str2.stringify) str2 = str2.stringify;
-    const map = new MapGenerator2(str2, this.result.root, this.result.opts);
+    let str2 = stringify;
+    if (opts.syntax)
+      str2 = opts.syntax.stringify;
+    if (opts.stringifier)
+      str2 = opts.stringifier;
+    if (str2.stringify)
+      str2 = str2.stringify;
+    const map = new MapGenerator(str2, this.result.root, this.result.opts);
     const data = map.generate();
     this.result.css = data[0];
     this.result.map = data[1];
     return this.result;
   }
   sync() {
-    if (this.error) throw this.error;
-    if (this.processed) return this.result;
+    if (this.error)
+      throw this.error;
+    if (this.processed)
+      return this.result;
     this.processed = true;
     if (this.processing) {
       throw this.getAsyncError();
@@ -3244,8 +3045,8 @@ var LazyResult3 = class _LazyResult {
     this.prepareVisitors();
     if (this.hasListener) {
       const root2 = this.result.root;
-      while (!root2[isClean2]) {
-        root2[isClean2] = true;
+      while (!root2[isClean]) {
+        root2[isClean] = true;
         this.walkSync(root2);
       }
       if (this.listeners.OnceExit) {
@@ -3263,9 +3064,7 @@ var LazyResult3 = class _LazyResult {
   then(onFulfilled, onRejected) {
     if (process.env.NODE_ENV !== "production") {
       if (!("from" in this.opts)) {
-        warnOnce2(
-          "Without `from` option PostCSS could generate wrong source map and will not find Browserslist config. Set it to CSS file path or to `undefined` to prevent this warning."
-        );
+        warnOnce("Without `from` option PostCSS could generate wrong source map and will not find Browserslist config. Set it to CSS file path or to `undefined` to prevent this warning.");
       }
     }
     return this.async().then(onFulfilled, onRejected);
@@ -3316,8 +3115,8 @@ var LazyResult3 = class _LazyResult {
       let child;
       while (child = node.nodes[node.indexes[iterator]]) {
         node.indexes[iterator] += 1;
-        if (!child[isClean2]) {
-          child[isClean2] = true;
+        if (!child[isClean]) {
+          child[isClean] = true;
           stack.push(toStack(child));
           return;
         }
@@ -3331,7 +3130,7 @@ var LazyResult3 = class _LazyResult {
       visit.eventIndex += 1;
       if (event === CHILDREN) {
         if (node.nodes && node.nodes.length) {
-          node[isClean2] = true;
+          node[isClean] = true;
           visit.iterator = node.getIterator();
         }
         return;
@@ -3343,19 +3142,21 @@ var LazyResult3 = class _LazyResult {
     stack.pop();
   }
   walkSync(node) {
-    node[isClean2] = true;
+    node[isClean] = true;
     const events = getEvents(node);
     for (const event of events) {
       if (event === CHILDREN) {
         if (node.nodes) {
           node.each((child) => {
-            if (!child[isClean2]) this.walkSync(child);
+            if (!child[isClean])
+              this.walkSync(child);
           });
         }
       } else {
         const visitors = this.listeners[event];
         if (visitors) {
-          if (this.visitSync(visitors, node.toProxy())) return;
+          if (this.visitSync(visitors, node.toProxy()))
+            return;
         }
       }
     }
@@ -3392,7 +3193,7 @@ LazyResult3.registerPostcss = (dependant) => {
   postcss = dependant;
 };
 Root2.registerLazyResult(LazyResult3);
-Document2.registerLazyResult(LazyResult3);
+Document.registerLazyResult(LazyResult3);
 
 // src/postcss/processor.js
 var Processor3 = class {
@@ -3419,9 +3220,7 @@ var Processor3 = class {
         normalized.push(i);
       } else if (typeof i === "object" && (i.parse || i.stringify)) {
         if (process.env.NODE_ENV !== "production") {
-          throw new Error(
-            "PostCSS syntaxes cannot be used as plugins. Instead, please use one of the syntax/parser/stringifier options as outlined in your PostCSS runner documentation."
-          );
+          throw new Error("PostCSS syntaxes cannot be used as plugins. Instead, please use one of the syntax/parser/stringifier options as outlined in your PostCSS runner documentation.");
         }
       } else {
         throw new Error(i + " is not a PostCSS plugin");
@@ -3445,8 +3244,6 @@ Root2.registerProcessor(Processor3);
 Document.registerProcessor(Processor3);
 
 // src/postcss/postcss.js
-init_warning();
-init_result();
 LazyResult3.registerPostcss(postcss2);
 function postcss2(...plugins) {
   if (plugins.length === 1 && Array.isArray(plugins[0])) {
@@ -3467,7 +3264,8 @@ postcss2.plugin = /* @__PURE__ */ __name(function plugin(name, initializer) {
   let cache;
   Object.defineProperty(creator, "postcss", {
     get() {
-      if (!cache) cache = creator();
+      if (!cache)
+        cache = creator();
       return cache;
     }
   });
@@ -3771,7 +3569,7 @@ var ATTRIBUTE = "attribute";
 var UNIVERSAL = "universal";
 
 // src/postcss-selector-parser/selectors/container.js
-var Container3 = class extends Node2 {
+var Container2 = class extends Node2 {
   static {
     __name(this, "Container");
   }
@@ -3883,7 +3681,7 @@ var Container3 = class extends Node2 {
    * Return the most specific node at the line and column number given.
    * The source location is based on the original parsed location, locations aren't
    * updated as selector nodes are mutated.
-   * 
+   *
    * Note that this location is relative to the location of the first character
    * of the selector, and not the location of the selector in the overall document
    * when used in conjunction with postcss.
@@ -4045,7 +3843,7 @@ var Container3 = class extends Node2 {
 };
 
 // src/postcss-selector-parser/selectors/root.js
-var Root3 = class extends Container3 {
+var Root3 = class extends Container2 {
   static {
     __name(this, "Root");
   }
@@ -4073,7 +3871,7 @@ var Root3 = class extends Container3 {
 };
 
 // src/postcss-selector-parser/selectors/selector.js
-var Selector = class extends Container3 {
+var Selector = class extends Container2 {
   static {
     __name(this, "Selector");
   }
@@ -4300,7 +4098,7 @@ var String2 = class extends Node2 {
 };
 
 // src/postcss-selector-parser/selectors/pseudo.js
-var Pseudo = class extends Container3 {
+var Pseudo = class extends Container2 {
   static {
     __name(this, "Pseudo");
   }
@@ -4554,11 +4352,7 @@ var Attribute = class _Attribute extends Namespace {
    */
   set value(v) {
     if (this._constructed) {
-      const {
-        deprecatedUsage,
-        unescaped,
-        quoteMark
-      } = unescapeValue(v);
+      const { deprecatedUsage, unescaped, quoteMark } = unescapeValue(v);
       if (deprecatedUsage) {
         warnOfDeprecatedValueAssignment();
       }
@@ -5043,24 +4837,14 @@ function getSource(startLine, startColumn, endLine, endColumn) {
 }
 __name(getSource, "getSource");
 function getTokenSource(token) {
-  return getSource(
-    token[FIELDS.START_LINE],
-    token[FIELDS.START_COL],
-    token[FIELDS.END_LINE],
-    token[FIELDS.END_COL]
-  );
+  return getSource(token[FIELDS.START_LINE], token[FIELDS.START_COL], token[FIELDS.END_LINE], token[FIELDS.END_COL]);
 }
 __name(getTokenSource, "getTokenSource");
 function getTokenSourceSpan(startToken, endToken) {
   if (!startToken) {
     return void 0;
   }
-  return getSource(
-    startToken[FIELDS.START_LINE],
-    startToken[FIELDS.START_COL],
-    endToken[FIELDS.END_LINE],
-    endToken[FIELDS.END_COL]
-  );
+  return getSource(startToken[FIELDS.START_LINE], startToken[FIELDS.START_COL], endToken[FIELDS.END_LINE], endToken[FIELDS.END_COL]);
 }
 __name(getTokenSourceSpan, "getTokenSourceSpan");
 function unescapeProp(node, prop) {
@@ -5138,12 +4922,7 @@ var Parser2 = class {
     }
     const len = attr.length;
     const node = {
-      source: getSource(
-        startingToken[1],
-        startingToken[2],
-        this.currToken[3],
-        this.currToken[4]
-      ),
+      source: getSource(startingToken[1], startingToken[2], this.currToken[3], this.currToken[4]),
       sourceIndex: startingToken[FIELDS.START_POS]
     };
     if (len === 1 && !~[word].indexOf(attr[0][FIELDS.TYPE])) {
@@ -5397,12 +5176,7 @@ var Parser2 = class {
         let lastToken = this.tokens[this.position - 1];
         nodes.push(new String2({
           value: "",
-          source: getSource(
-            firstToken[FIELDS.START_LINE],
-            firstToken[FIELDS.START_COL],
-            lastToken[FIELDS.END_LINE],
-            lastToken[FIELDS.END_COL]
-          ),
+          source: getSource(firstToken[FIELDS.START_LINE], firstToken[FIELDS.START_COL], lastToken[FIELDS.END_LINE], lastToken[FIELDS.END_COL]),
           sourceIndex: firstToken[FIELDS.START_POS],
           spaces: { before: space2, after: "" }
         }));
@@ -5442,12 +5216,7 @@ var Parser2 = class {
       }
       let node = new Combinator({
         value: `/${name}/`,
-        source: getSource(
-          this.currToken[FIELDS.START_LINE],
-          this.currToken[FIELDS.START_COL],
-          this.tokens[this.position + 2][FIELDS.END_LINE],
-          this.tokens[this.position + 2][FIELDS.END_COL]
-        ),
+        source: getSource(this.currToken[FIELDS.START_LINE], this.currToken[FIELDS.START_COL], this.tokens[this.position + 2][FIELDS.END_LINE], this.tokens[this.position + 2][FIELDS.END_COL]),
         sourceIndex: this.currToken[FIELDS.START_POS],
         raws
       });
@@ -5654,12 +5423,7 @@ var Parser2 = class {
       } else {
         this.newNode(new String2({
           value: parenValue,
-          source: getSource(
-            parenStart[FIELDS.START_LINE],
-            parenStart[FIELDS.START_COL],
-            parenEnd[FIELDS.END_LINE],
-            parenEnd[FIELDS.END_COL]
-          ),
+          source: getSource(parenStart[FIELDS.START_LINE], parenStart[FIELDS.START_COL], parenEnd[FIELDS.END_LINE], parenEnd[FIELDS.END_COL]),
           sourceIndex: parenStart[FIELDS.START_POS]
         }));
       }
@@ -5767,12 +5531,7 @@ var Parser2 = class {
       let node;
       const current = this.currToken;
       const sourceIndex = current[FIELDS.START_POS] + indices[i];
-      const source = getSource(
-        current[1],
-        current[2] + ind,
-        current[3],
-        current[2] + (index - 1)
-      );
+      const source = getSource(current[1], current[2] + ind, current[3], current[2] + (index - 1));
       if (~hasClass.indexOf(ind)) {
         let classNameOpts = {
           value: value.slice(1),
@@ -5879,15 +5638,9 @@ var Parser2 = class {
     }
     const an = /^[aeiou]/.test(description[0]) ? "an" : "a";
     if (!found) {
-      return this.error(
-        `Expected ${an} ${description}.`,
-        { index }
-      );
+      return this.error(`Expected ${an} ${description}.`, { index });
     }
-    return this.error(
-      `Expected ${an} ${description}, found "${found}" instead.`,
-      { index }
-    );
+    return this.error(`Expected ${an} ${description}, found "${found}" instead.`, { index });
   }
   requiredSpace(space2) {
     return this.options.lossy ? " " : space2;

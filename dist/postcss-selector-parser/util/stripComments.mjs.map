@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../../src/postcss-selector-parser/util/stripComments.js"],
-  "sourcesContent": ["export default function stripComments (str) {\n    let s = \"\";\n    let commentStart = str.indexOf(\"/*\");\n    let lastEnd = 0;\n    while (commentStart >= 0) {\n        s = s + str.slice(lastEnd, commentStart);\n        let commentEnd = str.indexOf(\"*/\", commentStart + 2);\n        if (commentEnd < 0) {\n            return s;\n        }\n        lastEnd = commentEnd + 2;\n        commentStart = str.indexOf(\"/*\", lastEnd);\n    }\n    s = s + str.slice(lastEnd);\n    return s;\n}\n"],
-  "mappings": ";;;;AAAe,SAAR,cAAgC,KAAK;AACxC,MAAI,IAAI;AACR,MAAI,eAAe,IAAI,QAAQ,IAAI;AACnC,MAAI,UAAU;AACd,SAAO,gBAAgB,GAAG;AACtB,QAAI,IAAI,IAAI,MAAM,SAAS,YAAY;AACvC,QAAI,aAAa,IAAI,QAAQ,MAAM,eAAe,CAAC;AACnD,QAAI,aAAa,GAAG;AAChB,aAAO;AAAA,IACX;AACA,cAAU,aAAa;AACvB,mBAAe,IAAI,QAAQ,MAAM,OAAO;AAAA,EAC5C;AACA,MAAI,IAAI,IAAI,MAAM,OAAO;AACzB,SAAO;AACX;AAfwB;",
+  "sourcesContent": ["export default function stripComments(str) {\r\n    let s = \"\";\r\n    let commentStart = str.indexOf(\"/*\");\r\n    let lastEnd = 0;\r\n    while (commentStart >= 0) {\r\n        s = s + str.slice(lastEnd, commentStart);\r\n        let commentEnd = str.indexOf(\"*/\", commentStart + 2);\r\n        if (commentEnd < 0) {\r\n            return s;\r\n        }\r\n        lastEnd = commentEnd + 2;\r\n        commentStart = str.indexOf(\"/*\", lastEnd);\r\n    }\r\n    s = s + str.slice(lastEnd);\r\n    return s;\r\n}\r\n"],
+  "mappings": ";;;;AAAe,SAAR,cAA+B,KAAK;AACvC,MAAI,IAAI;AACR,MAAI,eAAe,IAAI,QAAQ,IAAI;AACnC,MAAI,UAAU;AACd,SAAO,gBAAgB,GAAG;AACtB,QAAI,IAAI,IAAI,MAAM,SAAS,YAAY;AACvC,QAAI,aAAa,IAAI,QAAQ,MAAM,eAAe,CAAC;AACnD,QAAI,aAAa,GAAG;AAChB,aAAO;AAAA,IACX;AACA,cAAU,aAAa;AACvB,mBAAe,IAAI,QAAQ,MAAM,OAAO;AAAA,EAC5C;AACA,MAAI,IAAI,IAAI,MAAM,OAAO;AACzB,SAAO;AACX;AAfwB;",
   "names": []
 }

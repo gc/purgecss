@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../../src/postcss-selector-parser/util/ensureObject.js"],
-  "sourcesContent": ["export default function ensureObject (obj, ...props) {\n    while (props.length > 0) {\n        const prop = props.shift();\n\n        if (!obj[prop]) {\n            obj[prop] = {};\n        }\n\n        obj = obj[prop];\n    }\n}\n"],
-  "mappings": ";;;;AAAe,SAAR,aAA+B,QAAQ,OAAO;AACjD,SAAO,MAAM,SAAS,GAAG;AACrB,UAAM,OAAO,MAAM,MAAM;AAEzB,QAAI,CAAC,IAAI,IAAI,GAAG;AACZ,UAAI,IAAI,IAAI,CAAC;AAAA,IACjB;AAEA,UAAM,IAAI,IAAI;AAAA,EAClB;AACJ;AAVwB;",
+  "sourcesContent": ["export default function ensureObject(obj, ...props) {\r\n    while (props.length > 0) {\r\n        const prop = props.shift();\r\n        if (!obj[prop]) {\r\n            obj[prop] = {};\r\n        }\r\n        obj = obj[prop];\r\n    }\r\n}\r\n"],
+  "mappings": ";;;;AAAe,SAAR,aAA8B,QAAQ,OAAO;AAChD,SAAO,MAAM,SAAS,GAAG;AACrB,UAAM,OAAO,MAAM,MAAM;AACzB,QAAI,CAAC,IAAI,IAAI,GAAG;AACZ,UAAI,IAAI,IAAI,CAAC;AAAA,IACjB;AACA,UAAM,IAAI,IAAI;AAAA,EAClB;AACJ;AARwB;",
   "names": []
 }
