@@ -6167,8 +6167,6 @@ var IGNORE_ANNOTATION_CURRENT = "purgecss ignore current";
 var IGNORE_ANNOTATION_NEXT = "purgecss ignore";
 var IGNORE_ANNOTATION_START = "purgecss start ignore";
 var IGNORE_ANNOTATION_END = "purgecss end ignore";
-var CONFIG_FILENAME = "purgecss.config.js";
-var ERROR_CONFIG_FILE_LOADING = "Error loading the config file";
 // @__NO_SIDE_EFFECTS__
 function standardizeSafelist(userDefinedSafelist = []) {
   if (Array.isArray(userDefinedSafelist)) {
@@ -6751,19 +6749,67 @@ var PurgeCSS = class {
     });
   }
 };
+
+// src/postcss.ts
+var PLUGIN_NAME = "postcss-purgecss";
+async function purgeCSS(opts, root2, { result }) {
+  const purgeCSS2 = new PurgeCSS();
+  let configFileOptions;
+  const options = {
+    ...defaultOptions,
+    ...configFileOptions,
+    ...opts,
+    safelist: standardizeSafelist(
+      opts?.safelist || configFileOptions?.safelist
+    )
+  };
+  if (opts && typeof opts.contentFunction === "function") {
+    options.content = opts.contentFunction(
+      // @ts-ignore
+      root2.source && root2.source.input.file || ""
+    );
+  }
+  purgeCSS2.options = options;
+  if (options.variables) {
+    purgeCSS2.variablesStructure.safelist = options.safelist.variables || [];
+  }
+  const { content, extractors } = options;
+  const rawFormatContents = content.filter(
+    (o) => typeof o === "object"
+  );
+  const cssRawSelectors = await purgeCSS2.extractSelectorsFromString(
+    rawFormatContents,
+    extractors
+  );
+  const selectors = mergeExtractorSelectors({}, cssRawSelectors);
+  purgeCSS2.walkThroughCSS(root2, selectors);
+  if (purgeCSS2.options.fontFace) purgeCSS2.removeUnusedFontFaces();
+  if (purgeCSS2.options.keyframes) purgeCSS2.removeUnusedKeyframes();
+  if (purgeCSS2.options.variables) purgeCSS2.removeUnusedCSSVariables();
+  if (purgeCSS2.options.rejected && purgeCSS2.selectorsRemoved.size > 0) {
+    result.messages.push({
+      type: "purgecss",
+      plugin: "postcss-purgecss",
+      text: `purging ${purgeCSS2.selectorsRemoved.size} selectors:
+          ${Array.from(purgeCSS2.selectorsRemoved).map((selector2) => selector2.trim()).join("\n  ")}`
+    });
+    purgeCSS2.selectorsRemoved.clear();
+  }
+}
+__name(purgeCSS, "purgeCSS");
+var purgeCSSPlugin = /* @__PURE__ */ __name((opts) => {
+  if (typeof opts === "undefined")
+    throw new Error("PurgeCSS plugin does not have the correct options");
+  return {
+    postcssPlugin: PLUGIN_NAME,
+    OnceExit(root2, helpers) {
+      return purgeCSS(opts, root2, helpers);
+    }
+  };
+}, "purgeCSSPlugin");
+purgeCSSPlugin.postcss = true;
 export {
-  CONFIG_FILENAME,
-  ERROR_CONFIG_FILE_LOADING,
-  ExtractorResultSets_default as ExtractorResultSets,
-  IGNORE_ANNOTATION_CURRENT,
-  IGNORE_ANNOTATION_END,
-  IGNORE_ANNOTATION_NEXT,
-  IGNORE_ANNOTATION_START,
-  PurgeCSS,
-  VariableNode,
-  VariablesStructure,
-  defaultOptions,
-  mergeExtractorSelectors,
-  standardizeSafelist
+  postcss_default as postcss,
+  purgeCSSPlugin
 };
-//# sourceMappingURL=index.mjs.map
+//# sourceMappingURL=entry.mjs.map

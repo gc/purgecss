@@ -2,7 +2,7 @@ import dts from 'rollup-plugin-dts';
 import cleanup from 'rollup-plugin-cleanup';
 
 const name = 'index';
-const input = 'dist/postcss.mjs';
+const input = 'dist/entry.mjs';
 
 export default [
   {

@@ -115,5 +115,4 @@ const purgeCSSPlugin: any = (
 };
 purgeCSSPlugin.postcss = true;
 
-export default purgeCSSPlugin;
 export { purgeCSSPlugin };

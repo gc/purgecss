@@ -1,45 +1,44 @@
-const object = {};
-const hasOwnProperty = object.hasOwnProperty;
-const merge = (options, defaults) => {
+var object = {};
+var hasOwnProperty = object.hasOwnProperty;
+var merge = function merge(options, defaults) {
     if (!options) {
         return defaults;
     }
-    const result = {};
-    for (const key in defaults) {
+    var result = {};
+    for (var key in defaults) {
         // `if (defaults.hasOwnProperty(key) { … }` is not needed here, since
         // only recognized option names are used.
-        result[key] = hasOwnProperty.call(options, key)
-            ? options[key]
-            : defaults[key];
+        result[key] = hasOwnProperty.call(options, key) ? options[key] : defaults[key];
     }
     return result;
 };
-const regexAnySingleEscape = /<%= anySingleEscape %>/;
-const regexSingleEscape = /<%= singleEscapes %>/;
-const regexAlwaysEscape = /['"\\]/;
-const regexExcessiveSpaces = /(^|\\+)?(\\[A-F0-9]{1,6})\x20(?![a-fA-F0-9\x20])/g;
-/*@__NO_SIDE_EFFECTS__*/
-const cssesc = (string, options) => {
+var regexAnySingleEscape = /[ -,\.\/:-@\[-\^`\{-~]/;
+var regexSingleEscape = /[ -,\.\/:-@\[\]\^`\{-~]/;
+var regexAlwaysEscape = /['"\\]/;
+var regexExcessiveSpaces = /(^|\\+)?(\\[A-F0-9]{1,6})\x20(?![a-fA-F0-9\x20])/g;
+// https://mathiasbynens.be/notes/css-escapes#css
+var cssesc = function cssesc(string, options) {
     options = merge(options, cssesc.options);
     if (options.quotes != 'single' && options.quotes != 'double') {
         options.quotes = 'single';
     }
-    const quote = options.quotes == 'double' ? '"' : '\'';
-    const isIdentifier = options.isIdentifier;
-    const firstChar = string.charAt(0);
-    let output = '';
-    let counter = 0;
-    const length = string.length;
+    var quote = options.quotes == 'double' ? '"' : '\'';
+    var isIdentifier = options.isIdentifier;
+    var firstChar = string.charAt(0);
+    var output = '';
+    var counter = 0;
+    var length = string.length;
     while (counter < length) {
-        const character = string.charAt(counter++);
-        let codePoint = character.charCodeAt();
-        let value;
+        var character = string.charAt(counter++);
+        var codePoint = character.charCodeAt();
+        var value = void 0;
         // If it’s not a printable ASCII character…
         if (codePoint < 0x20 || codePoint > 0x7E) {
             if (codePoint >= 0xD800 && codePoint <= 0xDBFF && counter < length) {
                 // It’s a high surrogate, and there is a next character.
-                const extra = string.charCodeAt(counter++);
-                if ((extra & 0xFC00) == 0xDC00) { // next character is low surrogate
+                var extra = string.charCodeAt(counter++);
+                if ((extra & 0xFC00) == 0xDC00) {
+                    // next character is low surrogate
                     codePoint = ((codePoint & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000;
                 }
                 else {
@@ -62,11 +61,7 @@ const cssesc = (string, options) => {
             else if (/[\t\n\f\r\x0B]/.test(character)) {
                 value = '\\' + codePoint.toString(16).toUpperCase() + ' ';
             }
-            else if (character == '\\' ||
-                (!isIdentifier &&
-                    ((character == '"' && quote == character) ||
-                        (character == '\'' && quote == character))) ||
-                (isIdentifier && regexSingleEscape.test(character))) {
+            else if (character == '\\' || !isIdentifier && (character == '"' && quote == character || character == '\'' && quote == character) || isIdentifier && regexSingleEscape.test(character)) {
                 value = '\\' + character;
             }
             else {
@@ -106,4 +101,5 @@ cssesc.options = {
     'quotes': 'single',
     'wrap': false
 };
+cssesc.version = '3.0.0';
 export default cssesc;

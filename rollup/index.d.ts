@@ -3883,37 +3883,37 @@ var Selector = class extends Container2 {
 // src/cssesc/index.js
 var object = {};
 var hasOwnProperty = object.hasOwnProperty;
-var merge = /* @__PURE__ */ __name((options, defaults) => {
+var merge = /* @__PURE__ */ __name(function merge2(options, defaults) {
   if (!options) {
     return defaults;
   }
-  const result = {};
-  for (const key in defaults) {
+  var result = {};
+  for (var key in defaults) {
     result[key] = hasOwnProperty.call(options, key) ? options[key] : defaults[key];
   }
   return result;
 }, "merge");
-var regexAnySingleEscape = /<%= anySingleEscape %>/;
-var regexSingleEscape = /<%= singleEscapes %>/;
+var regexAnySingleEscape = /[ -,\.\/:-@\[-\^`\{-~]/;
+var regexSingleEscape = /[ -,\.\/:-@\[\]\^`\{-~]/;
 var regexExcessiveSpaces = /(^|\\+)?(\\[A-F0-9]{1,6})\x20(?![a-fA-F0-9\x20])/g;
-var cssesc = /* @__PURE__ */ __name(/* @__NO_SIDE_EFFECTS__ */ (string2, options) => {
-  options = merge(options, cssesc.options);
+var cssesc = /* @__PURE__ */ __name(function cssesc2(string2, options) {
+  options = merge(options, cssesc2.options);
   if (options.quotes != "single" && options.quotes != "double") {
     options.quotes = "single";
   }
-  const quote = options.quotes == "double" ? '"' : "'";
-  const isIdentifier2 = options.isIdentifier;
-  const firstChar = string2.charAt(0);
-  let output = "";
-  let counter = 0;
-  const length = string2.length;
+  var quote = options.quotes == "double" ? '"' : "'";
+  var isIdentifier2 = options.isIdentifier;
+  var firstChar = string2.charAt(0);
+  var output = "";
+  var counter = 0;
+  var length = string2.length;
   while (counter < length) {
-    const character = string2.charAt(counter++);
-    let codePoint = character.charCodeAt();
-    let value;
+    var character = string2.charAt(counter++);
+    var codePoint = character.charCodeAt();
+    var value = void 0;
     if (codePoint < 32 || codePoint > 126) {
       if (codePoint >= 55296 && codePoint <= 56319 && counter < length) {
-        const extra = string2.charCodeAt(counter++);
+        var extra = string2.charCodeAt(counter++);
         if ((extra & 64512) == 56320) {
           codePoint = ((codePoint & 1023) << 10) + (extra & 1023) + 65536;
         } else {
@@ -3962,6 +3962,7 @@ cssesc.options = {
   "quotes": "single",
   "wrap": false
 };
+cssesc.version = "3.0.0";
 var cssesc_default = cssesc;
 
 // src/postcss-selector-parser/selectors/className.js
@@ -6804,6 +6805,5 @@ var purgeCSSPlugin = /* @__PURE__ */ __name((opts) => {
   };
 }, "purgeCSSPlugin");
 purgeCSSPlugin.postcss = true;
-var postcss_default2 = purgeCSSPlugin;
 
-export { postcss_default2 as default, purgeCSSPlugin };
+export { postcss_default as postcss, purgeCSSPlugin };
